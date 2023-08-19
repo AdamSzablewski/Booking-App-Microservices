@@ -23,6 +23,7 @@ public class Service {
     @Id
     private BigInteger id;
     private String name;
+    @OneToMany
     private List<Appointment> appointments;
     @ManyToOne
     private Facility facility;

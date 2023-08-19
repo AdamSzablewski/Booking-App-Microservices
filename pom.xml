@@ -6,7 +6,8 @@
     <modules>
         <module>Messaging-Service</module>
 		<module>Booking-Service</module>
-	</modules>
+        <module>Api-Gateway</module>
+    </modules>
     <parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>

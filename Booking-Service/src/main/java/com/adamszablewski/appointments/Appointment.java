@@ -2,8 +2,11 @@ package com.adamszablewski.appointments;
 
 import com.adamszablewski.facilities.Facility;
 import com.adamszablewski.users.User;
+import com.adamszablewski.users.clients.Client;
+import com.adamszablewski.users.employee.Employee;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,9 +24,13 @@ import java.time.LocalDateTime;
 public class Appointment {
     @Id
     private BigInteger id;
-    @OneToOne
+    @ManyToOne
     private Facility facility;
-    private User client;
-    private User owner;
+    private String phoneNumber;
+    private String email;
+    @OneToOne
+    private Client client;
+    @OneToOne
+    private Employee employee;
     private LocalDateTime dateTime;
 }

@@ -1,6 +1,7 @@
 package com.adamszablewski.facilities;
 
 import com.adamszablewski.services.Service;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
@@ -24,7 +25,9 @@ public class Facility {
     private String country;
     private String region;
     private String city;
-    @OneToMany
+    private String street;
+    private String houseNumber;
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Service> services;
 
 

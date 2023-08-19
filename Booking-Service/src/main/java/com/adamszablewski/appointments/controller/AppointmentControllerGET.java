@@ -15,7 +15,7 @@ import java.util.Optional;
 @Controller
 @AllArgsConstructor
 @RequestMapping("/appointments")
-public class AppointmentController {
+public class AppointmentControllerGET {
     AppointmentService appointmentService;
 
     @GetMapping("/")
