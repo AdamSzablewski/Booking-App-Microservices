@@ -15,9 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class Owner extends Employee {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+
     @OneToMany(cascade = CascadeType.ALL)
     private List<Facility> facilities;
 

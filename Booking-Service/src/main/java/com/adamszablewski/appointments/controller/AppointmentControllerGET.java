@@ -34,4 +34,5 @@ public class AppointmentControllerGET {
     public Optional<Appointment> getAppointmentByEmail(@RequestParam String email){
         return appointmentService.getAppointmentByEmail(email);
     }
+
 }

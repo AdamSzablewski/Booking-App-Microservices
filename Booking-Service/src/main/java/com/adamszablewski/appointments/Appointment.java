@@ -14,7 +14,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigInteger;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Data
 @Builder
@@ -28,6 +30,9 @@ public class Appointment {
     private Facility facility;
     @ManyToOne
     private Task task;
+    private LocalDate date;
+    private LocalTime startTime;
+    private LocalTime endTime;
     private String number;
     private String email;
     @OneToOne

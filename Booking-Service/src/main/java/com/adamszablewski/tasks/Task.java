@@ -2,6 +2,7 @@ package com.adamszablewski.tasks;
 
 import com.adamszablewski.appointments.Appointment;
 import com.adamszablewski.facilities.Facility;
+import com.adamszablewski.timeSlots.TimeSlot;
 import com.adamszablewski.users.employee.Employee;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -38,6 +39,6 @@ public class Task {
     )
     private List<Employee> employees;
     private double price;
-    private int minutes;
+    private int durationInMinutes;
     private String currency;
 }

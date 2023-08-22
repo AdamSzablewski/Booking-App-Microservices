@@ -14,9 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class Client extends UserClass {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+
     private int points;
     private String country;
     private String region;

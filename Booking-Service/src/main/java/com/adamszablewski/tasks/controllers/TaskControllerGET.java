@@ -1,5 +1,6 @@
 package com.adamszablewski.tasks.controllers;
 
+import com.adamszablewski.appointments.Appointment;
 import com.adamszablewski.tasks.Task;
 import com.adamszablewski.tasks.services.TaskService;
 import lombok.AllArgsConstructor;
@@ -41,6 +42,7 @@ public class TaskControllerGET {
                                                    @RequestParam String category){
         return serviceService.getTasksForCityByCategory(region, city, category);
     }
+
 
 
 }
