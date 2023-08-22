@@ -18,7 +18,7 @@ public class AppointmentControllerPUT {
     AppointmentService appointmentService;
 
     @PutMapping("/id/{id}/employee/email/{email}")
-    public ResponseEntity<String> changeEmployeeForAppointmentById(@RequestParam BigInteger id,
+    public ResponseEntity<String> changeEmployeeForAppointmentById(@RequestParam Long id,
                                                                    @RequestParam String email){
         return appointmentService.changeEmployeeForAppointmentById(id, email);
     }

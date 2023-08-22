@@ -23,14 +23,14 @@ public class AppointmentControllerGET {
         return appointmentService.getAllAppointments();
     }
     @GetMapping("/id/{id}")
-    public Optional<Appointment> getAppointmentById(@RequestParam BigInteger id){
+    public Optional<Appointment> getAppointmentById(@RequestParam Long id){
         return appointmentService.getAppointmentById(id);
     }
     @GetMapping("/number/{number}")
     public Optional<Appointment> getAppointmentByPhoneNumber(@RequestParam String number){
         return appointmentService.getAppointmentByPhoneNumber(number);
     }
-    @GetMapping("/number/{number}")
+    @GetMapping("/email/{email}")
     public Optional<Appointment> getAppointmentByEmail(@RequestParam String email){
         return appointmentService.getAppointmentByEmail(email);
     }

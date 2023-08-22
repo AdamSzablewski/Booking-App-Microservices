@@ -2,9 +2,10 @@ package com.adamszablewski.appointments.helpers;
 
 import com.adamszablewski.appointments.Appointment;
 import com.adamszablewski.appointments.repository.AppointmentRepository;
-import com.adamszablewski.users.User;
+import com.adamszablewski.users.UserClass;
 import com.adamszablewski.users.clients.Client;
 import com.adamszablewski.users.employee.Employee;
+
 import com.adamszablewski.users.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -17,7 +18,7 @@ public class AppointmentHelper {
     private final AppointmentRepository appointmentRepository;
     private UserRepository userRepository;
 
-    public void addAppointmentForUsers(User user, Appointment appointment) {
+    public void addAppointmentForUsers(UserClass user, Appointment appointment) {
         List<Appointment> appointments = user.getAppointments();
         appointments.add(appointment);
         userRepository.save(user);
@@ -55,7 +56,7 @@ public class AppointmentHelper {
         appointment.setEmployee(employee);
         addAppointmentForUsers(employee, appointment);
     }
-    public void removeAppointmentFromUser(User user, Appointment appointment) {
+    public void removeAppointmentFromUser(UserClass user, Appointment appointment) {
         user.getAppointments().remove(appointment);
         userRepository.save(user);
     }

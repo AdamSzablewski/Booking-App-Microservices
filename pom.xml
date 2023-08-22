@@ -7,6 +7,7 @@
         <module>Messaging-Service</module>
 		<module>Booking-Service</module>
         <module>Api-Gateway</module>
+        <module>Eureka</module>
     </modules>
     <parent>
 		<groupId>org.springframework.boot</groupId>

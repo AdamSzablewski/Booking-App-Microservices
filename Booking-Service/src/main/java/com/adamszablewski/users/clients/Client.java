@@ -1,9 +1,8 @@
 package com.adamszablewski.users.clients;
 
 import com.adamszablewski.appointments.Appointment;
-import com.adamszablewski.users.User;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
+import com.adamszablewski.users.UserClass;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -14,11 +13,16 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Client extends User {
+public class Client extends UserClass {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private int points;
     private String country;
     private String region;
     private String city;
+    @OneToMany
+    private List<Appointment> appointments;
 
 
 

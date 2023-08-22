@@ -29,7 +29,7 @@ public class FacilityControllerGET {
         return facilityService.getAllFacilitiesForRegion(region);
     }
     @GetMapping("/id/{id}")
-    Optional<Facility> getFacilityById(@RequestParam BigInteger id){
+    Optional<Facility> getFacilityById(@RequestParam Long id){
         return facilityService.getFacilityById(id);
     }
     @GetMapping("/city/{city}")

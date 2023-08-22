@@ -18,16 +18,11 @@ public class GatewayConfig {
                         .or()
                         .path("/services/**")
                         .uri("lb://BOOKING"))
-                .route("order-service", r -> r
-                        .path("/purchaseOrders/**")
-                        .or()
-                        .path("/salesOrders/**")
-                        .uri("lb://ORDER-SERVICE"))
                 .route("messaging-service", r -> r
                         .path("/conversations/**")
                         .or()
                         .path("/messages/**")
-                        .uri("lb://MESSAGING-SERVICE"))
+                        .uri("lb://MESSAGING"))
                 .route("eureka-status", r -> r
                         .path("/eureka/**")
                         .uri("http://localhost:8761"))

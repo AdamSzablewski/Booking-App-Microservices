@@ -1,10 +1,9 @@
 package com.adamszablewski.facilities;
 
-import com.adamszablewski.services.Service;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import com.adamszablewski.appointments.Appointment;
+import com.adamszablewski.tasks.Task;
+import com.adamszablewski.users.owners.Owner;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,14 +20,20 @@ import java.util.List;
 public class Facility {
 
     @Id
-    private BigInteger id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String name;
     private String country;
     private String region;
     private String city;
     private String street;
     private String houseNumber;
     @OneToMany(cascade = CascadeType.ALL)
-    private List<Service> services;
+    private List<Task> tasks;
+    @OneToMany
+    private List<Appointment> appointments;
+    @ManyToOne
+    private Owner owner;
 
 
 

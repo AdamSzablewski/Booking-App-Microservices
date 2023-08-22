@@ -5,15 +5,15 @@ import com.adamszablewski.appointments.helpers.AppointmentHelper;
 import com.adamszablewski.appointments.repository.AppointmentRepository;
 import com.adamszablewski.exceptions.NoSuchAppointmentException;
 import com.adamszablewski.exceptions.NoSuchUserException;
-import com.adamszablewski.users.User;
 import com.adamszablewski.users.employee.Employee;
+
+
 import com.adamszablewski.users.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
 @Service
@@ -21,13 +21,14 @@ import java.util.Optional;
 public class AppointmentService {
     private final AppointmentRepository appointmentRepository;
     private final UserRepository userRepository;
+
     private final AppointmentHelper appointmentHelper;
 
     public List<Appointment> getAllAppointments() {
         return appointmentRepository.findAll();
     }
 
-    public Optional<Appointment> getAppointmentById(BigInteger id) {
+    public Optional<Appointment> getAppointmentById(Long id) {
         return appointmentRepository.findById(id);
     }
 
@@ -45,7 +46,7 @@ public class AppointmentService {
         return ResponseEntity.ok().build();
     }
     @Transactional
-    public ResponseEntity<String> deleteAppointmentById(BigInteger id) {
+    public ResponseEntity<String> deleteAppointmentById(Long id) {
         Appointment appointment = appointmentRepository.findById(id)
                 .orElseThrow(NoSuchAppointmentException::new);
 
@@ -71,7 +72,7 @@ public class AppointmentService {
     }
 
     @Transactional
-    public ResponseEntity<String> changeEmployeeForAppointmentById(BigInteger id, String email) {
+    public ResponseEntity<String> changeEmployeeForAppointmentById(Long id, String email) {
         Appointment appointment= appointmentRepository.findById(id)
                 .orElseThrow(NoSuchAppointmentException::new);
 

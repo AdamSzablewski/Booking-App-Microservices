@@ -5,7 +5,7 @@ import com.adamszablewski.facilities.Facility;
 import com.adamszablewski.facilities.repository.FacilityRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import com.adamszablewski.services.Service;
+import com.adamszablewski.tasks.Task;
 
 
 
@@ -30,7 +30,7 @@ public class FacilityService {
         return facilityRepository.findByCity(city);
     }
 
-    public Optional<Facility> getFacilityById(BigInteger id) {
+    public Optional<Facility> getFacilityById(Long id) {
         return facilityRepository.findById(id);
     }
 
@@ -39,14 +39,14 @@ public class FacilityService {
         return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<String> addServiceToFacility(BigInteger id, com.adamszablewski.services.Service service) {
+    public ResponseEntity<String> addServiceToFacility(Long id, Task service) {
         Facility facility = facilityRepository.findById(id)
                 .orElseThrow(NoSuchFacilityException::new);
-        facility.getServices().add(service);
+        facility.getTasks().add(service);
         return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<String> removeFacilityById(BigInteger id) {
+    public ResponseEntity<String> removeFacilityById(Long id) {
         facilityRepository.deleteById(id);
         return ResponseEntity.ok().build();
     }

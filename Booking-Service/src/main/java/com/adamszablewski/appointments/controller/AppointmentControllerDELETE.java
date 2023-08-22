@@ -9,9 +9,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import java.math.BigInteger;
-import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -21,16 +18,16 @@ public class AppointmentControllerDELETE {
     AppointmentService appointmentService;
 
     @DeleteMapping("/id/{id}")
-    public ResponseEntity<String> deleteAppointmentById(@RequestParam BigInteger id){
+    public ResponseEntity<String> deleteAppointmentById(@RequestParam Long id){
         return appointmentService.deleteAppointmentById(id);
     }
     @DeleteMapping("/email/{email}")
     public ResponseEntity<String> deleteAppointmentByEmail(@RequestParam String email){
         return appointmentService.deleteAppointmentByEmail(email);
     }
-    @DeleteMapping("/email/{email}")
-    public ResponseEntity<String> deleteAppointmentByNumber(@RequestParam String email){
-        return appointmentService.deleteAppointmentByNumber(email);
+    @DeleteMapping("/number/{number}")
+    public ResponseEntity<String> deleteAppointmentByNumber(@RequestParam String number){
+        return appointmentService.deleteAppointmentByNumber(number);
     }
 
 

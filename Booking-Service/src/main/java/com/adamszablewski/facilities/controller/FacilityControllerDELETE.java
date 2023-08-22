@@ -18,8 +18,8 @@ public class FacilityControllerDELETE {
 
     private final FacilityService facilityService;
 
-    @DeleteMapping("/id/{id")
-    ResponseEntity<String> removeFacilityById(@RequestParam BigInteger id){
+    @DeleteMapping("/id/{id}")
+    ResponseEntity<String> removeFacilityById(@RequestParam Long id){
         return facilityService.removeFacilityById(id);
     }
 

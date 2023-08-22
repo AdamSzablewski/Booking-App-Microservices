@@ -1,11 +1,12 @@
 package com.adamszablewski.users.repository;
 
-import com.adamszablewski.users.User;
+import com.adamszablewski.users.UserClass;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.math.BigInteger;
 import java.util.Optional;
-
-public interface UserRepository extends JpaRepository<User, BigInteger> {
-    Optional<User> findByEmail(String email);
+@Repository
+public interface UserRepository extends JpaRepository<UserClass, BigInteger> {
+    Optional<UserClass> findByEmail(String email);
 }

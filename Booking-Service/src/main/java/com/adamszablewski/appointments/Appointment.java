@@ -1,7 +1,7 @@
 package com.adamszablewski.appointments;
 
 import com.adamszablewski.facilities.Facility;
-import com.adamszablewski.users.User;
+import com.adamszablewski.tasks.Task;
 import com.adamszablewski.users.clients.Client;
 import com.adamszablewski.users.employee.Employee;
 import jakarta.persistence.Entity;
@@ -26,7 +26,9 @@ public class Appointment {
     private BigInteger id;
     @ManyToOne
     private Facility facility;
-    private String phoneNumber;
+    @ManyToOne
+    private Task task;
+    private String number;
     private String email;
     @OneToOne
     private Client client;
