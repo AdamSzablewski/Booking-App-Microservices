@@ -13,7 +13,7 @@ import java.util.List;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+
 public class Owner extends Employee {
 
     @OneToMany(cascade = CascadeType.ALL)

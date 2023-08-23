@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.math.BigInteger;
 import java.util.Optional;
 @Repository
-public interface UserRepository extends JpaRepository<UserClass, BigInteger> {
+public interface UserRepository extends JpaRepository<UserClass, Long> {
     Optional<UserClass> findByEmail(String email);
 }

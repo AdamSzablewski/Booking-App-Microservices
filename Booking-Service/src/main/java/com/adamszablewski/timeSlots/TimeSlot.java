@@ -1,5 +1,6 @@
 package com.adamszablewski.timeSlots;
 
+import com.adamszablewski.tasks.Task;
 import com.adamszablewski.users.employee.Employee;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -23,9 +24,11 @@ public class TimeSlot {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    private Task task;
     private LocalDate date;
+    private Employee employee;
     private LocalTime start;
     private LocalTime end;
-    private boolean available;
+
 
 }

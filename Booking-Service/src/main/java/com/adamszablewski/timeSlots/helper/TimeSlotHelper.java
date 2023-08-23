@@ -16,29 +16,31 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class TimeSlotHelper {
 
     AppointmentRepository appointmentRepository;
-    public boolean isTimeSlotAvailable(LocalTime startTime, LocalTime endTime, Employee employee, LocalDate date) {
+    public boolean isTimeSlotAvailable(LocalTime taskStartTime, LocalTime taskEndTime, Employee employee, LocalDate date) {
         List<Appointment> existingAppointments = appointmentRepository.findByEmployeeAndDate(employee, date);
         AtomicBoolean isAvailable = new AtomicBoolean(true);
         existingAppointments.forEach(appointment -> {
-            if (doTimeRangesOverlap(appointment.getStartTime(), appointment.getEndTime(), startTime, endTime)) {
+            if (doTimeRangesOverlap(appointment.getStartTime(), appointment.getEndTime(), taskStartTime, taskEndTime)) {
                 isAvailable.set(false);
 
             }
-            if (!isWithinEmployeeWorkHours(startTime, endTime, employee)) {
+            if (!isWithinEmployeeWorkHours(taskStartTime, taskEndTime, employee)) {
                 isAvailable.set(false);
             }
 
         });
         return isAvailable.get();
     }
-    public boolean doTimeRangesOverlap(LocalTime start1, LocalTime end1, LocalTime start2, LocalTime end2) {
-        return !end1.isBefore(start2) && !start1.isAfter(end2);
+    public boolean doTimeRangesOverlap(LocalTime existingAppointmentStartTime, LocalTime existingAppointmentEndTime,
+                                       LocalTime taskStartTime, LocalTime taskEndTime) {
+        return taskStartTime.isBefore(existingAppointmentEndTime) && taskEndTime.isAfter(existingAppointmentStartTime);
+
     }
-    public boolean isWithinEmployeeWorkHours(LocalTime startTime, LocalTime endTime, Employee employee) {
+    public boolean isWithinEmployeeWorkHours(LocalTime taskStartTime, LocalTime taskEndTime, Employee employee) {
         LocalTime employeeStartTime = employee.getStartTime();
         LocalTime employeeEndTime = employee.getEndTime();
 
-        return !startTime.isBefore(employeeStartTime) && !endTime.isAfter(employeeEndTime);
+        return taskStartTime.isAfter(employeeStartTime) && taskEndTime.isBefore(employeeEndTime);
     }
 
 }

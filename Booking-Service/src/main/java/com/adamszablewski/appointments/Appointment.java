@@ -39,5 +39,5 @@ public class Appointment {
     private Client client;
     @OneToOne
     private Employee employee;
-    private LocalDateTime dateTime;
+
 }

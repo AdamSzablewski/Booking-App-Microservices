@@ -8,6 +8,7 @@ import com.adamszablewski.users.UserClass;
 import com.adamszablewski.users.owners.Owner;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -20,6 +21,7 @@ import java.util.List;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Employee extends UserClass {
 
     @ManyToOne

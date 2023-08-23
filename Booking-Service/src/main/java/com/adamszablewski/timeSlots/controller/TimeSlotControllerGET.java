@@ -15,7 +15,7 @@ import java.util.List;
 @Controller
 @AllArgsConstructor
 @RequestMapping("/timeslots")
-public class TimeSlotController {
+public class TimeSlotControllerGET {
 
     TimeSlotService timeSlotService;
 
