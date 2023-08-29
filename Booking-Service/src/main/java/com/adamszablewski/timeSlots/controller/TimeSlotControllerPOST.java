@@ -18,8 +18,8 @@ public class TimeSlotControllerPOST {
     TimeSlotService timeSlotService;
 
     @PostMapping("/user/id/{id}")
-    public ResponseEntity<String> makeAppointmentFromTimeSlot(@RequestParam long id, @RequestBody TimeSlot timeSlot){
-        timeSlotService.makeAppointmentFromTimeSlot(id, timeSlot);
+    public ResponseEntity<String> makeAppointmentFromTimeSlot(@PathVariable long id, @RequestBody TimeSlot timeSlot){
+        return timeSlotService.makeAppointmentFromTimeSlot(id, timeSlot);
     }
 
 }

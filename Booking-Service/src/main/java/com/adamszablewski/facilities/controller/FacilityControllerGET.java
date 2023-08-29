@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -21,19 +22,20 @@ public class FacilityControllerGET {
     private final FacilityService facilityService;
 
     @GetMapping("/")
-    List<Facility> getAllFacilities(){
+    @ResponseBody
+    public List<Facility> getAllFacilities(){
         return facilityService.getAllFacilities();
     }
     @GetMapping("/region/{region}")
-    List<Facility> getAllFacilitiesForRegion(@RequestParam String region){
+    public List<Facility> getAllFacilitiesForRegion(@RequestParam String region){
         return facilityService.getAllFacilitiesForRegion(region);
     }
     @GetMapping("/id/{id}")
-    Optional<Facility> getFacilityById(@RequestParam Long id){
+    public Optional<Facility> getFacilityById(@RequestParam Long id){
         return facilityService.getFacilityById(id);
     }
     @GetMapping("/city/{city}")
-    List<Facility> getAllFacilitiesForCity(@RequestParam String city){
+    public List<Facility> getAllFacilitiesForCity(@RequestParam String city){
         return facilityService.getAllFacilitiesForCity(city);
     }
 }

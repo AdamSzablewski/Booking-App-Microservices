@@ -2,8 +2,9 @@ package com.adamszablewski.tasks;
 
 import com.adamszablewski.appointments.Appointment;
 import com.adamszablewski.facilities.Facility;
+import com.adamszablewski.feignClients.classes.Employee;
 import com.adamszablewski.timeSlots.TimeSlot;
-import com.adamszablewski.users.employee.Employee;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

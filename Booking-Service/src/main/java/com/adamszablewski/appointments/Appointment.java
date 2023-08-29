@@ -1,9 +1,10 @@
 package com.adamszablewski.appointments;
 
 import com.adamszablewski.facilities.Facility;
+import com.adamszablewski.feignClients.classes.Client;
+import com.adamszablewski.feignClients.classes.Employee;
 import com.adamszablewski.tasks.Task;
-import com.adamszablewski.users.clients.Client;
-import com.adamszablewski.users.employee.Employee;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;

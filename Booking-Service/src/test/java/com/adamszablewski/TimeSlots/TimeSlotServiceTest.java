@@ -2,12 +2,14 @@ package com.adamszablewski.TimeSlots;
 
 import com.adamszablewski.appointments.Appointment;
 import com.adamszablewski.appointments.repository.AppointmentRepository;
+import com.adamszablewski.feignClients.UserServiceClient;
+import com.adamszablewski.feignClients.classes.Employee;
 import com.adamszablewski.tasks.Task;
 import com.adamszablewski.tasks.repository.TaskRepository;
 import com.adamszablewski.timeSlots.TimeSlot;
 import com.adamszablewski.timeSlots.helper.TimeSlotHelper;
 import com.adamszablewski.timeSlots.service.TimeSlotService;
-import com.adamszablewski.users.employee.Employee;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,12 +39,19 @@ public class TimeSlotServiceTest {
 
     @Mock
     TaskRepository taskRepository;
+
     @Mock
     TimeSlotHelper timeSlotHelper;
 
+    @Mock
+    AppointmentRepository appointmentRepository;
+
+    @Mock
+    UserServiceClient userServiceClient;
+
     @BeforeEach
     void setup(){
-        timeSlotService = new TimeSlotService(taskRepository, timeSlotHelper);
+        timeSlotService = new TimeSlotService(taskRepository,  timeSlotHelper, appointmentRepository, userServiceClient);
     }
 
     @Test

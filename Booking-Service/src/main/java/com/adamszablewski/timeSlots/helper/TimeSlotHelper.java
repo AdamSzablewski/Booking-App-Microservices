@@ -2,7 +2,8 @@ package com.adamszablewski.timeSlots.helper;
 
 import com.adamszablewski.appointments.Appointment;
 import com.adamszablewski.appointments.repository.AppointmentRepository;
-import com.adamszablewski.users.employee.Employee;
+
+import com.adamszablewski.feignClients.classes.Employee;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;

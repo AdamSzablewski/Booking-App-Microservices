@@ -8,6 +8,7 @@
 		<module>Booking-Service</module>
         <module>Api-Gateway</module>
         <module>Eureka</module>
+        <module>User-Service</module>
     </modules>
     <parent>
 		<groupId>org.springframework.boot</groupId>

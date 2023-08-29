@@ -2,13 +2,14 @@ package com.adamszablewski.appointments.helpers;
 
 import com.adamszablewski.appointments.Appointment;
 import com.adamszablewski.appointments.repository.AppointmentRepository;
-import com.adamszablewski.users.UserClass;
-import com.adamszablewski.users.clients.Client;
-import com.adamszablewski.users.employee.Employee;
 
-import com.adamszablewski.users.repository.UserRepository;
+import com.adamszablewski.feignClients.UserServiceClient;
+import com.adamszablewski.feignClients.classes.Client;
+import com.adamszablewski.feignClients.classes.Employee;
+import com.adamszablewski.feignClients.classes.UserClass;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -16,14 +17,15 @@ import java.util.List;
 @AllArgsConstructor
 public class AppointmentHelper {
     private final AppointmentRepository appointmentRepository;
-    private UserRepository userRepository;
+    private final UserServiceClient userServiceClient;
 
     public void addAppointmentForUsers(UserClass user, Appointment appointment) {
         List<Appointment> appointments = user.getAppointments();
         appointments.add(appointment);
-        userRepository.save(user);
+        userServiceClient.save(user);
 
     }
+    @Transactional
     public void addAppointmentForUsers(Appointment appointment) {
         Client client = appointment.getClient();
         List<Appointment> appointments = client.getAppointments();
@@ -32,20 +34,18 @@ public class AppointmentHelper {
         Employee employee = appointment.getEmployee();
         List<Appointment> appointmentsEmployee = client.getAppointments();
         appointmentsEmployee.add(appointment);
-        userRepository.save(client);
-        userRepository.save(employee);
-
+        userServiceClient.saveAllUsers(List.of(employee, client));
     }
 
     public void removeAppointmentFromUsers(Appointment appointment) {
         Client client = appointment.getClient();
         client.getAppointments().remove(appointment);
-        userRepository.save(client);
+
 
         Employee employee = appointment.getEmployee();
         employee.getAppointments().remove(appointment);
 
-        userRepository.save(employee);
+        userServiceClient.saveAllUsers(List.of(client, employee));
 
 
     }
@@ -58,7 +58,7 @@ public class AppointmentHelper {
     }
     public void removeAppointmentFromUser(UserClass user, Appointment appointment) {
         user.getAppointments().remove(appointment);
-        userRepository.save(user);
+        userServiceClient.save(user);
     }
 
 }

@@ -5,10 +5,9 @@ import com.adamszablewski.appointments.helpers.AppointmentHelper;
 import com.adamszablewski.appointments.repository.AppointmentRepository;
 import com.adamszablewski.exceptions.NoSuchAppointmentException;
 import com.adamszablewski.exceptions.NoSuchUserException;
-import com.adamszablewski.users.employee.Employee;
 
-
-import com.adamszablewski.users.repository.UserRepository;
+import com.adamszablewski.feignClients.UserServiceClient;
+import com.adamszablewski.feignClients.classes.Employee;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -20,7 +19,8 @@ import java.util.Optional;
 @AllArgsConstructor
 public class AppointmentService {
     private final AppointmentRepository appointmentRepository;
-    private final UserRepository userRepository;
+    private final UserServiceClient userServiceClient;
+
 
     private final AppointmentHelper appointmentHelper;
 
@@ -76,7 +76,7 @@ public class AppointmentService {
         Appointment appointment= appointmentRepository.findById(id)
                 .orElseThrow(NoSuchAppointmentException::new);
 
-        Employee employee = (Employee) userRepository.findByEmail(email)
+        Employee employee = userServiceClient.findEmployeeByEmail(email)
                 .orElseThrow(NoSuchUserException::new);
 
         appointmentHelper.changeEmployeeForAppointment(appointment, employee);

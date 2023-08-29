@@ -1,7 +1,8 @@
 package com.adamszablewski.appointments.repository;
 
 import com.adamszablewski.appointments.Appointment;
-import com.adamszablewski.users.employee.Employee;
+
+import com.adamszablewski.feignClients.classes.Employee;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

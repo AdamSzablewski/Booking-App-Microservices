@@ -1,8 +1,9 @@
 package com.adamszablewski.facilities;
 
 import com.adamszablewski.appointments.Appointment;
+import com.adamszablewski.feignClients.classes.Owner;
 import com.adamszablewski.tasks.Task;
-import com.adamszablewski.users.owners.Owner;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,11 +29,14 @@ public class Facility {
     private String city;
     private String street;
     private String houseNumber;
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL)
     private List<Task> tasks;
+    @JsonIgnore
     @OneToMany
     private List<Appointment> appointments;
     @ManyToOne
+    @JsonIgnore
     private Owner owner;
 
 

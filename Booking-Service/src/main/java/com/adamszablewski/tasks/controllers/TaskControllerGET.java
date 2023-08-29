@@ -6,8 +6,9 @@ import com.adamszablewski.tasks.services.TaskService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -21,25 +22,25 @@ public class TaskControllerGET {
     TaskService serviceService;
 
     @GetMapping("/facility/name/{name}")
-    public List<Task> getAllServicesFOrFacilityByName(@RequestParam String name){
+    public List<Task> getAllServicesFOrFacilityByName(@PathVariable String name){
         return serviceService.getAllTasksForFacilityByName(name);
     }
     @GetMapping("/facility/id/{id}")
-    public List<Task> getAllTasksForFacilityById(@RequestParam Long id){
+    public List<Task> getAllTasksForFacilityById(@PathVariable Long id){
         return serviceService.getAllTasksforFacilityById(id);
     }
     @GetMapping("/id/{id}")
-    public Task getServiceById(@RequestParam Long id){
+    public Task getServiceById(@PathVariable Long id){
         return serviceService.getServiceById(id);
     }
     @GetMapping("/region/{region}/city{city}")
-    public List<Task> getTasksForCity(@RequestParam String region, @RequestParam String city){
+    public List<Task> getTasksForCity(@PathVariable String region, @PathVariable String city){
         return serviceService.getTasksForCity(region, city);
     }
     @GetMapping("/region/{region}/city{city}/category/{category}")
-    public List<Task> getTasksForCityByCategory(@RequestParam String region,
-                                                   @RequestParam String city,
-                                                   @RequestParam String category){
+    public List<Task> getTasksForCityByCategory(@PathVariable String region,
+                                                   @PathVariable String city,
+                                                   @PathVariable String category){
         return serviceService.getTasksForCityByCategory(region, city, category);
     }
 
