@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -28,7 +29,7 @@ public class Message {
 
     private String sender;
 
-    private String receiver;
+    private List<Long> receivers;
 
     private LocalDateTime dateSent;
 }

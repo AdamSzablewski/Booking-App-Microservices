@@ -26,7 +26,7 @@ public class ClientControllerGET {
     }
     @GetMapping("/id/{id}")
     @ResponseBody
-    public Client getClientByMail(@PathVariable long id){
+    public Client getClientById(@PathVariable long id){
         return clientService.getClientById(id);
     }
 

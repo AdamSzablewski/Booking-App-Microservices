@@ -9,9 +9,7 @@ import com.adamszablewski.tasks.repository.TaskRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.math.BigInteger;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -36,11 +34,11 @@ public class TaskService {
                 .orElseThrow(NoSuchTaskException::new);
     }
 
-    public List<Task> getTasksForCity(String region, String city) {
-        return taskRepository.findByRegionAndCity(region, city);
+    public List<Task> getTasksForCity( String city) {
+        return taskRepository.findByCity( city);
     }
 
-    public List<Task> getTasksForCityByCategory(String region, String city, String category) {
-        return taskRepository.findByRegionAndCityAndCategory(region, city, category);
+    public List<Task> getTasksForCityByCategory(String city, String category) {
+        return taskRepository.findByCityAndCategory(city, category);
     }
 }

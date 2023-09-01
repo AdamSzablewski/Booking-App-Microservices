@@ -32,13 +32,7 @@ public class Task {
     private List<Appointment> appointments;
     @ManyToOne
     private Facility facility;
-    @ManyToMany
-    @JoinTable(
-            name = "appointment_employee",
-            joinColumns = @JoinColumn(name = "appointment_id"),
-            inverseJoinColumns = @JoinColumn(name = "employee_id")
-    )
-    private List<Employee> employees;
+    private List<Long> employees;
     private double price;
     private int durationInMinutes;
     private String currency;

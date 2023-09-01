@@ -8,7 +8,6 @@ import com.adamszablewski.messages.repositories.MessageRepository;
 import com.adamszablewski.messages.service.ConversationService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -48,8 +47,9 @@ public class MessageSender {
         conversationRepository.save(conversation);
     }
     private String getUsernameFromMessage(Message message){
-        if (message.getSender().equalsIgnoreCase("support"))return message.getReceiver();
-        else return message.getSender();
+//        if (message.getSender().equalsIgnoreCase("support"))return message.getReceiver();
+//        else return message.getSender();
+        return null;
     }
 
 
@@ -64,16 +64,16 @@ public class MessageSender {
         String sender = isSupport ? "support" : user;
         String receiver = isSupport ? user : "support";
 
-        Message newMessage = Message.builder()
-                .sender(sender)
-                .receiver(receiver)
-                .message(message.getMessage())
-                .conversation(conversation)
-                .dateSent(LocalDateTime.now())
-                .build();
-        addMessageToConversation(newMessage);
+//        Message newMessage = Message.builder()
+//                .sender(sender)
+//                .receivers(receiver)
+//                .message(message.getMessage())
+//                .conversation(conversation)
+//                .dateSent(LocalDateTime.now())
+//                .build();
+//        addMessageToConversation(newMessage);
 
-        return newMessage;
+        return null;
     }
 
 }

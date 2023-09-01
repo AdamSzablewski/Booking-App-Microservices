@@ -18,8 +18,5 @@ public class AppointmentControllerPOST {
 
     AppointmentService appointmentService;
 
-    @PostMapping("/new")
-    public ResponseEntity<String> createNewAppointment(@RequestBody Appointment appointment){
-        return appointmentService.createNewAppointment(appointment);
-    }
+
 }

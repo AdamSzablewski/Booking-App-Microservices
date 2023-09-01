@@ -8,7 +8,9 @@ import com.adamszablewski.exceptions.NoSuchUserException;
 
 import com.adamszablewski.feignClients.UserServiceClient;
 import com.adamszablewski.feignClients.classes.Employee;
+import com.adamszablewski.messages.MessageSender;
 import lombok.AllArgsConstructor;
+import org.springframework.amqp.rabbit.listener.MessageAckListener;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +22,7 @@ import java.util.Optional;
 public class AppointmentService {
     private final AppointmentRepository appointmentRepository;
     private final UserServiceClient userServiceClient;
+    private final MessageSender messageSender;
 
 
     private final AppointmentHelper appointmentHelper;
@@ -39,18 +42,17 @@ public class AppointmentService {
     public Optional<Appointment> getAppointmentByEmail(String email) {
         return appointmentRepository.findByEmail(email);
     }
-    @Transactional
-    public ResponseEntity<String> createNewAppointment(Appointment appointment) {
-        appointmentRepository.save(appointment);
-        appointmentHelper.addAppointmentForUsers(appointment);
-        return ResponseEntity.ok().build();
-    }
+//    @Transactional
+//    public ResponseEntity<String> createNewAppointment(Appointment appointment) {
+//        appointmentRepository.save(appointment);
+//        appointmentHelper.addAppointmentForUsers(appointment);
+//        return ResponseEntity.ok().build();
+//    }
     @Transactional
     public ResponseEntity<String> deleteAppointmentById(Long id) {
         Appointment appointment = appointmentRepository.findById(id)
                 .orElseThrow(NoSuchAppointmentException::new);
-
-        appointmentHelper.removeAppointmentFromUsers(appointment);
+        messageSender.createAppoinmentCanceledMessage(appointment);
         appointmentRepository.delete(appointment);
         return ResponseEntity.ok().build();
     }
@@ -58,7 +60,7 @@ public class AppointmentService {
     public ResponseEntity<String> deleteAppointmentByEmail(String email) {
         Appointment appointment = appointmentRepository.findByEmail(email)
             .orElseThrow(NoSuchAppointmentException::new);
-
+        messageSender.createAppoinmentCanceledMessage(appointment);
         appointmentRepository.delete(appointment);
         return ResponseEntity.ok().build();
     }
@@ -66,20 +68,16 @@ public class AppointmentService {
     public ResponseEntity<String> deleteAppointmentByNumber(String number) {
         Appointment appointment = appointmentRepository.findByNumber(number)
                 .orElseThrow(NoSuchAppointmentException::new);
-
+        messageSender.createAppoinmentCanceledMessage(appointment);
         appointmentRepository.delete(appointment);
         return ResponseEntity.ok().build();
     }
 
     @Transactional
-    public ResponseEntity<String> changeEmployeeForAppointmentById(Long id, String email) {
+    public ResponseEntity<String> changeEmployeeForAppointmentById(Long id) {
         Appointment appointment= appointmentRepository.findById(id)
                 .orElseThrow(NoSuchAppointmentException::new);
-
-        Employee employee = userServiceClient.findEmployeeByEmail(email)
-                .orElseThrow(NoSuchUserException::new);
-
-        appointmentHelper.changeEmployeeForAppointment(appointment, employee);
+        appointmentHelper.changeEmployeeForAppointment(appointment, appointment.getEmployee());
         return ResponseEntity.ok().build();
     }
 }

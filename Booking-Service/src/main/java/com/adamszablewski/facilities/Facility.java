@@ -35,9 +35,8 @@ public class Facility {
     @JsonIgnore
     @OneToMany
     private List<Appointment> appointments;
-    @ManyToOne
-    @JsonIgnore
-    private Owner owner;
+    private Long owner;
+    private List<Long> employees;
 
 
 

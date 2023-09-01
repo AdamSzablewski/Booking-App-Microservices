@@ -21,7 +21,7 @@ public class RabbitMqConfig {
 
     public static final String SALES_ORDER_CONFIRMATION_QUEUE = "salesOrderQueue";
     public static final String TEXT_MESSAGE_QUEUE = "textMessageQueue";
-    public static final String MESSAGE_MEASSAGE_QUEUE = "messageObjectQueue";
+    public static final String MESSAGE_MEASSAGE_QUEUE = "MessageQueue";
     public static final String EXCHANGE_NAME = "messageExchange";
 //    @Bean
 //    public Queue queue(){

@@ -27,6 +27,15 @@ public abstract class UserClass {
     @Column(name = "last_name")
     private String lastName;
 
+    @Column(name = "country")
+    private String country;
+
+    @Column(name = "region")
+    private String region;
+
+    @Column(name = "city")
+    private String city;
+
     @Column(name = "email")
     private String email;
 

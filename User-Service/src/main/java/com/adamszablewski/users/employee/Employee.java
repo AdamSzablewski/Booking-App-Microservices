@@ -33,7 +33,7 @@ public class Employee extends UserClass {
             joinColumns = @JoinColumn(name = "employee_id"),
             inverseJoinColumns = @JoinColumn(name = "task_id")
     )
-    private List<Task> services;
+    private List<Task> tasks;
     @OneToMany
     private List<Appointment> appointments;
 

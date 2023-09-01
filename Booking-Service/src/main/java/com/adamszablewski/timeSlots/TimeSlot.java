@@ -1,6 +1,6 @@
 package com.adamszablewski.timeSlots;
 
-import com.adamszablewski.feignClients.classes.Employee;
+import com.adamszablewski.facilities.Facility;
 import com.adamszablewski.tasks.Task;
 
 import jakarta.persistence.*;
@@ -10,7 +10,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Entity
@@ -25,10 +24,11 @@ public class TimeSlot {
     @ManyToOne
     private Task task;
     private LocalDate date;
+    private long employee;
     @ManyToOne
-    private Employee employee;
-    private LocalTime start;
-    private LocalTime end;
+    private Facility facility;
+    private LocalTime startTime;
+    private LocalTime endTime;
 
 
 }

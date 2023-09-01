@@ -4,10 +4,11 @@ import com.adamszablewski.appointments.Appointment;
 import com.adamszablewski.appointments.repository.AppointmentRepository;
 import com.adamszablewski.exceptions.NoSuchTaskException;
 import com.adamszablewski.exceptions.NoSuchUserException;
+import com.adamszablewski.exceptions.TimeSlotAlreadyTakenException;
 import com.adamszablewski.feignClients.classes.Client;
 import com.adamszablewski.feignClients.classes.Employee;
 import com.adamszablewski.feignClients.UserServiceClient;
-import com.adamszablewski.rabbitMq.RabbitMqProducer;
+import com.adamszablewski.messages.MessageSender;
 import com.adamszablewski.tasks.Task;
 import com.adamszablewski.tasks.repository.TaskRepository;
 import com.adamszablewski.timeSlots.TimeSlot;
@@ -32,13 +33,16 @@ public class TimeSlotService {
     private final TimeSlotHelper timeSlotHelper;
     private final AppointmentRepository appointmentRepository;
     private final UserServiceClient userServiceClient;
-    private final RabbitMqProducer rabbitMqProducer;
+    private final MessageSender messageSender;
+
+
 
     public List<TimeSlot> getAvailableTimeSlotsForTaskAndDate(LocalDate date, Long id){
         Task task = taskRepository.findById(id)
                 .orElseThrow(NoSuchTaskException::new);
 
-        List<Employee> employeesForTask = task.getEmployees();
+
+        List<Employee> employeesForTask =  userServiceClient.findEmployeesForIds(task.getEmployees());
         List<TimeSlot> availableTimeSlots = new ArrayList<>();
 
         employeesForTask.forEach(employee -> {
@@ -47,11 +51,17 @@ public class TimeSlotService {
             while(!employeeStartTime.isAfter(employeeEndTime.minusMinutes(task.getDurationInMinutes()))){
 
                 if(timeSlotHelper.isTimeSlotAvailable(employeeStartTime,
-                        employeeStartTime.plusMinutes(task.getDurationInMinutes()), employee, date)){
-                    availableTimeSlots.add(TimeSlot.builder()
-                            .start(employeeStartTime)
-                            .end(employeeStartTime.plusMinutes(task.getDurationInMinutes()))
-                            .build());
+                        employeeStartTime.plusMinutes(task.getDurationInMinutes()), employee.getId(), date)){
+                    availableTimeSlots.add(
+                            TimeSlot.builder()
+                                .startTime(employeeStartTime)
+                                .endTime(employeeStartTime.plusMinutes(task.getDurationInMinutes()))
+                                    .task(task)
+                                    .date(date)
+                                    .employee(employee.getId())
+                                    .facility(task.getFacility())
+                                    .build()
+                    );
                 }
                 employeeStartTime = employeeStartTime.plusMinutes(15);
             }
@@ -63,19 +73,26 @@ public class TimeSlotService {
     public ResponseEntity<String> makeAppointmentFromTimeSlot(long id, TimeSlot timeSlot) {
         Client client = userServiceClient.getClientById(id)
                 .orElseThrow(NoSuchUserException::new);
+        System.out.println(timeSlot.toString());
+        if(!timeSlotHelper.isTimeSlotAvailable(timeSlot.getStartTime(), timeSlot.getEndTime(),
+                timeSlot.getEmployee(), timeSlot.getDate())){
+                    throw new TimeSlotAlreadyTakenException();
+        }
 
-        Employee employee = timeSlot.getEmployee();
         Appointment appointment = Appointment.builder()
                 .date(timeSlot.getDate())
-                .startTime(timeSlot.getStart())
-                .endTime(timeSlot.getEnd())
-                .employee(employee)
-                .facility(employee.getWorkplace())
+                .startTime(timeSlot.getStartTime())
+                .endTime(timeSlot.getEndTime())
+                .employee(timeSlot.getEmployee())
+                .task(timeSlot.getTask())
+                .client(client.getId())
+                .facility(timeSlot.getFacility())
                 .build();
 
-        employee.getAppointments().add(appointment);
+
         appointmentRepository.save(appointment);
-        userServiceClient.saveAllUsers(List.of(client, employee));
+        messageSender.sendAppointmentCreatedMessage(appointment);
+
         //rabbitMqProducer.sendMessage(appointment);
 //        userRepository.save(client);
 //        userRepository.save(employee);

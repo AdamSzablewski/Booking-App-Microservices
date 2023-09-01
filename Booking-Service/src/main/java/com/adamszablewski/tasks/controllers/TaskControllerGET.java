@@ -5,9 +5,7 @@ import com.adamszablewski.tasks.Task;
 import com.adamszablewski.tasks.services.TaskService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.math.BigInteger;
@@ -33,15 +31,15 @@ public class TaskControllerGET {
     public Task getServiceById(@PathVariable Long id){
         return serviceService.getServiceById(id);
     }
-    @GetMapping("/region/{region}/city{city}")
-    public List<Task> getTasksForCity(@PathVariable String region, @PathVariable String city){
-        return serviceService.getTasksForCity(region, city);
+    @GetMapping("/city/{city}")
+    @ResponseBody
+    public List<Task> getTasksForCity( @PathVariable String city){
+        return serviceService.getTasksForCity(city);
     }
-    @GetMapping("/region/{region}/city{city}/category/{category}")
-    public List<Task> getTasksForCityByCategory(@PathVariable String region,
-                                                   @PathVariable String city,
-                                                   @PathVariable String category){
-        return serviceService.getTasksForCityByCategory(region, city, category);
+    @GetMapping("/city/{city}/category/{category}")
+    public List<Task> getTasksForCityByCategory(@PathVariable String city,
+                                                @PathVariable String category){
+        return serviceService.getTasksForCityByCategory(city, category);
     }
 
 
