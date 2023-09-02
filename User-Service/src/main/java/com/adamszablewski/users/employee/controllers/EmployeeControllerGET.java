@@ -1,6 +1,5 @@
 package com.adamszablewski.users.employee.controllers;
 
-import com.adamszablewski.users.UserClass;
 import com.adamszablewski.users.employee.Employee;
 import com.adamszablewski.users.employee.service.EmployeeService;
 import com.adamszablewski.users.owners.Owner;
@@ -30,7 +29,7 @@ public class EmployeeControllerGET {
         return employeeService.getEmployeeById(id);
     }
 
-    @GetMapping("/employee")
+    @GetMapping("/com/adamszablewski/users/employee")
     List<Employee> getEmployeesByTaskAndFacility(@RequestParam("taskName") String taskName,
                                                  @RequestParam("facilityName") String facilityName){
         return employeeService.getEmployeesByTaskAndFacility(taskName, facilityName);

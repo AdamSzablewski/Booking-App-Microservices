@@ -21,9 +21,9 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @ManyToOne
+    @ManyToMany
     @JsonIgnore
-    private Conversation conversation;
+    private List<Conversation> conversations;
 
     private String message;
 
@@ -32,4 +32,15 @@ public class Message {
     private List<Long> receivers;
 
     private LocalDateTime dateSent;
+
+    @Override
+    public String toString() {
+        return "Message{" +
+                "id=" + id +
+                ", message='" + message + '\'' +
+                ", sender='" + sender + '\'' +
+                ", receivers=" + receivers +
+                ", dateSent=" + dateSent +
+                '}';
+    }
 }

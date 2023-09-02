@@ -14,14 +14,14 @@ public class ConversationCreator {
 
     private final ConversationRepository conversationRepository;
 
-    public Conversation createConversation(String user) {
+    public Conversation createConversation(long userId) {
 
-        Optional<Conversation> optionalConversation =  conversationRepository.findByParticipantsContains(user);
-        if (optionalConversation.isPresent()){
-            return optionalConversation.get();
-        }
+//        Optional<Conversation> optionalConversation =  conversationRepository.findByParticipantsContains(userId);
+//        if (optionalConversation.isPresent()){
+//            return optionalConversation.get();
+//        }
         Conversation conversation = Conversation.builder()
-                .participants(List.of(user, "support"))
+                .userId(userId)
                 .messages(new ArrayList<>())
                 .build();
         conversationRepository.save(conversation);

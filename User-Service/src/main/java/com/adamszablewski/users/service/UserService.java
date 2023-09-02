@@ -1,7 +1,6 @@
 package com.adamszablewski.users.service;
 
 import com.adamszablewski.users.UserClass;
-import com.adamszablewski.users.employee.Employee;
 import com.adamszablewski.users.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;

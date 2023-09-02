@@ -52,25 +52,19 @@ public class AppointmentService {
     public ResponseEntity<String> deleteAppointmentById(Long id) {
         Appointment appointment = appointmentRepository.findById(id)
                 .orElseThrow(NoSuchAppointmentException::new);
-        messageSender.createAppoinmentCanceledMessage(appointment);
-        appointmentRepository.delete(appointment);
-        return ResponseEntity.ok().build();
+        return appointmentHelper.deleteAppointment(appointment);
     }
     @Transactional
     public ResponseEntity<String> deleteAppointmentByEmail(String email) {
         Appointment appointment = appointmentRepository.findByEmail(email)
             .orElseThrow(NoSuchAppointmentException::new);
-        messageSender.createAppoinmentCanceledMessage(appointment);
-        appointmentRepository.delete(appointment);
-        return ResponseEntity.ok().build();
+        return appointmentHelper.deleteAppointment(appointment);
     }
     @Transactional
     public ResponseEntity<String> deleteAppointmentByNumber(String number) {
         Appointment appointment = appointmentRepository.findByNumber(number)
                 .orElseThrow(NoSuchAppointmentException::new);
-        messageSender.createAppoinmentCanceledMessage(appointment);
-        appointmentRepository.delete(appointment);
-        return ResponseEntity.ok().build();
+        return appointmentHelper.deleteAppointment(appointment);
     }
 
     @Transactional

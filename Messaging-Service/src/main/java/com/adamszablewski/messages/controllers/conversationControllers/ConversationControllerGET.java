@@ -28,7 +28,7 @@ public class ConversationControllerGET {
 //    @RateLimiter(name = "messageServiceRateLimiter")
     @GetMapping("/user/{user}")
     //@PreAuthorize("hasAuthority('ADMIN') or principal.username == #user")
-    public Optional<Conversation> getCoversation(@PathVariable String user){
+    public Conversation getCoversation(@PathVariable long user){
         return conversationService.getCoversation(user);
     }
 //    @CircuitBreaker(name = "messageServiceCircuitBreaker", fallbackMethod = "fallBackMethod")

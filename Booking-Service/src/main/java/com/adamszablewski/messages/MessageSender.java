@@ -32,11 +32,14 @@ public class MessageSender {
         String street = appointment.getFacility().getStreet();
         String house = appointment.getFacility().getHouseNumber();
         Message message = Message.builder()
-                .message("You have a new appoinment for: "+appointment.getTask().getName()+" on " +
+                .message("You have a new appoinment for: "+appointment.getTask().getName()+" with "
+                        +appointment.getFacility().getName()+" on " +
                         appointment.getDate()+" at "+appointment.getStartTime()+
-                        ". The address is: "+street+" "+house+" in "+city)
+                        ". The address is: "+street+" "+house+" in "+city+". Your appoinment will cost "
+                        +appointment.getTask().getPrice()+" "+appointment.getTask().getCurrency())
                 .sender(APP_NAME)
                 .receivers(List.of(appointment.getEmployee(), appointment.getClient()))
+                .dateSent(LocalDateTime.now())
                 .build();
 
         rabbitMqProducer.sendMessageObject(message);

@@ -23,7 +23,7 @@ public class GatewayConfig {
                         .uri("lb://BOOKING"))
                 .route("user-service", r -> r
                         .path("/users/**")
-                        .uri("lb://USERS"))
+                        .uri("lb://USER-SERVICE"))
                 .route("messaging-service", r -> r
                         .path("/conversations/**")
                         .or()

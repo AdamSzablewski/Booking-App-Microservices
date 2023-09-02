@@ -20,11 +20,19 @@ public class Conversation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @ElementCollection
-    @CollectionTable(name = "conversation_participants", joinColumns = @JoinColumn(name = "conversation_id"))
-    @Column(name = "participant")
-    private List<String> participants;
-    @OneToMany(fetch = FetchType.EAGER)
+    private long userId;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "conversation_messages",
+            joinColumns = @JoinColumn(name = "conversation_id"),
+            inverseJoinColumns = @JoinColumn(name = "message_id")
+    )
     private List<Message> messages;
-
+    @Override
+    public String toString() {
+        return "Conversation{" +
+                "id=" + id +
+                ", userId=" + userId +
+                '}';
+    }
 }

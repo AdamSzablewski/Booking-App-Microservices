@@ -21,11 +21,11 @@ public class ConversationControllerPOST {
     private final ConversationService conversationService;
 //    @CircuitBreaker(name = "messageServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
 //    @RateLimiter(name = "messageServiceRateLimiter")
-    @PostMapping("/conversations/create/customer/{customer}")
-    //@PreAuthorize("hasAuthority('ADMIN') or principal.username == #customer")
-    public ResponseEntity<String> createConversation(@PathVariable String customer){
-        return conversationService.createConversation(customer);
-    }
+//    @PostMapping("/conversations/create/customer/{customer}")
+//    //@PreAuthorize("hasAuthority('ADMIN') or principal.username == #customer")
+//    public ResponseEntity<String> createConversation(@PathVariable String customer){
+//        return conversationService.createConversation(customer);
+//    }
 
     private ResponseEntity<String> fallBackMethod(String customer, Throwable ex){
         return CustomExceptionHandler.handleException(ex);

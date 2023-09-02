@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
-@FeignClient(name = "USERS")
+@FeignClient(name = "USER-SERVICE")
 public interface UserServiceClient {
     @PutMapping("/users/saveAll")
     void saveAllUsers(List<UserClass> users);

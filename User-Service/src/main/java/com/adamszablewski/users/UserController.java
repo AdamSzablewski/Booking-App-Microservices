@@ -1,6 +1,5 @@
 package com.adamszablewski.users;
 
-import com.adamszablewski.users.employee.Employee;
 import com.adamszablewski.users.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;

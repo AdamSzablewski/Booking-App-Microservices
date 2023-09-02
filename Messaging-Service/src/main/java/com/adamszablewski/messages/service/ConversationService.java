@@ -19,20 +19,17 @@ public class ConversationService {
     private final ConversationRepository conversationRepository;
     private final ConversationCreator conversationCreator;
 
-    public Optional<Conversation> getCoversation(String user) {
-        Optional<Conversation> optionalConversation = conversationRepository.findByParticipantsContains(user);
-        if (optionalConversation.isEmpty()){
-            throw new NoSuchUserFoundException();
-        }
-        return optionalConversation;
+    public Conversation getCoversation(long user) {
+        return conversationRepository.findByUserId(user)
+                .orElseThrow(NoSuchUserFoundException::new);
 
     }
 
-    public ResponseEntity<String> createConversation(String user) {
-        conversationCreator.createConversation(user);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
-
-    }
+//    public ResponseEntity<String> createConversation(String user) {
+//        conversationCreator.createConversation(user);
+//        return ResponseEntity.status(HttpStatus.CREATED).build();
+//
+//    }
 //    public Conversation createConversation(String user) {
 //        Optional<Conversation> optionalConversation =  conversationRepository.findByParticipantsContains(user);
 //        if (optionalConversation.isPresent()){

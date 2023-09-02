@@ -16,15 +16,15 @@ public class MessageControllerPOST {
 
     MessageService messageService;
 
-    @PostMapping("/user/{user}")
-    //@PreAuthorize("principal.username == #user")
-    public ResponseEntity<Message> createConversationByVendor(@RequestBody Message message, @PathVariable String user){
-        return messageService.createMessageByCustomer(message, user);
-    }
-
-    @PostMapping("/support/{user}")
-    //@PreAuthorize("hasAuthority('ADMIN') or hasAuthority('EMPLOYEE')")
-    public ResponseEntity<Message> createConversationBySupport(@RequestBody Message message, @PathVariable String user){
-        return messageService.createMessageBySupport(message, user);
-    }
+//    @PostMapping("/user/{user}")
+//    //@PreAuthorize("principal.username == #user")
+//    public ResponseEntity<Message> createConversationByVendor(@RequestBody Message message, @PathVariable String user){
+//        return messageService.createMessageByCustomer(message, user);
+//    }
+//
+//    @PostMapping("/support/{user}")
+//    //@PreAuthorize("hasAuthority('ADMIN') or hasAuthority('EMPLOYEE')")
+//    public ResponseEntity<Message> createConversationBySupport(@RequestBody Message message, @PathVariable String user){
+//        return messageService.createMessageBySupport(message, user);
+//    }
 }
