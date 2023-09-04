@@ -31,6 +31,7 @@ public class MessageSender {
         String city = appointment.getFacility().getCity();
         String street = appointment.getFacility().getStreet();
         String house = appointment.getFacility().getHouseNumber();
+
         Message message = Message.builder()
                 .message("You have a new appoinment for: "+appointment.getTask().getName()+" with "
                         +appointment.getFacility().getName()+" on " +

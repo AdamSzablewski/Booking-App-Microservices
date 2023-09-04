@@ -31,16 +31,19 @@ public class AppointmentService {
         return appointmentRepository.findAll();
     }
 
-    public Optional<Appointment> getAppointmentById(Long id) {
-        return appointmentRepository.findById(id);
+    public Appointment getAppointmentById(Long id) {
+        return appointmentRepository.findById(id)
+                .orElseThrow(NoSuchAppointmentException::new);
     }
 
-    public Optional<Appointment> getAppointmentByPhoneNumber(String number) {
-        return appointmentRepository.findByNumber(number);
+    public Appointment getAppointmentByPhoneNumber(String number) {
+        return appointmentRepository.findByNumber(number)
+                .orElseThrow(NoSuchAppointmentException::new);
     }
 
-    public Optional<Appointment> getAppointmentByEmail(String email) {
-        return appointmentRepository.findByEmail(email);
+    public Appointment getAppointmentByEmail(String email) {
+        return appointmentRepository.findByEmail(email)
+                .orElseThrow(NoSuchAppointmentException::new);
     }
 //    @Transactional
 //    public ResponseEntity<String> createNewAppointment(Appointment appointment) {
