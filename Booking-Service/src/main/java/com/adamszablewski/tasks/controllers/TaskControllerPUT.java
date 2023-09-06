@@ -1,9 +1,9 @@
-package com.adamszablewski.facilities.controller;
+package com.adamszablewski.tasks.controllers;
 
 import com.adamszablewski.appointments.dtos.RestResponseDTO;
 import com.adamszablewski.exceptions.CustomExceptionHandler;
-import com.adamszablewski.facilities.Facility;
-import com.adamszablewski.facilities.service.FacilityService;
+import com.adamszablewski.tasks.Task;
+import com.adamszablewski.tasks.services.TaskService;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import lombok.AllArgsConstructor;
@@ -11,26 +11,27 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigInteger;
-import java.util.List;
-import java.util.Optional;
-
 @Controller
+@RequestMapping("/services/change")
 @AllArgsConstructor
-@RequestMapping("/facilities/create")
-public class FacilityControllerPOST {
+public class TaskControllerPUT {
 
-    private final FacilityService facilityService;
+    private final TaskService taskService;
 
-    @PostMapping("/")
+    @PutMapping("/id/{id}")
     @CircuitBreaker(name = "bookingServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
     @RateLimiter(name = "bookingServiceRateLimiter")
-    ResponseEntity<RestResponseDTO<String>> createFacility(@RequestBody Facility facility){
-        facilityService.createFacility(facility);
+    public ResponseEntity<RestResponseDTO<Task>> changeTaskById(@PathVariable long id,
+                                                                @RequestBody Task task){
+        taskService.changeTask(id, task);
         return ResponseEntity.ok(new RestResponseDTO<>());
-  }
+    }
+
 
     public ResponseEntity<RestResponseDTO<?>> fallBackMethod(Throwable throwable){
         return CustomExceptionHandler.handleException(throwable);
     }
+
+
+
 }

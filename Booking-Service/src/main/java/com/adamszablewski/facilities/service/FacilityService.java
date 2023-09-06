@@ -30,24 +30,23 @@ public class FacilityService {
         return facilityRepository.findByCity(city);
     }
 
-    public Optional<Facility> getFacilityById(Long id) {
-        return facilityRepository.findById(id);
+    public Facility getFacilityById(Long id) {
+        return facilityRepository.findById(id)
+                .orElseThrow(NoSuchFacilityException::new);
     }
 
-    public ResponseEntity<String> createFacility(Facility facility) {
+    public void createFacility(Facility facility) {
         facilityRepository.save(facility);
-        return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<String> addServiceToFacility(Long id, Task service) {
+    public void addServiceToFacility(Long id, Task service) {
         Facility facility = facilityRepository.findById(id)
                 .orElseThrow(NoSuchFacilityException::new);
         facility.getTasks().add(service);
-        return ResponseEntity.ok().build();
+        facilityRepository.save(facility);
     }
 
-    public ResponseEntity<String> removeFacilityById(Long id) {
+    public void removeFacilityById(Long id) {
         facilityRepository.deleteById(id);
-        return ResponseEntity.ok().build();
     }
 }

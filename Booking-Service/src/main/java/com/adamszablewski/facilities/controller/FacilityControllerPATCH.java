@@ -1,7 +1,12 @@
 package com.adamszablewski.facilities.controller;
 
+import com.adamszablewski.appointments.dtos.RestResponseDTO;
+import com.adamszablewski.exceptions.CustomExceptionHandler;
+import com.adamszablewski.facilities.Facility;
 import com.adamszablewski.facilities.service.FacilityService;
 import com.adamszablewski.tasks.Task;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -17,8 +22,14 @@ public class FacilityControllerPATCH {
     private final FacilityService facilityService;
 
     @PatchMapping("id/{id}/add/services/")
-    public ResponseEntity<String> addServiceToFacility(@RequestParam Long id, @RequestBody Task service){
-        return facilityService.addServiceToFacility(id, service);
+    @CircuitBreaker(name = "bookingServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
+    @RateLimiter(name = "bookingServiceRateLimiter")
+    public ResponseEntity<RestResponseDTO<String>> addServiceToFacility(@RequestParam Long id, @RequestBody Task service){
+        facilityService.addServiceToFacility(id, service);
+        return ResponseEntity.ok(new RestResponseDTO<>());
+    }
+    public ResponseEntity<RestResponseDTO<?>> fallBackMethod(Throwable throwable){
+        return CustomExceptionHandler.handleException(throwable);
     }
 
 }

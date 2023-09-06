@@ -1,15 +1,20 @@
 package com.adamszablewski.timeSlots.helper;
 
 import com.adamszablewski.appointments.Appointment;
+import com.adamszablewski.appointments.dtos.RestResponseDTO;
 import com.adamszablewski.appointments.repository.AppointmentRepository;
 
+import com.adamszablewski.exceptions.ConnectionException;
 import com.adamszablewski.exceptions.NoSuchUserException;
 import com.adamszablewski.feignClients.UserServiceClient;
 import com.adamszablewski.feignClients.classes.Employee;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 
+import java.net.ConnectException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -43,8 +48,11 @@ public class TimeSlotHelper {
 
     }
     public boolean isWithinEmployeeWorkHours(LocalTime taskStartTime, LocalTime taskEndTime, long employeeId) {
-        Employee employee = userServiceClient.getEmployeeById(employeeId)
-                .orElseThrow(NoSuchUserException::new);
+        ResponseEntity<RestResponseDTO<Employee>> response = userServiceClient.getEmployeeById(employeeId);
+        if (response.getStatusCode() != HttpStatus.OK || response.getBody().getValue() == null){
+            throw new ConnectionException();
+        }
+        Employee employee = response.getBody().getValue();
 
         LocalTime employeeStartTime = employee.getStartTime();
         LocalTime employeeEndTime = employee.getEndTime();

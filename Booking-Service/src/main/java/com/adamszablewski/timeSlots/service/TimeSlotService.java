@@ -70,7 +70,7 @@ public class TimeSlotService {
     }
 
 
-    public ResponseEntity<String> makeAppointmentFromTimeSlot(long id, TimeSlot timeSlot) {
+    public Appointment makeAppointmentFromTimeSlot(long id, TimeSlot timeSlot) {
         Client client = userServiceClient.getClientById(id)
                 .orElseThrow(NoSuchUserException::new);
         System.out.println(timeSlot.toString());
@@ -96,6 +96,6 @@ public class TimeSlotService {
         //rabbitMqProducer.sendMessage(appointment);
 //        userRepository.save(client);
 //        userRepository.save(employee);
-        return ResponseEntity.ok().build();
+        return appointment;
     }
 }

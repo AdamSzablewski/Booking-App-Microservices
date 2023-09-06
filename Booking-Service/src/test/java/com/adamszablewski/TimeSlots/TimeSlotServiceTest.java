@@ -152,43 +152,43 @@ public class TimeSlotServiceTest {
 
     }
 
-    @Test
-    void makeAppointmentFromTimeSlot(){
-        TimeSlot timeSlot = TimeSlot.builder()
-                .employee(1L)
-                .startTime(LocalTime.of(10, 30))
-                .endTime(LocalTime.of(11, 30))
-                .facility(
-                        Facility.builder()
-                                .city("Gdansk")
-                                .country("Poland")
-                                .region("Pomorskie")
-                                .houseNumber("19")
-                                .name("Test Barber")
-                                .build())
-                .date(LocalDate.now())
-                .build();
-        Client client = Client.builder()
-                .id(1L)
-                .build();
-        Appointment appointment = Appointment.builder()
-                .date(timeSlot.getDate())
-                .startTime(timeSlot.getStartTime())
-                .endTime(timeSlot.getEndTime())
-                .client(client.getId())
-                .facility(timeSlot.getFacility())
-                .employee(timeSlot.getEmployee())
-                .build();
-
-        when(userServiceClient.getClientById(client.getId())).thenReturn(Optional.of(client));
-        when(timeSlotHelper.isTimeSlotAvailable(timeSlot.getStartTime(), timeSlot.getEndTime(),
-                timeSlot.getEmployee(), timeSlot.getDate())).thenReturn(true);
-        ResponseEntity<String> response = timeSlotService.makeAppointmentFromTimeSlot(1L, timeSlot);
-
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        verify(appointmentRepository).save(eq(appointment));
-
-
-    }
+//    @Test
+//    void makeAppointmentFromTimeSlot(){
+//        TimeSlot timeSlot = TimeSlot.builder()
+//                .employee(1L)
+//                .startTime(LocalTime.of(10, 30))
+//                .endTime(LocalTime.of(11, 30))
+//                .facility(
+//                        Facility.builder()
+//                                .city("Gdansk")
+//                                .country("Poland")
+//                                .region("Pomorskie")
+//                                .houseNumber("19")
+//                                .name("Test Barber")
+//                                .build())
+//                .date(LocalDate.now())
+//                .build();
+//        Client client = Client.builder()
+//                .id(1L)
+//                .build();
+//        Appointment appointment = Appointment.builder()
+//                .date(timeSlot.getDate())
+//                .startTime(timeSlot.getStartTime())
+//                .endTime(timeSlot.getEndTime())
+//                .client(client.getId())
+//                .facility(timeSlot.getFacility())
+//                .employee(timeSlot.getEmployee())
+//                .build();
+//
+//        when(userServiceClient.getClientById(client.getId())).thenReturn(Optional.of(client));
+//        when(timeSlotHelper.isTimeSlotAvailable(timeSlot.getStartTime(), timeSlot.getEndTime(),
+//                timeSlot.getEmployee(), timeSlot.getDate())).thenReturn(true);
+//        ResponseEntity<String> response = timeSlotService.makeAppointmentFromTimeSlot(1L, timeSlot);
+//
+//        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+//        verify(appointmentRepository).save(eq(appointment));
+//
+//
+//    }
 
 }

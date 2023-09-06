@@ -16,6 +16,5 @@ public class RestResponseDTO <T>{
     private T value;
     private List<T> values;
     private String error;
-
 }
 

@@ -23,43 +23,33 @@ public class AppointmentControllerGET {
     @ResponseBody
     @CircuitBreaker(name = "bookingServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
     @RateLimiter(name = "bookingServiceRateLimiter")
-    public ResponseEntity<RestResponseDTO<?>> getAllAppointments(){
-        RestResponseDTO<?> appointmentDTO = buildListResponse(appointmentService.getAllAppointments());
+    public ResponseEntity<RestResponseDTO<Appointment>> getAllAppointments(){
+        RestResponseDTO<Appointment> appointmentDTO = RestResponseDTO.<Appointment>builder()
+                .values(appointmentService.getAllAppointments())
+                .build();
         return ResponseEntity.ok(appointmentDTO);
     }
     @GetMapping("/id/{id}")
     @CircuitBreaker(name = "bookingServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
     @RateLimiter(name = "bookingServiceRateLimiter")
-    public ResponseEntity<RestResponseDTO<?>> getAppointmentById(@PathVariable Long id){
-        RestResponseDTO<?> restResponseDTO = buildResponse(appointmentService.getAppointmentById(id));
+    public ResponseEntity<RestResponseDTO<Appointment>> getAppointmentById(@PathVariable Long id){
+        RestResponseDTO<Appointment> restResponseDTO = RestResponseDTO.<Appointment>builder()
+                .value(appointmentService.getAppointmentById(id))
+                .build();
         return ResponseEntity.ok(restResponseDTO);
 
     }
     @GetMapping("/number/{number}")
     @CircuitBreaker(name = "bookingServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
     @RateLimiter(name = "bookingServiceRateLimiter")
-    public ResponseEntity<RestResponseDTO<?>> getAppointmentByPhoneNumber(@PathVariable String number){
-        RestResponseDTO<?> appointmentDTO = buildResponse(appointmentService.getAppointmentByPhoneNumber(number));
+    public ResponseEntity<RestResponseDTO<Appointment>> getAppointmentByPhoneNumber(@PathVariable String number){
+        RestResponseDTO<Appointment> appointmentDTO =RestResponseDTO.<Appointment>builder()
+                .value(appointmentService.getAppointmentByPhoneNumber(number))
+                .build();
         return ResponseEntity.ok(appointmentDTO);
     }
-    @GetMapping("/email/{email}")
-    @CircuitBreaker(name = "bookingServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
-    @RateLimiter(name = "bookingServiceRateLimiter")
-    public ResponseEntity<RestResponseDTO<?>> getAppointmentByEmail(@PathVariable String email){
-        RestResponseDTO<?> appointmentDTO = buildResponse(appointmentService.getAppointmentByEmail(email));
-        return ResponseEntity.ok(appointmentDTO);
-    }
+
     public  ResponseEntity<RestResponseDTO<?>> fallBackMethod(Throwable throwable){
-        return CustomExceptionHandler.handleException(throwable, new RestResponseDTO<>());
-    }
-    private <T> RestResponseDTO<T> buildListResponse(List<T> dataList){
-        return RestResponseDTO.<T>builder()
-                .values(dataList)
-                .build();
-    }
-    private <T> RestResponseDTO<T> buildResponse(T data){
-        return RestResponseDTO.<T>builder()
-                .value(data)
-                .build();
+        return CustomExceptionHandler.handleException(throwable);
     }
 }

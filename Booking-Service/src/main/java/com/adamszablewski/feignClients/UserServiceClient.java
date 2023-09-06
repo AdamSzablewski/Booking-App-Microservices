@@ -1,10 +1,12 @@
 package com.adamszablewski.feignClients;
 
+import com.adamszablewski.appointments.dtos.RestResponseDTO;
 import com.adamszablewski.feignClients.classes.Client;
 import com.adamszablewski.feignClients.classes.Employee;
 import com.adamszablewski.feignClients.classes.Owner;
 import com.adamszablewski.feignClients.classes.UserClass;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,7 +21,7 @@ public interface UserServiceClient {
     void save(UserClass users);
 
     @GetMapping("/users/employee/id/{id}")
-    Optional<Employee> getEmployeeById(@PathVariable long id);
+    ResponseEntity<RestResponseDTO<Employee>> getEmployeeById(@PathVariable long id);
 
     @GetMapping("/users/clients/id/{id}")
     Optional<Client> getClientById(@PathVariable long id);

@@ -5,8 +5,8 @@ import com.adamszablewski.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-public class CustomExceptionHandler <T> {
-    public static ResponseEntity<RestResponseDTO<?>> handleException(Throwable ex, RestResponseDTO<?> response) {
+public class CustomExceptionHandler {
+    public static ResponseEntity<RestResponseDTO<?>> handleException(Throwable ex) {
         RestResponseDTO<?> responseBody = RestResponseDTO.builder()
                 .error(ex.getMessage())
                 .build();

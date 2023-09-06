@@ -3,19 +3,10 @@ package com.adamszablewski.appointments.helpers;
 import com.adamszablewski.appointments.Appointment;
 import com.adamszablewski.appointments.repository.AppointmentRepository;
 
-import com.adamszablewski.exceptions.NoSuchAppointmentException;
-import com.adamszablewski.exceptions.NoSuchUserException;
 import com.adamszablewski.feignClients.UserServiceClient;
-import com.adamszablewski.feignClients.classes.Client;
-import com.adamszablewski.feignClients.classes.Employee;
-import com.adamszablewski.feignClients.classes.UserClass;
 import com.adamszablewski.messages.MessageSender;
 import lombok.AllArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Component
 @AllArgsConstructor
@@ -63,10 +54,10 @@ public class AppointmentHelper {
     public void changeEmployeeForAppointment(Appointment appointment, long employee) {
         appointment.setEmployee(employee);
     }
-    public ResponseEntity<String> deleteAppointment(Appointment appointment) {
+    public void deleteAppointment(Appointment appointment) {
         messageSender.createAppoinmentCanceledMessage(appointment);
         appointmentRepository.delete(appointment);
-        return ResponseEntity.ok().build();
+
     }
 //    public void removeAppointmentFromUser(UserClass user, Appointment appointment) {
 //        user.getAppointments().remove(appointment);
