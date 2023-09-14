@@ -5,6 +5,7 @@ import com.adamszablewski.feignClients.classes.Client;
 import com.adamszablewski.feignClients.classes.Employee;
 import com.adamszablewski.feignClients.classes.Owner;
 import com.adamszablewski.feignClients.classes.UserClass;
+import org.apache.catalina.User;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +30,7 @@ public interface UserServiceClient {
     @GetMapping("/users/owner/id/{id}")
     Optional<Owner> findOwnerById(@PathVariable long id);
     @GetMapping("/users/employee/email/{email}")
-    Optional<Employee> findEmployeeByEmail(@PathVariable String email);
+    RestResponseDTO<Employee> findEmployeeByEmail(@PathVariable String email);
     @GetMapping("/users/employee")
     List<UserClass> findAllEmployeesByTaskAndFacility(@RequestParam("taskName") String taskName,
                                                       @RequestParam("facilityName") String facilityName);
@@ -40,4 +41,6 @@ public interface UserServiceClient {
     Employee findEmployeeById(long id);
     @GetMapping("/users/owner/email/{email}")
     RestResponseDTO<Owner> findOwnerByEmail(@PathVariable String email);
+    @GetMapping("/users/email/{email}")
+    RestResponseDTO<UserClass> findUserByEmail(String ownerEmail);
 }

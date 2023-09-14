@@ -1,36 +1,26 @@
-package com.adamszablewski.timeSlots;
+package com.adamszablewski.facilities.employmentRequests;
 
 import com.adamszablewski.facilities.Facility;
 import com.adamszablewski.feignClients.classes.Employee;
-import com.adamszablewski.tasks.Task;
-
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-
+@Data
 @Entity
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-@Data
-public class TimeSlot {
+public class EmploymentRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
-    @ManyToOne
-    private Task task;
-    private LocalDate date;
-    @OneToOne
     private Employee employee;
-    @ManyToOne
     private Facility facility;
-    private LocalTime startTime;
-    private LocalTime endTime;
-
-
+    private boolean status;
 }

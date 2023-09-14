@@ -23,7 +23,7 @@ import java.time.LocalTime;
 @Entity
 public class Appointment {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private BigInteger id;
     @ManyToOne
     private Facility facility;

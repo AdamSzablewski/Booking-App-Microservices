@@ -22,15 +22,15 @@ public class OwnerControllerGET {
 
     OwnerService ownerService;
 
-//    @GetMapping("/email/{email}")
-//    @CircuitBreaker(name = "userServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
-//    @RateLimiter(name = "userServiceRateLimiter")
-//    public ResponseEntity<RestResponseDTO<Owner>> getOwnerByEmail(@PathVariable String email){
-//        RestResponseDTO<Owner> responseDTO = RestResponseDTO.<Owner>builder()
-//                .value(ownerService.getOwnerByEmail(email))
-//                .build();
-//        return ResponseEntity.ok(responseDTO);
-//    }
+    @GetMapping("/email/{email}")
+    @CircuitBreaker(name = "userServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
+    @RateLimiter(name = "userServiceRateLimiter")
+    public ResponseEntity<RestResponseDTO<Owner>> getOwnerByEmail(@PathVariable String email){
+        RestResponseDTO<Owner> responseDTO = RestResponseDTO.<Owner>builder()
+                .value(ownerService.getOwnerByEmail(email))
+                .build();
+        return ResponseEntity.ok(responseDTO);
+    }
 
     @GetMapping("/id/{id}")
     @CircuitBreaker(name = "userServiceCircuitBreaker", fallbackMethod = "fallBackMethod")

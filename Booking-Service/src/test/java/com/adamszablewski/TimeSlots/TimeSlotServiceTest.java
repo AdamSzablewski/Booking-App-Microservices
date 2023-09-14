@@ -66,34 +66,34 @@ public class TimeSlotServiceTest {
                 .id(1L)
                 .startTime(LocalTime.of(7, 0))
                 .endTime(LocalTime.of(16, 0))
-                .services(List.of(task))
+                .tasks(List.of(task))
                 .appointments(new ArrayList<>())
                 .build();
         TimeSlot ts1 = TimeSlot.builder()
-                .employee(employee.getId())
+                .employee(employee)
                 .task(task)
                 .startTime(LocalTime.of(7, 0))
                 .endTime(LocalTime.of(10, 0))
                 .date(LocalDate.now())
                 .build();
         TimeSlot ts2 = TimeSlot.builder()
-                .employee(employee.getId())
+                .employee(employee)
                 .task(task)
                 .startTime(LocalTime.of(10, 0))
                 .endTime(LocalTime.of(13, 0))
                 .date(LocalDate.now())
                 .build();
         TimeSlot ts3 = TimeSlot.builder()
-                .employee(employee.getId())
+                .employee(employee)
                 .task(task)
                 .startTime(LocalTime.of(13, 0))
                 .endTime(LocalTime.of(16, 0))
                 .date(LocalDate.now())
                 .build();
-        task.setEmployees(List.of(employee.getId()));
+        task.setEmployees(List.of(employee));
 
         when(taskRepository.findById(task.getId())).thenReturn(Optional.of(task));
-        when(userServiceClient.findEmployeesForIds(task.getEmployees())).thenReturn(List.of(employee));
+        //when(userServiceClient.findEmployeesForIds(task.getEmployees())).thenReturn(List.of(employee));
 
         AtomicReference<LocalTime> lastAppointmentEndTime = new AtomicReference<>(employee.getStartTime());
 

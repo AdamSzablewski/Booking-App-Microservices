@@ -1,8 +1,10 @@
 package com.adamszablewski.feignClients.classes;
 
 import com.adamszablewski.appointments.Appointment;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -13,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table
-@SuperBuilder
+@Builder
 public class UserClass {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -41,7 +43,7 @@ public class UserClass {
     @Column(name = "phone_number")
     private String phoneNumber;
 
-    @Column(name = "password")
+    @JsonIgnore
     private String password;
 
     @OneToMany

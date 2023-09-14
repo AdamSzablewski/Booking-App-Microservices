@@ -52,6 +52,14 @@ public class EmployeeControllerGET {
         return ResponseEntity.ok(responseDTO);
     }
 
+    @PostMapping("/id/{id}")
+    @CircuitBreaker(name = "userServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
+    @RateLimiter(name = "userServiceRateLimiter")
+    ResponseEntity<RestResponseDTO<String>> makeEmployeeFromUser(@PathVariable long id, @RequestBody Employee employee){
+        employeeService.makeEmployeeFromUser(id, employee);
+        return ResponseEntity.ok(new RestResponseDTO<>());
+    }
+
     @PostMapping("/ids")
     @CircuitBreaker(name = "userServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
     @RateLimiter(name = "userServiceRateLimiter")

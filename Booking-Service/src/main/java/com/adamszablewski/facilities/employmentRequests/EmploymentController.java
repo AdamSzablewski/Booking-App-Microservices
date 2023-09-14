@@ -1,9 +1,8 @@
-package com.adamszablewski.facilities.controller;
+package com.adamszablewski.facilities.employmentRequests;
 
 import com.adamszablewski.appointments.dtos.RestResponseDTO;
 import com.adamszablewski.exceptions.CustomExceptionHandler;
 import com.adamszablewski.facilities.Facility;
-import com.adamszablewski.facilities.service.FacilityService;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import lombok.AllArgsConstructor;
@@ -11,27 +10,22 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigInteger;
-import java.util.List;
-import java.util.Optional;
-
 @Controller
+@RequestMapping("/facilities/employment")
 @AllArgsConstructor
-@RequestMapping("/facilities/create")
-public class FacilityControllerPOST {
+public class EmploymentController {
+    private final EmploymentRequestService employmentRequestService;
 
-    private final FacilityService facilityService;
-
-    @PostMapping("/")
+    @GetMapping("/request/{id}")
     @CircuitBreaker(name = "bookingServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
     @RateLimiter(name = "bookingServiceRateLimiter")
-    ResponseEntity<RestResponseDTO<String>> createFacility(@RequestBody Facility facility,
-                                                           @RequestHeader("userEmail") String ownerEmail){
-        System.out.println("user in post facility "+ownerEmail);
-        facilityService.createFacility(facility, ownerEmail);
-        return ResponseEntity.ok(new RestResponseDTO<>());
-  }
-
+    public ResponseEntity<RestResponseDTO<Facility>> acceptEmploymentRequest(@PathVariable long id,
+                                                                             @RequestBody boolean status){
+        RestResponseDTO<Facility> responseDTO = RestResponseDTO.<Facility>builder()
+                .values(employmentRequestService.acceptEmploymentRequest(id, status))
+                .build();
+        return ResponseEntity.ok(responseDTO);
+    }
     public ResponseEntity<RestResponseDTO<?>> fallBackMethod(Throwable throwable){
         return CustomExceptionHandler.handleException(throwable);
     }

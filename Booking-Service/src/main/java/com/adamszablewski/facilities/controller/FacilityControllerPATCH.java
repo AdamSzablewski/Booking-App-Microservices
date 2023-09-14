@@ -24,8 +24,16 @@ public class FacilityControllerPATCH {
     @PatchMapping("id/{id}/add/services/")
     @CircuitBreaker(name = "bookingServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
     @RateLimiter(name = "bookingServiceRateLimiter")
-    public ResponseEntity<RestResponseDTO<String>> addServiceToFacility(@RequestParam Long id, @RequestBody Task service){
+    public ResponseEntity<RestResponseDTO<String>> addServiceToFacility(@PathVariable Long id, @RequestBody Task service){
         facilityService.addServiceToFacility(id, service);
+        return ResponseEntity.ok(new RestResponseDTO<>());
+    }
+    @PatchMapping("id/{id}/add/employee/{email}/facility/id/{facilityId}")
+    @CircuitBreaker(name = "bookingServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
+    @RateLimiter(name = "bookingServiceRateLimiter")
+    public ResponseEntity<RestResponseDTO<String>> addEmployeeToFacility(@PathVariable String email,
+                                                                         @PathVariable long facilityId){
+        facilityService.addEmployeeToFacility(email, facilityId);
         return ResponseEntity.ok(new RestResponseDTO<>());
     }
     public ResponseEntity<RestResponseDTO<?>> fallBackMethod(Throwable throwable){

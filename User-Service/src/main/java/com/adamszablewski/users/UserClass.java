@@ -4,6 +4,7 @@ package com.adamszablewski.users;
 import com.adamszablewski.feignClients.Appointment;
 import com.adamszablewski.users.owners.Owner;
 import com.adamszablewski.users.role.Role;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -46,6 +47,6 @@ public class UserClass {
     @Column(name = "phone_number")
     private String phoneNumber;
 
-    @Column(name = "password")
+    @JsonIgnore
     private String password;
 }

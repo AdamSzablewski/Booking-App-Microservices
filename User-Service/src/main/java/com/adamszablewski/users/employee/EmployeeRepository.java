@@ -1,5 +1,6 @@
 package com.adamszablewski.users.employee;
 
+import com.adamszablewski.users.UserClass;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -11,5 +12,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     //@Query("SELECT emp FROM Employee WHERE emp.id IN :ids")
     List<Employee> findByIdIn(List<Long> ids);
 
-   // Optional<Employee> findByEmail(String email);
+    Optional<Employee> findByUserId(long id);
+
+    // Optional<Employee> findByEmail(String email);
 }
