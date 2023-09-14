@@ -6,10 +6,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 public class CustomExceptionHandler {
+
     public static ResponseEntity<RestResponseDTO<?>> handleException(Throwable ex) {
+        ex.printStackTrace();
         RestResponseDTO<?> responseBody = RestResponseDTO.builder()
                 .error(ex.getMessage())
                 .build();
+
         if (ex instanceof NoSuchAppointmentException) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseBody);
         } else if (ex instanceof NoSuchFacilityException) {

@@ -38,18 +38,12 @@ import static org.mockito.Mockito.*;
 @AutoConfigureTestDatabase
 public class TimeSlotServiceTest {
     TimeSlotService timeSlotService;
-
-
-
     @Mock
     TaskRepository taskRepository;
-
     @Mock
     TimeSlotHelper timeSlotHelper;
-
     @Mock
     AppointmentRepository appointmentRepository;
-
     @Mock
     UserServiceClient userServiceClient;
     @Mock
@@ -103,7 +97,8 @@ public class TimeSlotServiceTest {
 
         AtomicReference<LocalTime> lastAppointmentEndTime = new AtomicReference<>(employee.getStartTime());
 
-        when(timeSlotHelper.isTimeSlotAvailable(any(LocalTime.class), any(LocalTime.class), any(Long.class), any(LocalDate.class))).thenAnswer(invocation -> {
+        when(timeSlotHelper.isTimeSlotAvailable(any(LocalTime.class), any(LocalTime.class), any(Long.class),
+                any(LocalDate.class))).thenAnswer(invocation -> {
             LocalTime startTime = invocation.getArgument(0);
 
             boolean isAvailbale =  !startTime.isBefore(lastAppointmentEndTime.get());
@@ -142,9 +137,9 @@ public class TimeSlotServiceTest {
 
         when(taskRepository.findById(task.getId())).thenReturn(Optional.of(task));
 
-        AtomicReference<LocalTime> lastAppointmentEndTime = new AtomicReference<>(employee.getStartTime());
 
-        when(timeSlotHelper.isTimeSlotAvailable(any(), any(), any(), any())).thenReturn(false);
+        lenient().when(timeSlotHelper.isTimeSlotAvailable(any(LocalTime.class), any(LocalTime.class), any(Long.class),
+                any(LocalDate.class))).thenAnswer(invocation -> false);
 
         List<TimeSlot> timeSlots = timeSlotService.getAvailableTimeSlotsForTaskAndDate(date, task.getId());
 
@@ -152,43 +147,44 @@ public class TimeSlotServiceTest {
 
     }
 
-//    @Test
-//    void makeAppointmentFromTimeSlot(){
-//        TimeSlot timeSlot = TimeSlot.builder()
-//                .employee(1L)
-//                .startTime(LocalTime.of(10, 30))
-//                .endTime(LocalTime.of(11, 30))
-//                .facility(
-//                        Facility.builder()
-//                                .city("Gdansk")
-//                                .country("Poland")
-//                                .region("Pomorskie")
-//                                .houseNumber("19")
-//                                .name("Test Barber")
-//                                .build())
-//                .date(LocalDate.now())
-//                .build();
-//        Client client = Client.builder()
-//                .id(1L)
-//                .build();
-//        Appointment appointment = Appointment.builder()
-//                .date(timeSlot.getDate())
-//                .startTime(timeSlot.getStartTime())
-//                .endTime(timeSlot.getEndTime())
-//                .client(client.getId())
-//                .facility(timeSlot.getFacility())
-//                .employee(timeSlot.getEmployee())
-//                .build();
-//
-//        when(userServiceClient.getClientById(client.getId())).thenReturn(Optional.of(client));
-//        when(timeSlotHelper.isTimeSlotAvailable(timeSlot.getStartTime(), timeSlot.getEndTime(),
-//                timeSlot.getEmployee(), timeSlot.getDate())).thenReturn(true);
-//        ResponseEntity<String> response = timeSlotService.makeAppointmentFromTimeSlot(1L, timeSlot);
-//
-//        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-//        verify(appointmentRepository).save(eq(appointment));
-//
-//
-//    }
+    @Test
+    void makeAppointmentFromTimeSlot(){
+        TimeSlot timeSlot = TimeSlot.builder()
+                .employee(1L)
+                .startTime(LocalTime.of(10, 30))
+                .endTime(LocalTime.of(11, 30))
+                .facility(
+                        Facility.builder()
+                                .city("Gdansk")
+                                .country("Poland")
+                                .region("Pomorskie")
+                                .houseNumber("19")
+                                .name("Test Barber")
+                                .build())
+                .date(LocalDate.now())
+                .build();
+        Client client = Client.builder()
+                .id(1L)
+                .build();
+        Appointment appointment = Appointment.builder()
+                .date(timeSlot.getDate())
+                .startTime(timeSlot.getStartTime())
+                .endTime(timeSlot.getEndTime())
+                .client(client)
+                .facility(timeSlot.getFacility())
+                .employee(timeSlot.getEmployee())
+                .build();
+
+        when(userServiceClient.getClientById(client.getId())).thenReturn(Optional.of(client));
+        when(timeSlotHelper.isTimeSlotAvailable(timeSlot.getStartTime(), timeSlot.getEndTime(),
+                timeSlot.getEmployee(), timeSlot.getDate())).thenReturn(true);
+        Appointment response = timeSlotService.makeAppointmentFromTimeSlot(1L, timeSlot);
+
+
+        verify(appointmentRepository).save(eq(appointment));
+        assertThat(response).isEqualTo(appointment);
+
+
+    }
 
 }

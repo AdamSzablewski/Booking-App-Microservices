@@ -2,11 +2,14 @@ package com.adamszablewski.messages.controllers.conversationControllers;
 
 
 
+import com.adamszablewski.RestResponseDTO;
 import com.adamszablewski.exceptions.CustomExceptionHandler;
 import com.adamszablewski.messages.Conversation;
 import com.adamszablewski.messages.repositories.ConversationRepository;
 import com.adamszablewski.messages.service.ConversationService;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,22 +26,31 @@ import java.util.Optional;
 public class ConversationControllerGET {
 
     private final ConversationService conversationService;
-    private ConversationRepository conversationRepository;
-//    @CircuitBreaker(name = "messageServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
-//    @RateLimiter(name = "messageServiceRateLimiter")
+    private final ConversationRepository conversationRepository;
+
     @GetMapping("/user/{user}")
+    @CircuitBreaker(name = "messagingServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
+    @RateLimiter(name = "messagingServiceRateLimiter")
     //@PreAuthorize("hasAuthority('ADMIN') or principal.username == #user")
-    public Conversation getCoversation(@PathVariable long user){
-        return conversationService.getCoversation(user);
+    public ResponseEntity<RestResponseDTO<Conversation>> getCoversation(@PathVariable long user){
+        RestResponseDTO<Conversation> responseDTO = RestResponseDTO.<Conversation>builder()
+                .value(conversationService.getCoversation(user))
+                .build();
+        return ResponseEntity.ok(responseDTO);
     }
 //    @CircuitBreaker(name = "messageServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
 //    @RateLimiter(name = "messageServiceRateLimiter")
     @GetMapping("/all")
-    public List<Conversation> getAll(){
-        return conversationRepository.findAll();
+    @CircuitBreaker(name = "messagingServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
+    @RateLimiter(name = "messagingServiceRateLimiter")
+    public ResponseEntity<RestResponseDTO<Conversation>> getAll(){
+        RestResponseDTO<Conversation> responseDTO = RestResponseDTO.<Conversation>builder()
+                .values(conversationRepository.findAll())
+                .build();
+        return ResponseEntity.ok(responseDTO);
     }
-    private ResponseEntity<String> fallBackMethod(String customer, Throwable ex){
-        return CustomExceptionHandler.handleException(ex);
+    public  ResponseEntity<RestResponseDTO<?>> fallBackMethod(Throwable throwable){
+        return CustomExceptionHandler.handleException(throwable);
     }
    
 }

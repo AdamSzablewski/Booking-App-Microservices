@@ -32,7 +32,8 @@ public class Task {
     private List<Appointment> appointments;
     @ManyToOne
     private Facility facility;
-    private List<Long> employees;
+    @ManyToMany
+    private List<Employee> employees;
     private double price;
     private int durationInMinutes;
     private String currency;

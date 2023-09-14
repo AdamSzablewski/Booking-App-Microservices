@@ -15,10 +15,10 @@ import java.util.List;
 public class EmployeeService {
     UserRepository userRepository;
     EmployeeRepository employeeRepository;
-    public Owner getOwnerByEmail(String email) {
-        return (Owner) userRepository.findByEmail(email)
-                .orElseThrow(NoSuchUserException::new);
-    }
+//    public Employee getEmployeeByEmail(String email) {
+//        return employeeRepository.findByEmail(email)
+//                .orElseThrow(NoSuchUserException::new);
+//    }
     public List<Employee> getEmployeesByTaskAndFacility(String taskName, String facilityName) {
         return employeeRepository.findAllByTasks_NameAndWorkplace_Name(taskName, facilityName);
     }

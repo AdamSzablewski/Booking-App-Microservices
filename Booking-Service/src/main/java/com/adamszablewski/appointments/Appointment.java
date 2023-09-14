@@ -34,7 +34,9 @@ public class Appointment {
     private LocalTime endTime;
     private String number;
     private String email;
-    private long client;
-    private long employee;
+    @OneToOne
+    private Client client;
+    @OneToOne
+    private Employee employee;
 
 }

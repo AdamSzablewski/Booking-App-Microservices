@@ -25,8 +25,10 @@ public class FacilityControllerPOST {
     @PostMapping("/")
     @CircuitBreaker(name = "bookingServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
     @RateLimiter(name = "bookingServiceRateLimiter")
-    ResponseEntity<RestResponseDTO<String>> createFacility(@RequestBody Facility facility){
-        facilityService.createFacility(facility);
+    ResponseEntity<RestResponseDTO<String>> createFacility(@RequestBody Facility facility,
+                                                           @RequestHeader("userEmail") String ownerEmail){
+        System.out.println("called");
+        facilityService.createFacility(facility, ownerEmail);
         return ResponseEntity.ok(new RestResponseDTO<>());
   }
 

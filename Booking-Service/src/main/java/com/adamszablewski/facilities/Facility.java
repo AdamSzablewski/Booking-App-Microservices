@@ -1,6 +1,7 @@
 package com.adamszablewski.facilities;
 
 import com.adamszablewski.appointments.Appointment;
+import com.adamszablewski.feignClients.classes.Employee;
 import com.adamszablewski.feignClients.classes.Owner;
 import com.adamszablewski.tasks.Task;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -33,10 +34,12 @@ public class Facility {
     @OneToMany(cascade = CascadeType.ALL)
     private List<Task> tasks;
     @JsonIgnore
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Appointment> appointments;
-    private Long owner;
-    private List<Long> employees;
+    @OneToOne(cascade = CascadeType.ALL)
+    private Owner owner;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Employee> employees;
 
 
 

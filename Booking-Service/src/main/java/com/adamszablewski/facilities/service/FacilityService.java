@@ -1,21 +1,25 @@
 package com.adamszablewski.facilities.service;
 
+import com.adamszablewski.appointments.dtos.RestResponseDTO;
 import com.adamszablewski.exceptions.NoSuchFacilityException;
+import com.adamszablewski.exceptions.NoSuchUserException;
 import com.adamszablewski.facilities.Facility;
 import com.adamszablewski.facilities.repository.FacilityRepository;
+import com.adamszablewski.feignClients.UserServiceClient;
+import com.adamszablewski.feignClients.classes.Owner;
 import lombok.AllArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import com.adamszablewski.tasks.Task;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
-
-import java.math.BigInteger;
 import java.util.List;
-import java.util.Optional;
 
-@org.springframework.stereotype.Service
+@Service
 @AllArgsConstructor
 public class FacilityService {
+
+    private final UserServiceClient userServiceClient;
 
     private final FacilityRepository facilityRepository;
     public List<Facility> getAllFacilities() {
@@ -34,9 +38,26 @@ public class FacilityService {
         return facilityRepository.findById(id)
                 .orElseThrow(NoSuchFacilityException::new);
     }
+    @Transactional
+    public void createFacility(Facility facility, String ownerEmail) {
+        RestResponseDTO<Owner> responseDTO = userServiceClient.findOwnerByEmail(ownerEmail);
+        Owner owner = responseDTO.getValue();
+        System.out.println(owner);
+        if (owner == null){
+            throw new NoSuchUserException();
+        }
 
-    public void createFacility(Facility facility) {
-        facilityRepository.save(facility);
+        Facility newFacility = Facility.builder()
+                .name(facility.getName())
+                .country(facility.getCountry())
+                .region(facility.getRegion())
+                .city(facility.getCity())
+                .houseNumber(facility.getHouseNumber())
+                .street(facility.getStreet())
+                .owner(owner)
+                .build();
+
+        facilityRepository.save(newFacility);
     }
 
     public void addServiceToFacility(Long id, Task service) {

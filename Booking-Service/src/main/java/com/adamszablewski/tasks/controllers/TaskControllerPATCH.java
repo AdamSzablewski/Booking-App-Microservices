@@ -9,10 +9,7 @@ import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/services/change")
@@ -21,7 +18,7 @@ public class TaskControllerPATCH {
 
     private final TaskService taskService;
 
-    @PutMapping("/employee/id/{id}/task/id/{taskId}")
+    @PatchMapping("/remove/employee/id/{id}/task/id/{taskId}")
     @CircuitBreaker(name = "bookingServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
     @RateLimiter(name = "bookingServiceRateLimiter")
     public ResponseEntity<RestResponseDTO<Task>> removeEmployeeFromTask (@PathVariable long id,
@@ -29,7 +26,7 @@ public class TaskControllerPATCH {
         taskService.removeEmployeeFromTask(id, taskId);
         return ResponseEntity.ok(new RestResponseDTO<>());
     }
-    @PutMapping("/employee/id/{id}/task/id/{taskId}")
+    @PatchMapping("/add/employee/id/{id}/task/id/{taskId}")
     @CircuitBreaker(name = "bookingServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
     @RateLimiter(name = "bookingServiceRateLimiter")
     public ResponseEntity<RestResponseDTO<Task>> addEmployeeTOTask (@PathVariable long id,

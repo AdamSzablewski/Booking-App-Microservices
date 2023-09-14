@@ -1,67 +1,67 @@
-server:
-  port: 8082
-
-spring:
-  h2:
-    console:
-      enabled: true
-    datasource:
-      url: jdbc:h2:mem:testdb
-      driver-class-name: org.h2.Driver
-      username: sa
-      password:
-  #data:
-#    mongodb:
-#      authentication-database: admin
-#      username: adam
-#      password: a1
-#      database: messages
-#      port: 27017
-  application:
-    name: messaging-service
-  zipkin:
-    base-url: http://localhost:9411
-    service:
-      name: messaging-service
-  sleuth:
-    sampler:
-      probability: 1.0
-  tracing:
-    propagation:
-      type: b3
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: prometheus
-  metrics:
-    distribution:
-      percentiles-histogram:
-        http:
-          server:
-            requests: true
-
-logging:
-  pattern:
-    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
-
-rabbitmq:
-  host: localhost
-  port: 5672
-  username: guest
-  password: guest
-
-resilience4j:
-  circuitbreaker:
-    instances:
-      messageServiceRateLimiter:
-        limitForPeriod: 10
-        limitRefreshPeriod: 1s
-        limitType: FIXED
-      messageServiceCircuitBreaker:
-        registerHealthIndicator: true
-        event-consumer-buffer-size: 10
-        slidingWindowType: COUNT_BASED
-
-
+#server:
+#  port: 8082
+#
+#spring:
+#  h2:
+#    console:
+#      enabled: true
+#    datasource:
+#      url: jdbc:h2:mem:testdb
+#      driver-class-name: org.h2.Driver
+#      username: sa
+#      password:
+#  #data:
+##    mongodb:
+##      authentication-database: admin
+##      username: adam
+##      password: a1
+##      database: messages
+##      port: 27017
+#  application:
+#    name: messaging-service
+#  zipkin:
+#    base-url: http://localhost:9411
+#    service:
+#      name: messaging-service
+#  sleuth:
+#    sampler:
+#      probability: 1.0
+#  tracing:
+#    propagation:
+#      type: b3
+#
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include: prometheus
+#  metrics:
+#    distribution:
+#      percentiles-histogram:
+#        http:
+#          server:
+#            requests: true
+#
+#logging:
+#  pattern:
+#    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+#
+#rabbitmq:
+#  host: localhost
+#  port: 5672
+#  username: guest
+#  password: guest
+#
+#resilience4j:
+#  circuitbreaker:
+#    instances:
+#      messagingServiceRateLimiter:
+#        limitForPeriod: 10
+#        limitRefreshPeriod: 1s
+#        limitType: FIXED
+#      messagingServiceCircuitBreaker:
+#        registerHealthIndicator: true
+#        event-consumer-buffer-size: 10
+#        slidingWindowType: COUNT_BASED
+#
+#

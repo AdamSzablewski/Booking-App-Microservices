@@ -1,6 +1,7 @@
 package com.adamszablewski.timeSlots;
 
 import com.adamszablewski.facilities.Facility;
+import com.adamszablewski.feignClients.classes.Employee;
 import com.adamszablewski.tasks.Task;
 
 import jakarta.persistence.*;
@@ -24,7 +25,8 @@ public class TimeSlot {
     @ManyToOne
     private Task task;
     private LocalDate date;
-    private long employee;
+    @OneToOne
+    private Employee employee;
     @ManyToOne
     private Facility facility;
     private LocalTime startTime;

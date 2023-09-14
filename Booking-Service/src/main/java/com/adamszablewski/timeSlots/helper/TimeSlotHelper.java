@@ -25,9 +25,9 @@ public class TimeSlotHelper {
 
     AppointmentRepository appointmentRepository;
     UserServiceClient userServiceClient;
-    public boolean isTimeSlotAvailable(LocalTime taskStartTime, LocalTime taskEndTime, long employeeId, LocalDate date) {
+    public boolean isTimeSlotAvailable(LocalTime taskStartTime, LocalTime taskEndTime, Employee employee, LocalDate date) {
 
-        List<Appointment> existingAppointments = appointmentRepository.findByEmployeeAndDate(employeeId, date);
+        List<Appointment> existingAppointments = appointmentRepository.findByEmployeeAndDate(employee, date);
         AtomicBoolean isAvailable = new AtomicBoolean(true);
         existingAppointments.forEach(appointment -> {
             System.out.println(appointment);
@@ -35,7 +35,7 @@ public class TimeSlotHelper {
                 isAvailable.set(false);
 
             }
-            if (!isWithinEmployeeWorkHours(taskStartTime, taskEndTime, employeeId)) {
+            if (!isWithinEmployeeWorkHours(taskStartTime, taskEndTime, employee)) {
                 isAvailable.set(false);
             }
 
@@ -47,11 +47,12 @@ public class TimeSlotHelper {
         return taskStartTime.isBefore(existingAppointmentEndTime) && taskEndTime.isAfter(existingAppointmentStartTime);
 
     }
-    public boolean isWithinEmployeeWorkHours(LocalTime taskStartTime, LocalTime taskEndTime, long employeeId) {
-        ResponseEntity<RestResponseDTO<Employee>> response = userServiceClient.getEmployeeById(employeeId);
+    public boolean isWithinEmployeeWorkHours(LocalTime taskStartTime, LocalTime taskEndTime, Employee employeeId) {
+        ResponseEntity<RestResponseDTO<Employee>> response = userServiceClient.getEmployeeById(employeeId.getId());
         if (response.getStatusCode() != HttpStatus.OK || response.getBody().getValue() == null){
             throw new ConnectionException();
         }
+        System.out.println(response);
         Employee employee = response.getBody().getValue();
 
         LocalTime employeeStartTime = employee.getStartTime();

@@ -74,14 +74,16 @@ public class TaskService {
     public void removeEmployeeFromTask(long id, long taskId) {
         Task task = taskRepository.findById(taskId)
                 .orElseThrow(NoSuchTaskException::new);
-        task.getEmployees().remove(id);
+        Employee employee = userServiceClient.findEmployeeById(id);
+        task.getEmployees().remove(employee);
         taskRepository.save(task);
     }
     @Transactional
     public void addEmployeeTOTask(long id, long taskId) {
         Task task = taskRepository.findById(taskId)
                 .orElseThrow(NoSuchTaskException::new);
-        task.getEmployees().add(id);
+        Employee employee = userServiceClient.findEmployeeById(id);
+        task.getEmployees().add(employee);
         taskRepository.save(task);
     }
 }

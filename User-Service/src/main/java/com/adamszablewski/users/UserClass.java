@@ -2,10 +2,14 @@ package com.adamszablewski.users;
 
 
 import com.adamszablewski.feignClients.Appointment;
+import com.adamszablewski.users.owners.Owner;
+import com.adamszablewski.users.role.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
@@ -14,8 +18,8 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table
-@Inheritance(strategy = InheritanceType.JOINED)
-public abstract class UserClass {
+@Builder
+public class UserClass {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -44,11 +48,4 @@ public abstract class UserClass {
 
     @Column(name = "password")
     private String password;
-
-    @OneToMany
-    private List<Appointment> appointments;
-
-
-
-
 }

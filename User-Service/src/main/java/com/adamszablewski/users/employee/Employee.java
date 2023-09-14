@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 
 import java.time.LocalTime;
@@ -21,10 +22,15 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Table
-public class Employee extends UserClass {
-
+public class Employee {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name = "id")
+    private long id;
     @ManyToOne
     private Facility workplace;
+    @OneToOne
+    private UserClass userClass;
     private LocalTime startTime;
     private LocalTime endTime;
     @ManyToMany

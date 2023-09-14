@@ -8,17 +8,15 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.util.List;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@SuperBuilder
 @Entity
 @Table
-@Inheritance(strategy = InheritanceType.JOINED)
-public abstract class UserClass {
+@SuperBuilder
+public class UserClass {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id")
     private long id;
 
@@ -27,6 +25,15 @@ public abstract class UserClass {
 
     @Column(name = "last_name")
     private String lastName;
+
+    @Column(name = "country")
+    private String country;
+
+    @Column(name = "region")
+    private String region;
+
+    @Column(name = "city")
+    private String city;
 
     @Column(name = "email")
     private String email;

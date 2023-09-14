@@ -42,7 +42,8 @@ public class TimeSlotService {
                 .orElseThrow(NoSuchTaskException::new);
 
 
-        List<Employee> employeesForTask =  userServiceClient.findEmployeesForIds(task.getEmployees());
+        List<Employee> employeesForTask =  task.getEmployees();
+        System.out.println("employees for task "+ employeesForTask);
         List<TimeSlot> availableTimeSlots = new ArrayList<>();
 
         employeesForTask.forEach(employee -> {
@@ -51,14 +52,14 @@ public class TimeSlotService {
             while(!employeeStartTime.isAfter(employeeEndTime.minusMinutes(task.getDurationInMinutes()))){
 
                 if(timeSlotHelper.isTimeSlotAvailable(employeeStartTime,
-                        employeeStartTime.plusMinutes(task.getDurationInMinutes()), employee.getId(), date)){
+                        employeeStartTime.plusMinutes(task.getDurationInMinutes()), employee, date)){
                     availableTimeSlots.add(
                             TimeSlot.builder()
                                 .startTime(employeeStartTime)
                                 .endTime(employeeStartTime.plusMinutes(task.getDurationInMinutes()))
                                     .task(task)
                                     .date(date)
-                                    .employee(employee.getId())
+                                    .employee(employee)
                                     .facility(task.getFacility())
                                     .build()
                     );
@@ -85,7 +86,7 @@ public class TimeSlotService {
                 .endTime(timeSlot.getEndTime())
                 .employee(timeSlot.getEmployee())
                 .task(timeSlot.getTask())
-                .client(client.getId())
+                .client(client)
                 .facility(timeSlot.getFacility())
                 .build();
 

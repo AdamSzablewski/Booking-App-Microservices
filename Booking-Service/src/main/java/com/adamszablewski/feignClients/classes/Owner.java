@@ -2,10 +2,9 @@ package com.adamszablewski.feignClients.classes;
 
 import com.adamszablewski.facilities.Facility;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -17,10 +16,17 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@SuperBuilder
-public class Owner extends Employee {
-
+@Builder
+public class Owner {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name = "id")
+    private long id;
     @OneToMany(cascade = CascadeType.ALL)
     private List<Facility> facilities;
+    @OneToOne
+    private Employee employee;
+    @OneToOne
+    private UserClass user;
 
 }

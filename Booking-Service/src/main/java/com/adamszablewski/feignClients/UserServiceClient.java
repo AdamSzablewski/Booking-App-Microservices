@@ -28,7 +28,7 @@ public interface UserServiceClient {
 
     @GetMapping("/users/owner/id/{id}")
     Optional<Owner> findOwnerById(@PathVariable long id);
-    @GetMapping("/users/employee/email")
+    @GetMapping("/users/employee/email/{email}")
     Optional<Employee> findEmployeeByEmail(@PathVariable String email);
     @GetMapping("/users/employee")
     List<UserClass> findAllEmployeesByTaskAndFacility(@RequestParam("taskName") String taskName,
@@ -36,4 +36,8 @@ public interface UserServiceClient {
 
     @PostMapping("/users/employee/ids")
     List<Employee> findEmployeesForIds(List<Long> employees);
+    @GetMapping("/users/employee/id/{id}")
+    Employee findEmployeeById(long id);
+    @GetMapping("/users/owner/email/{email}")
+    RestResponseDTO<Owner> findOwnerByEmail(@PathVariable String email);
 }
