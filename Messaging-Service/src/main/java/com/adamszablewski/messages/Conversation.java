@@ -1,6 +1,7 @@
 package com.adamszablewski.messages;
 
 
+import com.adamszablewski.classes.UserClass;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,8 +20,8 @@ public class Conversation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
-    private long userId;
+    @OneToOne
+    private UserClass user;
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "conversation_messages",
@@ -32,7 +33,7 @@ public class Conversation {
     public String toString() {
         return "Conversation{" +
                 "id=" + id +
-                ", userId=" + userId +
+                ", userId=" + user +
                 '}';
     }
 }

@@ -1,5 +1,6 @@
 package com.adamszablewski.messages.helpers;
 
+import com.adamszablewski.classes.UserClass;
 import com.adamszablewski.messages.Conversation;
 import com.adamszablewski.messages.repositories.ConversationRepository;
 import lombok.AllArgsConstructor;
@@ -14,14 +15,14 @@ public class ConversationCreator {
 
     private final ConversationRepository conversationRepository;
 
-    public Conversation createConversation(long userId) {
+    public Conversation createConversation(UserClass user) {
 
 //        Optional<Conversation> optionalConversation =  conversationRepository.findByParticipantsContains(userId);
 //        if (optionalConversation.isPresent()){
 //            return optionalConversation.get();
 //        }
         Conversation conversation = Conversation.builder()
-                .userId(userId)
+                .user(user)
                 .messages(new ArrayList<>())
                 .build();
         conversationRepository.save(conversation);

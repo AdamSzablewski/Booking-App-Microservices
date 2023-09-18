@@ -16,15 +16,13 @@ import org.springframework.web.bind.annotation.*;
 public class EmploymentController {
     private final EmploymentRequestService employmentRequestService;
 
-    @GetMapping("/request/{id}")
+    @PutMapping("/request/{id}")
     @CircuitBreaker(name = "bookingServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
     @RateLimiter(name = "bookingServiceRateLimiter")
-    public ResponseEntity<RestResponseDTO<Facility>> acceptEmploymentRequest(@PathVariable long id,
-                                                                             @RequestBody boolean status){
-        RestResponseDTO<Facility> responseDTO = RestResponseDTO.<Facility>builder()
-                .values(employmentRequestService.acceptEmploymentRequest(id, status))
-                .build();
-        return ResponseEntity.ok(responseDTO);
+    public ResponseEntity<RestResponseDTO<Facility>> answereEmploymentRequest(@PathVariable long id,
+                                                                             @RequestParam("status") boolean status){
+        employmentRequestService.answereEmploymentRequest(id, status);
+        return ResponseEntity.ok(new RestResponseDTO<>());
     }
     public ResponseEntity<RestResponseDTO<?>> fallBackMethod(Throwable throwable){
         return CustomExceptionHandler.handleException(throwable);

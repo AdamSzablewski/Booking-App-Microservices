@@ -18,6 +18,7 @@ public class EmployeeService {
     public Employee getEmployeeByEmail(String email) {
         UserClass user = userRepository.findByEmail(email)
                 .orElseThrow(NoSuchUserException::new);
+        System.out.println(user);
         return employeeRepository.findByUserId(user.getId())
                 .orElseThrow(NoSuchUserException::new);
     }
@@ -34,13 +35,11 @@ public class EmployeeService {
                 .orElseThrow(NoSuchUserException::new);
     }
 
-    public void makeEmployeeFromUser(long id, Employee employee) {
+    public void makeEmployeeFromUser(long id) {
         UserClass user = userRepository.findById(id)
                 .orElseThrow(NoSuchUserException::new);
 
         Employee newEmployee = Employee.builder()
-                .startTime(employee.getStartTime())
-                .endTime(employee.getEndTime())
                 .user(user)
                 .build();
         employeeRepository.save(newEmployee);

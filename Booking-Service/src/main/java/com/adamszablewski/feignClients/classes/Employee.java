@@ -29,7 +29,7 @@ public class Employee {
     @ManyToOne
     private Facility workplace;
     @OneToOne
-    private UserClass userClass;
+    private UserClass user;
     private LocalTime startTime;
     private LocalTime endTime;
     @ManyToMany

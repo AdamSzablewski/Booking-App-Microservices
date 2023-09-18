@@ -2,6 +2,7 @@ package com.adamszablewski.feignClients.classes;
 
 import com.adamszablewski.appointments.Appointment;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +10,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,38 +18,31 @@ import java.util.List;
 @Builder
 public class UserClass {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonProperty("id")
     private long id;
 
-    @Column(name = "first_name")
+    @JsonProperty("firstName")
     private String firstName;
 
-    @Column(name = "last_name")
+    @JsonProperty("lastName")
     private String lastName;
 
-    @Column(name = "country")
+    @JsonProperty("country")
     private String country;
 
-    @Column(name = "region")
+    @JsonProperty("region")
     private String region;
 
-    @Column(name = "city")
+    @JsonProperty("city")
     private String city;
 
-    @Column(name = "email")
+    @JsonProperty("email")
     private String email;
 
-    @Column(name = "phone_number")
+    @JsonProperty("phoneNumber")
     private String phoneNumber;
 
     @JsonIgnore
     private String password;
-
-    @OneToMany
-    private List<Appointment> appointments;
-
-
-
-
 }

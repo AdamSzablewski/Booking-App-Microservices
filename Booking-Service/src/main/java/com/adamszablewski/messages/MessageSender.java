@@ -25,7 +25,7 @@ public class MessageSender {
         Message message = Message.builder()
                 .message("Your appoinment for the date "+appointment.getDate()+" has been canceled")
                 .sender(APP_NAME)
-                .receivers(List.of(appointment.getClient().getUserClass(), appointment.getEmployee().getUserClass()))
+                .receivers(List.of(appointment.getClient().getUserClass(), appointment.getEmployee().getUser()))
                 .dateSent(LocalDateTime.now())
                 .build();
 
@@ -44,7 +44,7 @@ public class MessageSender {
                         ". The address is: "+street+" "+house+" in "+city+". Your appoinment will cost "
                         +appointment.getTask().getPrice()+" "+appointment.getTask().getCurrency())
                 .sender(APP_NAME)
-                .receivers(List.of(appointment.getEmployee().getUserClass(), appointment.getClient().getUserClass()))
+                .receivers(List.of(appointment.getEmployee().getUser(), appointment.getClient().getUserClass()))
                 .dateSent(LocalDateTime.now())
                 .build();
 
@@ -65,13 +65,37 @@ public class MessageSender {
     }
 
     public void sendEmploymentRequestMessage(Employee employee, Facility facility) {
-        UserClass user = employee.getUserClass();
+        UserClass user = employee.getUser();
+        System.out.println(employee);
+        System.out.println(user);
         Message message = Message.builder()
                 .sender(APP_NAME)
                 .receivers(List.of(user))
                 .message("You have reieved a request to start working for: "+facility.getName()+" " +
                         "to accept request go to requests")
                 .dateSent(LocalDateTime.now())
+                .build();
+        rabbitMqProducer.sendMessageObject(message);
+    }
+
+    public void sendEmploymentRequestDenied(Employee employee, Facility facility) {
+        UserClass user = employee.getUser();
+        UserClass owner = facility.getOwner().getUser();
+        Message message = Message.builder()
+                .sender(APP_NAME)
+                .receivers(List.of(owner))
+                .message("The user "+user.getEmail()+" hase denied your employment request")
+                .build();
+        rabbitMqProducer.sendMessageObject(message);
+    }
+
+    public void sendEmploymentRequestAccepted(Employee employee, Facility facility) {
+        UserClass user = employee.getUser();
+        UserClass owner = facility.getOwner().getUser();
+        Message message = Message.builder()
+                .sender(APP_NAME)
+                .receivers(List.of(owner))
+                .message("The user "+user.getEmail()+" hase accepted your employment request")
                 .build();
         rabbitMqProducer.sendMessageObject(message);
     }

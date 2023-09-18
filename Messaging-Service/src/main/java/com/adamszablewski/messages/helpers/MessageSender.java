@@ -35,7 +35,7 @@ public class MessageSender {
     @Transactional
     public void addMessageToConversation(Message message){
         message.getReceivers().forEach(reciever -> {
-            Optional<Conversation> optionalConversation = conversationRepository.findByUserId(reciever);
+            Optional<Conversation> optionalConversation = conversationRepository.findByUserId(reciever.getId());
             Conversation conversation;
             if (optionalConversation.isEmpty()){
                 conversation = conversationCreator.createConversation(reciever);

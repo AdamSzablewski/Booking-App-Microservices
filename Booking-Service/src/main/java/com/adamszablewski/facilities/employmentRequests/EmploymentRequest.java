@@ -2,10 +2,7 @@ package com.adamszablewski.facilities.employmentRequests;
 
 import com.adamszablewski.facilities.Facility;
 import com.adamszablewski.feignClients.classes.Employee;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,7 +17,9 @@ public class EmploymentRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
+    @OneToOne
     private Employee employee;
+    @OneToOne
     private Facility facility;
     private boolean status;
 }

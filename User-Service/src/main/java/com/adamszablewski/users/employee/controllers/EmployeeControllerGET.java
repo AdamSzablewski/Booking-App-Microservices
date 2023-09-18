@@ -34,10 +34,20 @@ public class EmployeeControllerGET {
     @GetMapping("/id/{id}")
     @CircuitBreaker(name = "userServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
     @RateLimiter(name = "userServiceRateLimiter")
-    public ResponseEntity<RestResponseDTO<Employee>>  getEmployeeByMail(@PathVariable long id){
+    public ResponseEntity<RestResponseDTO<Employee>>  getEmployeeById(@PathVariable long id){
         RestResponseDTO<Employee> responseDTO = RestResponseDTO.<Employee>builder()
                 .value(employeeService.getEmployeeById(id))
                 .build();
+        return ResponseEntity.ok(responseDTO);
+    }
+    @GetMapping("/email/{mail}")
+    @CircuitBreaker(name = "userServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
+    @RateLimiter(name = "userServiceRateLimiter")
+    public ResponseEntity<RestResponseDTO<Employee>>  getEmployeeByMail(@PathVariable String mail){
+        RestResponseDTO<Employee> responseDTO = RestResponseDTO.<Employee>builder()
+                .value(employeeService.getEmployeeByEmail(mail))
+                .build();
+        System.out.println(responseDTO);
         return ResponseEntity.ok(responseDTO);
     }
 
@@ -52,11 +62,11 @@ public class EmployeeControllerGET {
         return ResponseEntity.ok(responseDTO);
     }
 
-    @PostMapping("/id/{id}")
+    @PutMapping("/id/{id}")
     @CircuitBreaker(name = "userServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
     @RateLimiter(name = "userServiceRateLimiter")
-    ResponseEntity<RestResponseDTO<String>> makeEmployeeFromUser(@PathVariable long id, @RequestBody Employee employee){
-        employeeService.makeEmployeeFromUser(id, employee);
+    ResponseEntity<RestResponseDTO<String>> makeEmployeeFromUser(@PathVariable long id){
+        employeeService.makeEmployeeFromUser(id);
         return ResponseEntity.ok(new RestResponseDTO<>());
     }
 

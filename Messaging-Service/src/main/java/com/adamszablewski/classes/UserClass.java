@@ -1,9 +1,5 @@
-package com.adamszablewski.users;
+package com.adamszablewski.classes;
 
-
-import com.adamszablewski.feignClients.Appointment;
-import com.adamszablewski.users.owners.Owner;
-import com.adamszablewski.users.role.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
@@ -11,9 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
-
-import java.util.List;
 
 @Data
 @AllArgsConstructor

@@ -1,5 +1,6 @@
 package com.adamszablewski.messages;
 
+import com.adamszablewski.classes.UserClass;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -28,8 +29,13 @@ public class Message {
     private String message;
 
     private String sender;
-
-    private List<Long> receivers;
+    @ManyToMany
+    @JoinTable(
+            name = "message_receiver",
+            joinColumns = @JoinColumn(name = "message_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private List<UserClass> receivers;
 
     private LocalDateTime dateSent;
 
