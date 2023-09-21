@@ -1,4 +1,4 @@
-package com.adamszablewski.facilities.employmentRequests;
+package com.adamszablewski.employmentRequests;
 
 import com.adamszablewski.appointments.dtos.RestResponseDTO;
 import com.adamszablewski.exceptions.CustomExceptionHandler;

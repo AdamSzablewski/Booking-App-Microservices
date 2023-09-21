@@ -4,7 +4,7 @@ import com.adamszablewski.appointments.dtos.RestResponseDTO;
 import com.adamszablewski.exceptions.NoSuchFacilityException;
 import com.adamszablewski.exceptions.NoSuchUserException;
 import com.adamszablewski.facilities.Facility;
-import com.adamszablewski.facilities.employmentRequests.EmploymentRequestService;
+import com.adamszablewski.employmentRequests.EmploymentRequestService;
 import com.adamszablewski.facilities.repository.FacilityRepository;
 import com.adamszablewski.feignClients.UserServiceClient;
 import com.adamszablewski.feignClients.classes.Owner;

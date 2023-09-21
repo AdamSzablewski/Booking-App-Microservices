@@ -7,6 +7,7 @@ import com.adamszablewski.feignClients.classes.Employee;
 import com.adamszablewski.feignClients.classes.UserClass;
 import com.adamszablewski.rabbitMq.RabbitMqProducer;
 import com.adamszablewski.rabbitMq.classes.Message;
+import com.adamszablewski.tasks.Task;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -96,6 +97,16 @@ public class MessageSender {
                 .sender(APP_NAME)
                 .receivers(List.of(owner))
                 .message("The user "+user.getEmail()+" hase accepted your employment request")
+                .build();
+        rabbitMqProducer.sendMessageObject(message);
+    }
+
+    public void sendTaskCreatedMessage(Facility facility, Task task) {
+        UserClass owner = facility.getOwner().getUser();
+        Message message = Message.builder()
+                .sender(APP_NAME)
+                .receivers(List.of(owner))
+                .message("You have successfully added the service "+task.getName()+" to your facility.")
                 .build();
         rabbitMqProducer.sendMessageObject(message);
     }

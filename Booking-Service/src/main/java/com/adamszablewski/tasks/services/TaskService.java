@@ -2,12 +2,14 @@ package com.adamszablewski.tasks.services;
 
 import com.adamszablewski.appointments.dtos.RestResponseDTO;
 import com.adamszablewski.exceptions.ConnectionException;
+import com.adamszablewski.exceptions.NoSuchEmployeeException;
 import com.adamszablewski.exceptions.NoSuchFacilityException;
 import com.adamszablewski.exceptions.NoSuchTaskException;
 import com.adamszablewski.facilities.Facility;
 import com.adamszablewski.facilities.repository.FacilityRepository;
 import com.adamszablewski.feignClients.UserServiceClient;
 import com.adamszablewski.feignClients.classes.Employee;
+import com.adamszablewski.messages.MessageSender;
 import com.adamszablewski.tasks.Task;
 import com.adamszablewski.tasks.repository.TaskRepository;
 import lombok.AllArgsConstructor;
@@ -26,6 +28,7 @@ public class TaskService {
     private final TaskRepository taskRepository;
     private final FacilityRepository facilityRepository;
     private final UserServiceClient userServiceClient;
+    private final MessageSender messageSender;
     public List<Task> getAllTasksForFacilityByName(String name) {
         Facility facility = facilityRepository.findByName(name)
                 .orElseThrow(NoSuchFacilityException::new);
@@ -54,8 +57,11 @@ public class TaskService {
     public void createTaskForFacility(long id, Task task) {
         Facility facility = facilityRepository.findById(id)
                 .orElseThrow(NoSuchFacilityException::new);
+        task.setFacility(facility);
         facility.getTasks().add(task);
         facilityRepository.save(facility);
+        messageSender.sendTaskCreatedMessage(facility, task);
+
     }
     @Transactional
     public void changeTask(long id, Task newTask) {
@@ -74,7 +80,8 @@ public class TaskService {
     public void removeEmployeeFromTask(long id, long taskId) {
         Task task = taskRepository.findById(taskId)
                 .orElseThrow(NoSuchTaskException::new);
-        Employee employee = userServiceClient.findEmployeeById(id);
+        Employee employee = userServiceClient.findEmployeeById(id).getValue();
+        employee.getTasks().remove(task);
         task.getEmployees().remove(employee);
         taskRepository.save(task);
     }
@@ -82,8 +89,21 @@ public class TaskService {
     public void addEmployeeTOTask(long id, long taskId) {
         Task task = taskRepository.findById(taskId)
                 .orElseThrow(NoSuchTaskException::new);
-        Employee employee = userServiceClient.findEmployeeById(id);
+
+        Employee employee = userServiceClient.findEmployeeById(id).getValue();
+        System.out.println(employee);
+        System.out.println("employees for facility "+employee.getWorkplace());
+        System.out.println(task);
+        if (employee.getWorkplace() == null || employee.getWorkplace().getId() != task.getFacility().getId()){
+            throw new NoSuchEmployeeException();
+        }
         task.getEmployees().add(employee);
+        employee.getTasks().add(task);
+
         taskRepository.save(task);
+    }
+
+    public void deleteTaskById(long id) {
+        taskRepository.deleteById(id);
     }
 }

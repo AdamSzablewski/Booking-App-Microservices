@@ -1,6 +1,7 @@
 package com.adamszablewski.rabbitMq.classes;
 
 
+import com.adamszablewski.feignClients.classes.UserClass;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,14 +18,23 @@ import java.util.List;
 public class Conversation {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
-
-    @ElementCollection
-    @CollectionTable(name = "conversation_participants", joinColumns = @JoinColumn(name = "conversation_id"))
-    @Column(name = "participant")
-    private List<String> participants;
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToOne
+    private UserClass user;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "conversation_messages",
+            joinColumns = @JoinColumn(name = "conversation_id"),
+            inverseJoinColumns = @JoinColumn(name = "message_id")
+    )
     private List<Message> messages;
 
+    @Override
+    public String toString() {
+        return "Conversation{" +
+                "id=" + id +
+                ", userId=" + user +
+                '}';
+    }
 }

@@ -1,13 +1,14 @@
 package com.adamszablewski.feignClients;
 
 
+import com.adamszablewski.users.employee.Employee;
 import com.adamszablewski.users.owners.Owner;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 
 import java.util.List;
@@ -20,7 +21,7 @@ import java.util.List;
 public class Facility {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     private String name;
     private String country;
@@ -28,17 +29,16 @@ public class Facility {
     private String city;
     private String street;
     private String houseNumber;
-    @JsonIgnore
+
     @OneToMany(cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("facility")
     private List<Task> tasks;
-    @JsonIgnore
-    @OneToMany
-    private List<Appointment> appointments;
-    @ManyToOne
-    @JsonIgnore
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("facilities")
     private Owner owner;
-
-
-
-
+    @OneToMany(cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("workplace")
+    @ToString.Exclude
+    private List<Employee> employees;
 }

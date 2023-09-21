@@ -1,20 +1,13 @@
 package com.adamszablewski.timeSlots.helper;
 
 import com.adamszablewski.appointments.Appointment;
-import com.adamszablewski.appointments.dtos.RestResponseDTO;
 import com.adamszablewski.appointments.repository.AppointmentRepository;
 
-import com.adamszablewski.exceptions.ConnectionException;
-import com.adamszablewski.exceptions.NoSuchUserException;
 import com.adamszablewski.feignClients.UserServiceClient;
 import com.adamszablewski.feignClients.classes.Employee;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
 
-import java.net.ConnectException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -30,8 +23,8 @@ public class TimeSlotHelper {
         List<Appointment> existingAppointments = appointmentRepository.findByEmployeeAndDate(employee, date);
         AtomicBoolean isAvailable = new AtomicBoolean(true);
         existingAppointments.forEach(appointment -> {
-            System.out.println(appointment);
-            if (doTimeRangesOverlap(appointment.getStartTime(), appointment.getEndTime(), taskStartTime, taskEndTime)) {
+
+            if (!timeRangesNotOverlapping(appointment.getStartTime(), appointment.getEndTime(), taskStartTime, taskEndTime)) {
                 isAvailable.set(false);
 
             }
@@ -42,24 +35,21 @@ public class TimeSlotHelper {
         });
         return isAvailable.get();
     }
-    public boolean doTimeRangesOverlap(LocalTime existingAppointmentStartTime, LocalTime existingAppointmentEndTime,
-                                       LocalTime taskStartTime, LocalTime taskEndTime) {
-        return taskStartTime.isBefore(existingAppointmentEndTime) && taskEndTime.isAfter(existingAppointmentStartTime);
+    public boolean timeRangesNotOverlapping(LocalTime existingAppointmentStartTime, LocalTime existingAppointmentEndTime,
+                                            LocalTime taskStartTime, LocalTime taskEndTime) {
+        //return taskStartTime.isBefore(existingAppointmentEndTime) && taskEndTime.isAfter(existingAppointmentStartTime);
+        return (taskStartTime.isBefore(existingAppointmentStartTime) && taskEndTime.isBefore(existingAppointmentStartTime)) ||
+                (taskStartTime.isAfter(existingAppointmentEndTime) && taskEndTime.isAfter(existingAppointmentEndTime));
+
 
     }
-    public boolean isWithinEmployeeWorkHours(LocalTime taskStartTime, LocalTime taskEndTime, Employee employeeId) {
-        ResponseEntity<RestResponseDTO<Employee>> response = userServiceClient.getEmployeeById(employeeId.getId());
-        if (response.getStatusCode() != HttpStatus.OK || response.getBody().getValue() == null){
-            throw new ConnectionException();
-        }
-        System.out.println(response);
-        Employee employee = response.getBody().getValue();
-
+    public boolean isWithinEmployeeWorkHours(LocalTime taskStartTime, LocalTime taskEndTime, Employee employee) {
         LocalTime employeeStartTime = employee.getStartTime();
         LocalTime employeeEndTime = employee.getEndTime();
 
         return taskStartTime.isAfter(employeeStartTime) && taskEndTime.isBefore(employeeEndTime);
     }
+
 
 
 

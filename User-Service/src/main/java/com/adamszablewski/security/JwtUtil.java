@@ -8,9 +8,7 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
 
-
 import java.security.Key;
-import java.security.SignatureException;
 
 @Component
 public class JwtUtil {

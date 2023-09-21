@@ -1,6 +1,7 @@
 package com.adamszablewski.feignClients.classes;
 
 import com.adamszablewski.appointments.Appointment;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,10 +10,10 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.util.List;
+
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @Data
 public class Client {
     @Id
@@ -26,6 +27,7 @@ public class Client {
     @OneToOne
     private UserClass userClass;
     @OneToMany
+    @JsonIgnoreProperties("client")
     private List<Appointment> appointments;
 
 

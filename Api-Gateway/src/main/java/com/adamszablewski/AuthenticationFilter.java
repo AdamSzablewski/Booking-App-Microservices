@@ -1,6 +1,9 @@
 package com.adamszablewski;
 
+import com.adamszablewski.dto.LoginDto;
+import com.adamszablewski.feign.UserServiceClient;
 import com.adamszablewski.security.JwtUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.context.annotation.Bean;
@@ -17,6 +20,7 @@ public class AuthenticationFilter {
 
     private final JwtUtil jwtUtil;
 
+
     @Bean
     @Order(Ordered.HIGHEST_PRECEDENCE)
     public GlobalFilter customGlobalFilter(AuthenticationFilter authenticationFilter) {
@@ -24,12 +28,8 @@ public class AuthenticationFilter {
 
             ServerHttpRequest request;
 
-            if (isRegisterDtoRequest(exchange.getRequest())) {
+            if (isRegisterDtoRequest(exchange.getRequest()) || isLoginRequest(exchange.getRequest())) {
                 return chain.filter(exchange);
-            }
-            if (isLoginRequest(exchange.getRequest())) {
-                return chain.filter(exchange);
-
             }
             if (!exchange.getRequest().getHeaders().containsKey(HttpHeaders.AUTHORIZATION)){
                 throw new RuntimeException("no token");

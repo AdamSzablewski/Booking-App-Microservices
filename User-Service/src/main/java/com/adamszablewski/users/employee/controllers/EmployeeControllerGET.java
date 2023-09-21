@@ -7,10 +7,12 @@ import com.adamszablewski.users.employee.service.EmployeeService;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import lombok.AllArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalTime;
 import java.util.List;
 
 
@@ -38,6 +40,7 @@ public class EmployeeControllerGET {
         RestResponseDTO<Employee> responseDTO = RestResponseDTO.<Employee>builder()
                 .value(employeeService.getEmployeeById(id))
                 .build();
+        //System.out.println(responseDTO);
         return ResponseEntity.ok(responseDTO);
     }
     @GetMapping("/email/{mail}")
@@ -79,6 +82,19 @@ public class EmployeeControllerGET {
                 .build();
         return ResponseEntity.ok(responseDTO);
     }
+    @GetMapping("work/hours/id/{id}")
+    @CircuitBreaker(name = "userServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
+    @RateLimiter(name = "userServiceRateLimiter")
+    public ResponseEntity<RestResponseDTO<Employee>>  setWorkingHoursForEmployee(@PathVariable long id,
+                                                                                 @RequestParam("startTime")
+                                                                                 @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)LocalTime startTIme,
+                                                                                 @RequestParam("endTime")
+                                                                                     @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)LocalTime endTIme){
+        employeeService.setWorkingHours(id, startTIme, endTIme);
+        return ResponseEntity.ok(new RestResponseDTO<>());
+    }
+
+
     public ResponseEntity<RestResponseDTO<?>> fallBackMethod(Throwable throwable){
         return CustomExceptionHandler.handleException(throwable);
     }

@@ -39,6 +39,13 @@ public class ClientControllerGET {
                 .build();
         return ResponseEntity.ok(responseDTO);
     }
+    @PutMapping("/create/id/{id}")
+    @CircuitBreaker(name = "userServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
+    @RateLimiter(name = "userServiceRateLimiter")
+    ResponseEntity<RestResponseDTO<String>> makeEmployeeFromUser(@PathVariable long id){
+        clientService.makeClientFromUser(id);
+        return ResponseEntity.ok(new RestResponseDTO<>());
+    }
 
     public ResponseEntity<RestResponseDTO<?>> fallBackMethod(Throwable throwable){
         return CustomExceptionHandler.handleException(throwable);

@@ -20,6 +20,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -33,9 +34,10 @@ import java.util.concurrent.atomic.AtomicReference;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
-@DataJpaTest
+
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureTestDatabase
+@DataJpaTest(properties = "spring.config.name=application-test")
 public class TimeSlotServiceTest {
     TimeSlotService timeSlotService;
     @Mock
@@ -97,7 +99,7 @@ public class TimeSlotServiceTest {
 
         AtomicReference<LocalTime> lastAppointmentEndTime = new AtomicReference<>(employee.getStartTime());
 
-        when(timeSlotHelper.isTimeSlotAvailable(any(LocalTime.class), any(LocalTime.class), any(Long.class),
+        when(timeSlotHelper.isTimeSlotAvailable(any(LocalTime.class), any(LocalTime.class), any(Employee.class),
                 any(LocalDate.class))).thenAnswer(invocation -> {
             LocalTime startTime = invocation.getArgument(0);
 
@@ -129,16 +131,16 @@ public class TimeSlotServiceTest {
         Employee employee = Employee.builder()
                 .startTime(LocalTime.of(7, 0))
                 .endTime(LocalTime.of(16, 0))
-                .services(List.of(task))
+                .tasks(List.of(task))
                 .appointments(new ArrayList<>())
                 .build();
 
-        task.setEmployees(List.of(1L));
+        task.setEmployees(List.of(employee));
 
         when(taskRepository.findById(task.getId())).thenReturn(Optional.of(task));
 
 
-        lenient().when(timeSlotHelper.isTimeSlotAvailable(any(LocalTime.class), any(LocalTime.class), any(Long.class),
+        lenient().when(timeSlotHelper.isTimeSlotAvailable(any(LocalTime.class), any(LocalTime.class), any(Employee.class),
                 any(LocalDate.class))).thenAnswer(invocation -> false);
 
         List<TimeSlot> timeSlots = timeSlotService.getAvailableTimeSlotsForTaskAndDate(date, task.getId());
@@ -149,8 +151,11 @@ public class TimeSlotServiceTest {
 
     @Test
     void makeAppointmentFromTimeSlot(){
+        Employee employee = Employee.builder()
+                .id(1L)
+                .build();
         TimeSlot timeSlot = TimeSlot.builder()
-                .employee(1L)
+                .employee(employee)
                 .startTime(LocalTime.of(10, 30))
                 .endTime(LocalTime.of(11, 30))
                 .facility(

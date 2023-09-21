@@ -5,11 +5,9 @@ import com.adamszablewski.feignClients.classes.Client;
 import com.adamszablewski.feignClients.classes.Employee;
 import com.adamszablewski.tasks.Task;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigInteger;
 import java.time.LocalDate;
@@ -21,6 +19,7 @@ import java.time.LocalTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@ToString
 public class Appointment {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -28,6 +27,8 @@ public class Appointment {
     @ManyToOne
     private Facility facility;
     @ManyToOne
+    @JsonIgnoreProperties("appointments")
+    @ToString.Exclude
     private Task task;
     private LocalDate date;
     private LocalTime startTime;
@@ -35,8 +36,12 @@ public class Appointment {
     private String number;
     private String email;
     @OneToOne
+    @JsonIgnoreProperties("appointments")
+    @ToString.Exclude
     private Client client;
     @OneToOne
+    @JsonIgnoreProperties("appointments")
+    @ToString.Exclude
     private Employee employee;
 
 }

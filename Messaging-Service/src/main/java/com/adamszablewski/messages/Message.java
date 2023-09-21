@@ -2,6 +2,7 @@ package com.adamszablewski.messages;
 
 import com.adamszablewski.classes.UserClass;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,15 +20,13 @@ import java.util.List;
 public class Message {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
 
     @ManyToMany
-    @JsonIgnore
+    @JsonIgnoreProperties("messages")
     private List<Conversation> conversations;
-
     private String message;
-
     private String sender;
     @ManyToMany
     @JoinTable(
@@ -36,9 +35,7 @@ public class Message {
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     private List<UserClass> receivers;
-
     private LocalDateTime dateSent;
-
     @Override
     public String toString() {
         return "Message{" +

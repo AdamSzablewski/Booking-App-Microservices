@@ -28,8 +28,6 @@ import java.util.List;
 public class TimeSlotService {
 
     private final TaskRepository taskRepository;
-
-   // private final AppointmentRepository appointmentRepository;
     private final TimeSlotHelper timeSlotHelper;
     private final AppointmentRepository appointmentRepository;
     private final UserServiceClient userServiceClient;
@@ -43,7 +41,6 @@ public class TimeSlotService {
 
 
         List<Employee> employeesForTask =  task.getEmployees();
-        System.out.println("employees for task "+ employeesForTask);
         List<TimeSlot> availableTimeSlots = new ArrayList<>();
 
         employeesForTask.forEach(employee -> {

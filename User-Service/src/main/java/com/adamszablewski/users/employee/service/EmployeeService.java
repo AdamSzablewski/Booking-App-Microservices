@@ -8,6 +8,7 @@ import com.adamszablewski.users.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalTime;
 import java.util.List;
 
 @Service
@@ -43,5 +44,13 @@ public class EmployeeService {
                 .user(user)
                 .build();
         employeeRepository.save(newEmployee);
+    }
+
+    public void setWorkingHours(long id, LocalTime startTIme, LocalTime endTIme) {
+        Employee employee = employeeRepository.findByUserId(id)
+                .orElseThrow(NoSuchUserException::new);
+        employee.setStartTime(startTIme);
+        employee.setEndTime(endTIme);
+        employeeRepository.save(employee);
     }
 }

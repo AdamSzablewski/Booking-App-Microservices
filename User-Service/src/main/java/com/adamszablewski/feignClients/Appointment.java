@@ -3,15 +3,9 @@ package com.adamszablewski.feignClients;
 
 import com.adamszablewski.users.clients.Client;
 import com.adamszablewski.users.employee.Employee;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
+import lombok.*;
 
 
 import java.math.BigInteger;
@@ -23,12 +17,16 @@ import java.time.LocalTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@ToString
 public class Appointment {
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private BigInteger id;
     @ManyToOne
     private Facility facility;
     @ManyToOne
+    @JsonIgnoreProperties("appointments")
+    @ToString.Exclude
     private Task task;
     private LocalDate date;
     private LocalTime startTime;
@@ -36,8 +34,12 @@ public class Appointment {
     private String number;
     private String email;
     @OneToOne
+    @JsonIgnoreProperties("appointments")
+    @ToString.Exclude
     private Client client;
     @OneToOne
+    @JsonIgnoreProperties("appointments")
+    @ToString.Exclude
     private Employee employee;
 
 }

@@ -1,4 +1,4 @@
-package com.adamszablewski.facilities.employmentRequests;
+package com.adamszablewski.employmentRequests;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

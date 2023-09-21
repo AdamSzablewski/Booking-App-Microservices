@@ -19,7 +19,7 @@ public class TokenGenerator {
     public String generateToken(String username){
 
         Date currentDate = new Date();
-        Date expireDate = new Date(System.currentTimeMillis() + 1000 * 60 * 24);
+        Date expireDate = new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24);
 
         return Jwts.builder()
                 .setSubject(username)

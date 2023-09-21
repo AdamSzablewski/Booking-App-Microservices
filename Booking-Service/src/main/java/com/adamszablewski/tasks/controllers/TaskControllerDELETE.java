@@ -9,23 +9,26 @@ import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/services")
 @AllArgsConstructor
-public class TaskControllerPOST {
+public class TaskControllerDELETE {
 
-    private final TaskService taskService;
+    private final TaskService serviceService;
 
-    @PostMapping("/facility/id/{id}")
+    @DeleteMapping("/id/{id}")
     @CircuitBreaker(name = "bookingServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
     @RateLimiter(name = "bookingServiceRateLimiter")
-    public ResponseEntity<RestResponseDTO<Task>> createTaskForFacility(@PathVariable long id,
-                                                                                 @RequestBody Task task){
-        taskService.createTaskForFacility(id, task);
+    public ResponseEntity<RestResponseDTO<Task>> getAllServicesFOrFacilityByName(@PathVariable long id){
+        serviceService.deleteTaskById(id);
         return ResponseEntity.ok(new RestResponseDTO<>());
     }
+
 
 
     public ResponseEntity<RestResponseDTO<?>> fallBackMethod(Throwable throwable){

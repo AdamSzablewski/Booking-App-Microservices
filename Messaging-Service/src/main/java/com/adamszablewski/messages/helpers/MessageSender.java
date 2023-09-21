@@ -34,6 +34,7 @@ public class MessageSender {
 //    }
     @Transactional
     public void addMessageToConversation(Message message){
+        messageRepository.save(message);
         message.getReceivers().forEach(reciever -> {
             Optional<Conversation> optionalConversation = conversationRepository.findByUserId(reciever.getId());
             Conversation conversation;
@@ -49,10 +50,10 @@ public class MessageSender {
                 message.setConversations(new ArrayList<>());
             }
              message.getConversations().add(conversation);
-
+            conversationRepository.save(conversation);
         });
-        messageRepository.save(message);
-        System.out.println(message);
+
+        System.out.println("printing from addmessagetoconv "+ message);
 
 
     }

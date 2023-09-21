@@ -38,7 +38,7 @@ public interface UserServiceClient {
     @PostMapping("/users/employee/ids")
     List<Employee> findEmployeesForIds(List<Long> employees);
     @GetMapping("/users/employee/id/{id}")
-    Employee findEmployeeById(long id);
+    RestResponseDTO<Employee> findEmployeeById(@PathVariable long id);
     @GetMapping("/users/owner/email/{email}")
     RestResponseDTO<Owner> findOwnerByEmail(@PathVariable String email);
     @GetMapping("/users/email/{email}")

@@ -26,6 +26,7 @@ public class AuthController {
     private PasswordEncoder passwordEncoder;
     private RoleRepository roleRepository;
     private TokenGenerator tokenGenerator;
+    private SecurityService securityService;
 
 
 
@@ -47,13 +48,17 @@ public class AuthController {
                 .build();
 
         userRepository.save(user);
+
         //System.out.println(user.getPassword());
         return new ResponseEntity<>("User registered", HttpStatus.OK);
     }
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody LoginDto user){
-        System.out.println(user);
+
+
+        securityService.validateUser(user);
+
 //        Authentication authentication = authenticationManager.authenticate(
 //                new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword())
 //        );
