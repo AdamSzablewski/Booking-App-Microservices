@@ -4,6 +4,7 @@ import com.adamszablewski.appointments.Appointment;
 import com.adamszablewski.feignClients.classes.Employee;
 import com.adamszablewski.feignClients.classes.Owner;
 import com.adamszablewski.tasks.Task;
+import com.adamszablewski.util.Identifiable;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -19,7 +20,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Facility {
+public class Facility implements Identifiable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -32,14 +33,21 @@ public class Facility {
     private String houseNumber;
 
     @OneToMany(cascade = CascadeType.ALL)
-    @JsonIgnoreProperties("facility")
+    @JsonIgnoreProperties({"facility","facilities","workplace"})
+    @JsonManagedReference
     private List<Task> tasks;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JsonIgnoreProperties("facilities")
+    @JsonIgnoreProperties({"facility","facilities","workplace"})
+    @JsonBackReference
     private Owner owner;
     @OneToMany(cascade = CascadeType.ALL)
-    @JsonIgnoreProperties("workplace")
+    @JsonIgnoreProperties({"facility","facilities","workplace"})
     @ToString.Exclude
+    @JsonManagedReference
     private List<Employee> employees;
+    @Override
+    public Long getId() {
+        return id;
+    }
 }

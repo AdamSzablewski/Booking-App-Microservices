@@ -1,6 +1,7 @@
 package com.adamszablewski.users.owners;
 
 
+import com.adamszablewski.Identifiable;
 import com.adamszablewski.feignClients.Facility;
 import com.adamszablewski.users.UserClass;
 import com.adamszablewski.users.employee.Employee;
@@ -16,12 +17,13 @@ import lombok.experimental.SuperBuilder;
 import java.util.List;
 
 
+
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Builder
-public class Owner {
+public class Owner implements Identifiable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
@@ -29,8 +31,12 @@ public class Owner {
     @JsonIgnoreProperties("owner")
     private List<Facility> facilities;
     @OneToOne
+    @JsonIgnoreProperties("owner")
     private Employee employee;
     @OneToOne
     private UserClass user;
-
+    @Override
+    public Long getId() {
+        return id;
+    }
 }

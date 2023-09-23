@@ -26,7 +26,7 @@ public class MessageSender {
         Message message = Message.builder()
                 .message("Your appoinment for the date "+appointment.getDate()+" has been canceled")
                 .sender(APP_NAME)
-                .receivers(List.of(appointment.getClient().getUserClass(), appointment.getEmployee().getUser()))
+                .receivers(List.of(appointment.getClient().getUser(), appointment.getEmployee().getUser()))
                 .dateSent(LocalDateTime.now())
                 .build();
 
@@ -45,7 +45,7 @@ public class MessageSender {
                         ". The address is: "+street+" "+house+" in "+city+". Your appoinment will cost "
                         +appointment.getTask().getPrice()+" "+appointment.getTask().getCurrency())
                 .sender(APP_NAME)
-                .receivers(List.of(appointment.getEmployee().getUser(), appointment.getClient().getUserClass()))
+                .receivers(List.of(appointment.getEmployee().getUser(), appointment.getClient().getUser()))
                 .dateSent(LocalDateTime.now())
                 .build();
 

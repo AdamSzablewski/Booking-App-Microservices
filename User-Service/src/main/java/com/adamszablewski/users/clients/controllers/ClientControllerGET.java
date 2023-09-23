@@ -1,5 +1,6 @@
 package com.adamszablewski.users.clients.controllers;
 
+import com.adamszablewski.dto.ClientDto;
 import com.adamszablewski.dtos.RestResponseDTO;
 import com.adamszablewski.exceptions.CustomExceptionHandler;
 import com.adamszablewski.users.clients.Client;
@@ -33,8 +34,8 @@ public class ClientControllerGET {
     @GetMapping("/id/{id}")
     @CircuitBreaker(name = "userServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
     @RateLimiter(name = "userServiceRateLimiter")
-    public ResponseEntity<RestResponseDTO<Client>> getClientById(@PathVariable long id){
-        RestResponseDTO<Client> responseDTO = RestResponseDTO.<Client>builder()
+    public ResponseEntity<RestResponseDTO<ClientDto>> getClientById(@PathVariable long id){
+        RestResponseDTO<ClientDto> responseDTO = RestResponseDTO.<ClientDto>builder()
                 .value(clientService.getClientById(id))
                 .build();
         return ResponseEntity.ok(responseDTO);
@@ -42,7 +43,7 @@ public class ClientControllerGET {
     @PutMapping("/create/id/{id}")
     @CircuitBreaker(name = "userServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
     @RateLimiter(name = "userServiceRateLimiter")
-    ResponseEntity<RestResponseDTO<String>> makeEmployeeFromUser(@PathVariable long id){
+    ResponseEntity<RestResponseDTO<String>> makeClientFromUserId(@PathVariable long id){
         clientService.makeClientFromUser(id);
         return ResponseEntity.ok(new RestResponseDTO<>());
     }

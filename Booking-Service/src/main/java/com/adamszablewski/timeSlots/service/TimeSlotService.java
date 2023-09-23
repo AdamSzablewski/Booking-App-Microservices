@@ -2,10 +2,12 @@ package com.adamszablewski.timeSlots.service;
 
 import com.adamszablewski.appointments.Appointment;
 import com.adamszablewski.appointments.repository.AppointmentRepository;
+import com.adamszablewski.dto.ClientDto;
 import com.adamszablewski.exceptions.NoSuchTaskException;
 import com.adamszablewski.exceptions.NoSuchUserException;
 import com.adamszablewski.exceptions.TimeSlotAlreadyTakenException;
 import com.adamszablewski.feignClients.classes.Client;
+import com.adamszablewski.feignClients.classes.ClientRepository;
 import com.adamszablewski.feignClients.classes.Employee;
 import com.adamszablewski.feignClients.UserServiceClient;
 import com.adamszablewski.messages.MessageSender;
@@ -15,13 +17,14 @@ import com.adamszablewski.timeSlots.TimeSlot;
 import com.adamszablewski.timeSlots.helper.TimeSlotHelper;
 
 import lombok.AllArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.adamszablewski.dto.mapper.Mapper.*;
 
 @Service
 @AllArgsConstructor
@@ -32,6 +35,9 @@ public class TimeSlotService {
     private final AppointmentRepository appointmentRepository;
     private final UserServiceClient userServiceClient;
     private final MessageSender messageSender;
+    private final ClientRepository clientRepository;
+
+
 
 
 
@@ -51,14 +57,16 @@ public class TimeSlotService {
                 if(timeSlotHelper.isTimeSlotAvailable(employeeStartTime,
                         employeeStartTime.plusMinutes(task.getDurationInMinutes()), employee, date)){
                     availableTimeSlots.add(
-                            TimeSlot.builder()
+
+
+                        TimeSlot.builder()
                                 .startTime(employeeStartTime)
+                                .date(date)
+                                .task(mapTaskToDto(task))
                                 .endTime(employeeStartTime.plusMinutes(task.getDurationInMinutes()))
-                                    .task(task)
-                                    .date(date)
-                                    .employee(employee)
-                                    .facility(task.getFacility())
-                                    .build()
+                                .emloyee(mapEmployeeToDto(employee))
+                                .facility(mapFacilityToDto(task.getFacility()))
+                                .build()
                     );
                 }
                 employeeStartTime = employeeStartTime.plusMinutes(15);
@@ -68,12 +76,21 @@ public class TimeSlotService {
     }
 
 
-    public Appointment makeAppointmentFromTimeSlot(long id, TimeSlot timeSlot) {
-        Client client = userServiceClient.getClientById(id)
+    public void makeAppointmentFromTimeSlot(long id, TimeSlot timeSlot) {
+        System.out.println("timeSlot");
+
+        Client client = clientRepository.findById(id)
                 .orElseThrow(NoSuchUserException::new);
-        System.out.println(timeSlot.toString());
+        Task task = taskRepository.findById(timeSlot.getTask().getId())
+                .orElseThrow(NoSuchTaskException::new);
+        Employee employee = task.getEmployees()
+                .stream()
+                .filter(emp -> emp.getId() == timeSlot.getEmloyee().getId())
+                .findFirst()
+                .orElseThrow(NoSuchUserException::new);
+
         if(!timeSlotHelper.isTimeSlotAvailable(timeSlot.getStartTime(), timeSlot.getEndTime(),
-                timeSlot.getEmployee(), timeSlot.getDate())){
+                employee, timeSlot.getDate())){
                     throw new TimeSlotAlreadyTakenException();
         }
 
@@ -81,19 +98,21 @@ public class TimeSlotService {
                 .date(timeSlot.getDate())
                 .startTime(timeSlot.getStartTime())
                 .endTime(timeSlot.getEndTime())
-                .employee(timeSlot.getEmployee())
-                .task(timeSlot.getTask())
+                .employee(employee)
+                .task(task)
                 .client(client)
-                .facility(timeSlot.getFacility())
+                .facility(task.getFacility())
                 .build();
 
-
+        client.getAppointments().add(appointment);
+        employee.getAppointments().add(appointment);
         appointmentRepository.save(appointment);
+
         messageSender.sendAppointmentCreatedMessage(appointment);
 
-        //rabbitMqProducer.sendMessage(appointment);
+//        rabbitMqProducer.sendMessage(appointment);
 //        userRepository.save(client);
 //        userRepository.save(employee);
-        return appointment;
+
     }
 }

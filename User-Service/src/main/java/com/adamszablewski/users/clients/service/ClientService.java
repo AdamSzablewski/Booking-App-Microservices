@@ -1,5 +1,6 @@
 package com.adamszablewski.users.clients.service;
 
+import com.adamszablewski.dto.ClientDto;
 import com.adamszablewski.exceptions.NoSuchUserException;
 import com.adamszablewski.users.UserClass;
 import com.adamszablewski.users.clients.Client;
@@ -8,6 +9,8 @@ import com.adamszablewski.users.employee.Employee;
 import com.adamszablewski.users.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import static com.adamszablewski.dto.mapper.Mapper.mapClientToDto;
 
 @Service
 @AllArgsConstructor
@@ -21,9 +24,9 @@ public class ClientService {
 //                .orElseThrow(NoSuchUserException::new);
 //    }
 
-    public Client getClientById(long id) {
-        return clientRepository.findById(id)
-                .orElseThrow(NoSuchUserException::new);
+    public ClientDto getClientById(long id) {
+        return mapClientToDto(clientRepository.findById(id)
+                .orElseThrow(NoSuchUserException::new));
     }
 
     public void makeClientFromUser(long id) {

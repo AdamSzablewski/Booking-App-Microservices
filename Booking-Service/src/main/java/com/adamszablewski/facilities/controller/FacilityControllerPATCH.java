@@ -1,8 +1,7 @@
 package com.adamszablewski.facilities.controller;
 
-import com.adamszablewski.appointments.dtos.RestResponseDTO;
+import com.adamszablewski.dto.RestResponseDTO;
 import com.adamszablewski.exceptions.CustomExceptionHandler;
-import com.adamszablewski.facilities.Facility;
 import com.adamszablewski.facilities.service.FacilityService;
 import com.adamszablewski.tasks.Task;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
@@ -11,8 +10,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import java.math.BigInteger;
 
 @Controller
 @AllArgsConstructor

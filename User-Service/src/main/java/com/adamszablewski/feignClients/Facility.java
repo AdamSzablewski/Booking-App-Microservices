@@ -1,6 +1,7 @@
 package com.adamszablewski.feignClients;
 
 
+import com.adamszablewski.Identifiable;
 import com.adamszablewski.users.employee.Employee;
 import com.adamszablewski.users.owners.Owner;
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -18,7 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Facility {
+public class Facility implements Identifiable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -31,14 +32,21 @@ public class Facility {
     private String houseNumber;
 
     @OneToMany(cascade = CascadeType.ALL)
-    @JsonIgnoreProperties("facility")
+    @JsonIgnoreProperties({"facility","facilities","workplace"})
+    @JsonManagedReference
     private List<Task> tasks;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JsonIgnoreProperties("facilities")
+    @JsonIgnoreProperties({"facility","facilities","workplace"})
+    @JsonBackReference
     private Owner owner;
     @OneToMany(cascade = CascadeType.ALL)
-    @JsonIgnoreProperties("workplace")
+    @JsonIgnoreProperties({"facility","facilities","workplace"})
     @ToString.Exclude
+    @JsonManagedReference
     private List<Employee> employees;
+    @Override
+    public Long getId() {
+        return id;
+    }
 }

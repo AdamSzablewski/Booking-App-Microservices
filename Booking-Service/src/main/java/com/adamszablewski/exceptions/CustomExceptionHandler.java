@@ -1,7 +1,6 @@
 package com.adamszablewski.exceptions;
 
-import com.adamszablewski.appointments.dtos.RestResponseDTO;
-import com.adamszablewski.exceptions.*;
+import com.adamszablewski.dto.RestResponseDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 

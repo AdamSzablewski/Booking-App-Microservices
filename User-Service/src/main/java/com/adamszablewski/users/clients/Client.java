@@ -1,5 +1,6 @@
 package com.adamszablewski.users.clients;
 
+import com.adamszablewski.Identifiable;
 import com.adamszablewski.feignClients.Appointment;
 import com.adamszablewski.users.UserClass;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -16,7 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 @Builder
-public class Client {
+public class Client implements Identifiable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id")
@@ -24,7 +25,12 @@ public class Client {
     private int points;
     @OneToOne
     private UserClass user;
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY)
     @JsonIgnoreProperties("client")
     private List<Appointment> appointments;
+
+    @Override
+    public Long getId() {
+        return id;
+    }
 }

@@ -1,7 +1,6 @@
 package com.adamszablewski.appointments.controller;
 
-import com.adamszablewski.appointments.Appointment;
-import com.adamszablewski.appointments.dtos.RestResponseDTO;
+import com.adamszablewski.dto.RestResponseDTO;
 import com.adamszablewski.appointments.service.AppointmentService;
 import com.adamszablewski.exceptions.CustomExceptionHandler;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
@@ -10,8 +9,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 @Controller
 @AllArgsConstructor

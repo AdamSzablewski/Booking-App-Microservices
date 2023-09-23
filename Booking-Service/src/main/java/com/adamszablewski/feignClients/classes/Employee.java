@@ -4,6 +4,7 @@ package com.adamszablewski.feignClients.classes;
 import com.adamszablewski.appointments.Appointment;
 import com.adamszablewski.facilities.Facility;
 import com.adamszablewski.tasks.Task;
+import com.adamszablewski.util.Identifiable;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -23,12 +24,13 @@ import java.util.List;
 @Builder
 @Table
 @ToString
-public class Employee {
+public class Employee implements Identifiable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
     @ManyToOne
-    @JsonIgnoreProperties({"employees", "employee"})
+    //@JsonIgnoreProperties({"employees", "employee"})
+    @JsonBackReference
     private Facility workplace;
     @OneToOne
     private UserClass user;
@@ -42,8 +44,14 @@ public class Employee {
     )
     @JsonIgnoreProperties({"employees", "employee"})
     @ToString.Exclude
+    @JsonBackReference
     private List<Task> tasks;
     @OneToMany
     @JsonIgnoreProperties({"employees", "employee"})
     private List<Appointment> appointments;
+
+    @Override
+    public Long getId() {
+        return id;
+    }
 }

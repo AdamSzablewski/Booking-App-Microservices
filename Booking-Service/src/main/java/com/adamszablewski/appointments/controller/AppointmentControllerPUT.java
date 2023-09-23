@@ -1,7 +1,6 @@
 package com.adamszablewski.appointments.controller;
 
-import com.adamszablewski.appointments.Appointment;
-import com.adamszablewski.appointments.dtos.RestResponseDTO;
+import com.adamszablewski.dto.RestResponseDTO;
 import com.adamszablewski.appointments.service.AppointmentService;
 import com.adamszablewski.exceptions.CustomExceptionHandler;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
@@ -11,20 +10,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigInteger;
-
 @Controller
 @AllArgsConstructor
 @RequestMapping("/appointments/change")
 public class AppointmentControllerPUT {
-    AppointmentService appointmentService;
+    private final AppointmentService appointmentService;
 
     @PutMapping("/id/{id}/employee/email/{email}")
     @CircuitBreaker(name = "bookingServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
     @RateLimiter(name = "bookingServiceRateLimiter")
     public ResponseEntity<RestResponseDTO<String>> changeEmployeeForAppointmentById(@PathVariable Long id){
         appointmentService.changeEmployeeForAppointmentById(id);
-        return ResponseEntity.ok(new RestResponseDTO<String>());
+        return ResponseEntity.ok(new RestResponseDTO<>());
     }
     public  ResponseEntity<RestResponseDTO<?>> fallBackMethod(Throwable throwable){
         return CustomExceptionHandler.handleException(throwable);

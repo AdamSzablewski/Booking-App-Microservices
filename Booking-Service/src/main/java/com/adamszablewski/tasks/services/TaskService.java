@@ -1,7 +1,7 @@
 package com.adamszablewski.tasks.services;
 
-import com.adamszablewski.appointments.dtos.RestResponseDTO;
-import com.adamszablewski.exceptions.ConnectionException;
+import com.adamszablewski.dto.TaskDto;
+import com.adamszablewski.employmentRequests.util.UserTools;
 import com.adamszablewski.exceptions.NoSuchEmployeeException;
 import com.adamszablewski.exceptions.NoSuchFacilityException;
 import com.adamszablewski.exceptions.NoSuchTaskException;
@@ -13,13 +13,12 @@ import com.adamszablewski.messages.MessageSender;
 import com.adamszablewski.tasks.Task;
 import com.adamszablewski.tasks.repository.TaskRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.net.ConnectException;
 import java.util.List;
+
+import static com.adamszablewski.dto.mapper.Mapper.mapTaskToDto;
 
 @Service
 @AllArgsConstructor
@@ -29,29 +28,30 @@ public class TaskService {
     private final FacilityRepository facilityRepository;
     private final UserServiceClient userServiceClient;
     private final MessageSender messageSender;
-    public List<Task> getAllTasksForFacilityByName(String name) {
+    private final UserTools userTools;
+    public List<TaskDto> getAllTasksForFacilityByName(String name) {
         Facility facility = facilityRepository.findByName(name)
                 .orElseThrow(NoSuchFacilityException::new);
-        return facility.getTasks();
+        return mapTaskToDto(facility.getTasks());
     }
 
-    public List<Task> getAllTasksforFacilityById(Long id) {
+    public List<TaskDto> getAllTasksforFacilityById(Long id) {
         Facility facility = facilityRepository.findById(id)
                 .orElseThrow(NoSuchFacilityException::new);
-        return facility.getTasks();
+        return mapTaskToDto(facility.getTasks());
     }
 
-    public Task getServiceById(Long id) {
-        return taskRepository.findById(id)
-                .orElseThrow(NoSuchTaskException::new);
+    public TaskDto getServiceById(Long id) {
+        return mapTaskToDto(taskRepository.findById(id)
+                .orElseThrow(NoSuchTaskException::new));
     }
 
-    public List<Task> getTasksForCity( String city) {
-        return taskRepository.findByCity( city);
+    public List<TaskDto> getTasksForCity( String city) {
+        return mapTaskToDto(taskRepository.findByCity( city));
     }
 
-    public List<Task> getTasksForCityByCategory(String city, String category) {
-        return taskRepository.findByCityAndCategory(city, category);
+    public List<TaskDto> getTasksForCityByCategory(String city, String category) {
+        return mapTaskToDto(taskRepository.findByCityAndCategory(city, category));
     }
     @Transactional
     public void createTaskForFacility(long id, Task task) {
@@ -90,7 +90,7 @@ public class TaskService {
         Task task = taskRepository.findById(taskId)
                 .orElseThrow(NoSuchTaskException::new);
 
-        Employee employee = userServiceClient.findEmployeeById(id).getValue();
+        Employee employee = userTools.getEmployeeByUserId(id);
         System.out.println(employee);
         System.out.println("employees for facility "+employee.getWorkplace());
         System.out.println(task);

@@ -1,6 +1,7 @@
 package com.adamszablewski.users;
 
 
+import com.adamszablewski.Identifiable;
 import com.adamszablewski.feignClients.Appointment;
 import com.adamszablewski.users.owners.Owner;
 import com.adamszablewski.users.role.Role;
@@ -21,7 +22,7 @@ import java.util.List;
 @Entity
 @Table
 @Builder
-public class UserClass {
+public class UserClass implements Identifiable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -34,4 +35,9 @@ public class UserClass {
     private String phoneNumber;
     @JsonIgnore
     private String password;
+
+    @Override
+    public Long getId() {
+        return id;
+    }
 }

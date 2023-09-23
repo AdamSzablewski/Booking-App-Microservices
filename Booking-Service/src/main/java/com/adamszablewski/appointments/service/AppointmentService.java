@@ -3,6 +3,8 @@ package com.adamszablewski.appointments.service;
 import com.adamszablewski.appointments.Appointment;
 import com.adamszablewski.appointments.helpers.AppointmentHelper;
 import com.adamszablewski.appointments.repository.AppointmentRepository;
+import com.adamszablewski.dto.AppoinmentDTO;
+import com.adamszablewski.dto.mapper.Mapper;
 import com.adamszablewski.exceptions.NoSuchAppointmentException;
 
 import com.adamszablewski.feignClients.UserServiceClient;
@@ -14,64 +16,31 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static com.adamszablewski.dto.mapper.Mapper.mapAppointmentToDto;
+import static com.adamszablewski.dto.mapper.Mapper.mapAppointmentToDto;
+
 @Service
 @AllArgsConstructor
 public class AppointmentService {
     private final AppointmentRepository appointmentRepository;
-    private final UserServiceClient userServiceClient;
-    private final MessageSender messageSender;
-
-
     private final AppointmentHelper appointmentHelper;
 
-    public List<Appointment> getAllAppointments() {
-        return appointmentRepository.findAll();
+    public List<AppoinmentDTO> getAllAppointments() {
+        return mapAppointmentToDto(appointmentRepository.findAll());
     }
 
-    public Appointment getAppointmentById(Long id) {
-        return appointmentRepository.findById(id)
-                .orElseThrow(NoSuchAppointmentException::new);
+    public AppoinmentDTO getAppointmentById(Long id) {
+        return mapAppointmentToDto(appointmentRepository.findById(id)
+                .orElseThrow(NoSuchAppointmentException::new));
     }
-
-    public Appointment getAppointmentByPhoneNumber(String number) {
-        return appointmentRepository.findByNumber(number)
-                .orElseThrow(NoSuchAppointmentException::new);
-    }
-
-    public Appointment getAppointmentByEmail(String email) {
-        return appointmentRepository.findByEmail(email)
-                .orElseThrow(NoSuchAppointmentException::new);
-    }
-//    @Transactional
-//    public ResponseEntity<String> createNewAppointment(Appointment appointment) {
-//        appointmentRepository.save(appointment);
-//        appointmentHelper.addAppointmentForUsers(appointment);
-//        return ResponseEntity.ok().build();
-//    }
-    @Transactional
     public void deleteAppointmentById(Long id) {
         Appointment appointment = appointmentRepository.findById(id)
                 .orElseThrow(NoSuchAppointmentException::new);
         appointmentHelper.deleteAppointment(appointment);
     }
-//    @Transactional
-//    public ResponseEntity<String> deleteAppointmentByEmail(String email) {
-//        Appointment appointment = appointmentRepository.findByEmail(email)
-//            .orElseThrow(NoSuchAppointmentException::new);
-//        return appointmentHelper.deleteAppointment(appointment);
-//    }
-//    @Transactional
-//    public ResponseEntity<String> deleteAppointmentByNumber(String number) {
-//        Appointment appointment = appointmentRepository.findByNumber(number)
-//                .orElseThrow(NoSuchAppointmentException::new);
-//        return appointmentHelper.deleteAppointment(appointment);
-//    }
-
-    @Transactional
-    public ResponseEntity<String> changeEmployeeForAppointmentById(Long id) {
+    public void changeEmployeeForAppointmentById(Long id) {
         Appointment appointment= appointmentRepository.findById(id)
                 .orElseThrow(NoSuchAppointmentException::new);
         appointmentHelper.changeEmployeeForAppointment(appointment, appointment.getEmployee());
-        return ResponseEntity.ok().build();
     }
 }

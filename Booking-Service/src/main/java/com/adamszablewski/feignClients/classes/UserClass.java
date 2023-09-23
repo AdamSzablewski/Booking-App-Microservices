@@ -1,6 +1,7 @@
 package com.adamszablewski.feignClients.classes;
 
 import com.adamszablewski.appointments.Appointment;
+import com.adamszablewski.util.Identifiable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -15,7 +16,7 @@ import lombok.experimental.SuperBuilder;
 @Entity
 @Table
 @Builder
-public class UserClass {
+public class UserClass implements Identifiable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -28,4 +29,8 @@ public class UserClass {
     private String phoneNumber;
     @JsonIgnore
     private String password;
+    @Override
+    public Long getId() {
+        return id;
+    }
 }

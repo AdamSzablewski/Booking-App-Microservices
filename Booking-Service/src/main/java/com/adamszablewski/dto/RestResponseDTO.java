@@ -1,6 +1,5 @@
-package com.adamszablewski.appointments.dtos;
+package com.adamszablewski.dto;
 
-import com.adamszablewski.appointments.Appointment;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

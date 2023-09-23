@@ -2,6 +2,7 @@ package com.adamszablewski.feignClients.classes;
 
 import com.adamszablewski.facilities.Facility;
 
+import com.adamszablewski.util.Identifiable;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -19,7 +20,7 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 @Builder
-public class Owner {
+public class Owner implements Identifiable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
@@ -27,8 +28,12 @@ public class Owner {
     @JsonIgnoreProperties("owner")
     private List<Facility> facilities;
     @OneToOne
+    @JsonIgnoreProperties("owner")
     private Employee employee;
     @OneToOne
     private UserClass user;
-
+    @Override
+    public Long getId() {
+        return id;
+    }
 }

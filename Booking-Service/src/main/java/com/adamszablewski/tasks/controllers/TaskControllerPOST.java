@@ -1,6 +1,6 @@
 package com.adamszablewski.tasks.controllers;
 
-import com.adamszablewski.appointments.dtos.RestResponseDTO;
+import com.adamszablewski.dto.RestResponseDTO;
 import com.adamszablewski.exceptions.CustomExceptionHandler;
 import com.adamszablewski.tasks.Task;
 import com.adamszablewski.tasks.services.TaskService;

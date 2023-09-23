@@ -1,9 +1,8 @@
 package com.adamszablewski.tasks.controllers;
 
-import com.adamszablewski.appointments.Appointment;
-import com.adamszablewski.appointments.dtos.RestResponseDTO;
+import com.adamszablewski.dto.RestResponseDTO;
+import com.adamszablewski.dto.TaskDto;
 import com.adamszablewski.exceptions.CustomExceptionHandler;
-import com.adamszablewski.facilities.Facility;
 import com.adamszablewski.tasks.Task;
 import com.adamszablewski.tasks.services.TaskService;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
@@ -24,8 +23,8 @@ public class TaskControllerGET {
     @GetMapping("/facility/name/{name}")
     @CircuitBreaker(name = "bookingServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
     @RateLimiter(name = "bookingServiceRateLimiter")
-    public ResponseEntity<RestResponseDTO<Task>> getAllServicesFOrFacilityByName(@PathVariable String name){
-        RestResponseDTO<Task> responseDTO = RestResponseDTO.<Task>builder()
+    public ResponseEntity<RestResponseDTO<TaskDto>> getAllServicesFOrFacilityByName(@PathVariable String name){
+        RestResponseDTO<TaskDto> responseDTO = RestResponseDTO.<TaskDto>builder()
                 .values(serviceService.getAllTasksForFacilityByName(name))
                 .build();
         return ResponseEntity.ok(responseDTO);
@@ -33,8 +32,8 @@ public class TaskControllerGET {
     @GetMapping("/facility/id/{id}")
     @CircuitBreaker(name = "bookingServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
     @RateLimiter(name = "bookingServiceRateLimiter")
-    public ResponseEntity<RestResponseDTO<Task>> getAllTasksForFacilityById(@PathVariable Long id){
-        RestResponseDTO<Task> responseDTO = RestResponseDTO.<Task>builder()
+    public ResponseEntity<RestResponseDTO<TaskDto>> getAllTasksForFacilityById(@PathVariable Long id){
+        RestResponseDTO<TaskDto> responseDTO = RestResponseDTO.<TaskDto>builder()
                 .values(serviceService.getAllTasksforFacilityById(id))
                 .build();
         return ResponseEntity.ok(responseDTO);
@@ -42,8 +41,8 @@ public class TaskControllerGET {
     @GetMapping("/id/{id}")
     @CircuitBreaker(name = "bookingServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
     @RateLimiter(name = "bookingServiceRateLimiter")
-    public ResponseEntity<RestResponseDTO<Task>> getServiceById(@PathVariable Long id){
-        RestResponseDTO<Task> responseDTO = RestResponseDTO.<Task>builder()
+    public ResponseEntity<RestResponseDTO<TaskDto>> getServiceById(@PathVariable Long id){
+        RestResponseDTO<TaskDto> responseDTO = RestResponseDTO.<TaskDto>builder()
                 .value(serviceService.getServiceById(id))
                 .build();
         return ResponseEntity.ok(responseDTO);
@@ -52,8 +51,8 @@ public class TaskControllerGET {
     @GetMapping("/city/{city}")
     @CircuitBreaker(name = "bookingServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
     @RateLimiter(name = "bookingServiceRateLimiter")
-    public ResponseEntity<RestResponseDTO<Task>> getTasksForCity( @PathVariable String city){
-        RestResponseDTO<Task> responseDTO = RestResponseDTO.<Task>builder()
+    public ResponseEntity<RestResponseDTO<TaskDto>> getTasksForCity( @PathVariable String city){
+        RestResponseDTO<TaskDto> responseDTO = RestResponseDTO.<TaskDto>builder()
                 .values(serviceService.getTasksForCity(city))
                 .build();
         return ResponseEntity.ok(responseDTO);
@@ -61,9 +60,9 @@ public class TaskControllerGET {
     @GetMapping("/city/{city}/category/{category}")
     @CircuitBreaker(name = "bookingServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
     @RateLimiter(name = "bookingServiceRateLimiter")
-    public ResponseEntity<RestResponseDTO<Task>> getTasksForCityByCategory(@PathVariable String city,
+    public ResponseEntity<RestResponseDTO<TaskDto>> getTasksForCityByCategory(@PathVariable String city,
                                                 @PathVariable String category){
-        RestResponseDTO<Task> responseDTO = RestResponseDTO.<Task>builder()
+        RestResponseDTO<TaskDto> responseDTO = RestResponseDTO.<TaskDto>builder()
                 .values(serviceService.getTasksForCityByCategory(city, category))
                 .build();
         return ResponseEntity.ok(responseDTO);

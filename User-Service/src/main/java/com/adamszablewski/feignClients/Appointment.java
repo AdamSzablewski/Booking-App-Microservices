@@ -1,8 +1,10 @@
 package com.adamszablewski.feignClients;
 
 
+import com.adamszablewski.Identifiable;
 import com.adamszablewski.users.clients.Client;
 import com.adamszablewski.users.employee.Employee;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
@@ -18,14 +20,16 @@ import java.time.LocalTime;
 @NoArgsConstructor
 @Entity
 @ToString
-public class Appointment {
+public class Appointment implements Identifiable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private BigInteger id;
+    private long id;
     @ManyToOne
+    //@JsonIgnoreProperties({"appointment","appointments"})
     private Facility facility;
     @ManyToOne
-    @JsonIgnoreProperties("appointments")
+    //@JsonIgnoreProperties({"appointment","appointments"})
+    @JsonBackReference
     @ToString.Exclude
     private Task task;
     private LocalDate date;
@@ -34,12 +38,19 @@ public class Appointment {
     private String number;
     private String email;
     @OneToOne
-    @JsonIgnoreProperties("appointments")
+    @JsonBackReference
+    //@JsonIgnoreProperties({"appointment","appointments"})
     @ToString.Exclude
     private Client client;
     @OneToOne
-    @JsonIgnoreProperties("appointments")
+    @JsonBackReference
+    //@JsonIgnoreProperties({"appointment","appointments"})
     @ToString.Exclude
     private Employee employee;
+
+    @Override
+    public Long getId() {
+        return id;
+    }
 
 }

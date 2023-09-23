@@ -1,6 +1,7 @@
 package com.adamszablewski.users.employee;
 
 
+import com.adamszablewski.Identifiable;
 import com.adamszablewski.feignClients.Appointment;
 import com.adamszablewski.feignClients.Facility;
 import com.adamszablewski.feignClients.Task;
@@ -24,12 +25,13 @@ import java.util.List;
 @Builder
 @Table
 @ToString
-public class Employee {
+public class Employee implements Identifiable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
     @ManyToOne
-    @JsonIgnoreProperties({"employees", "employee"})
+    //@JsonIgnoreProperties({"employees", "employee"})
+    @JsonBackReference
     private Facility workplace;
     @OneToOne
     private UserClass user;
@@ -43,8 +45,14 @@ public class Employee {
     )
     @JsonIgnoreProperties({"employees", "employee"})
     @ToString.Exclude
+    @JsonBackReference
     private List<Task> tasks;
     @OneToMany
     @JsonIgnoreProperties({"employees", "employee"})
     private List<Appointment> appointments;
+
+    @Override
+    public Long getId() {
+        return id;
+    }
 }

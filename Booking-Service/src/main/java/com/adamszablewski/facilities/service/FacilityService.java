@@ -1,6 +1,7 @@
 package com.adamszablewski.facilities.service;
 
-import com.adamszablewski.appointments.dtos.RestResponseDTO;
+import com.adamszablewski.dto.FacilityDto;
+import com.adamszablewski.dto.RestResponseDTO;
 import com.adamszablewski.exceptions.NoSuchFacilityException;
 import com.adamszablewski.exceptions.NoSuchUserException;
 import com.adamszablewski.facilities.Facility;
@@ -19,6 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static com.adamszablewski.dto.mapper.Mapper.mapFacilityToDto;
+
 @Service
 @AllArgsConstructor
 public class FacilityService {
@@ -29,21 +32,21 @@ public class FacilityService {
     private final MessageSender messageSender;
     @PersistenceContext
     private EntityManager entityManager;
-    public List<Facility> getAllFacilities() {
-        return facilityRepository.findAll();
+    public List<FacilityDto> getAllFacilities() {
+        return mapFacilityToDto(facilityRepository.findAll());
     }
 
-    public List<Facility> getAllFacilitiesForRegion(String region) {
-        return facilityRepository.findByRegion(region);
+    public List<FacilityDto> getAllFacilitiesForRegion(String region) {
+        return mapFacilityToDto(facilityRepository.findByRegion(region));
     }
 
-    public List<Facility> getAllFacilitiesForCity(String city) {
-        return facilityRepository.findByCity(city);
+    public List<FacilityDto> getAllFacilitiesForCity(String city) {
+        return mapFacilityToDto(facilityRepository.findByCity(city));
     }
 
-    public Facility getFacilityById(Long id) {
-        return facilityRepository.findById(id)
-                .orElseThrow(NoSuchFacilityException::new);
+    public FacilityDto getFacilityById(Long id) {
+        return mapFacilityToDto(facilityRepository.findById(id)
+                .orElseThrow(NoSuchFacilityException::new));
     }
     @Transactional
     public void createFacility(Facility facility, String ownerEmail) {
