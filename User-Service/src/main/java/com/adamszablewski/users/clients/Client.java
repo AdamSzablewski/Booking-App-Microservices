@@ -23,11 +23,11 @@ public class Client implements Identifiable {
     @Column(name = "id")
     private long id;
     private int points;
-    @OneToOne
-    private UserClass user;
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL)
     @JsonIgnoreProperties("client")
     private List<Appointment> appointments;
+    @OneToOne
+    private UserClass user;
 
     @Override
     public Long getId() {

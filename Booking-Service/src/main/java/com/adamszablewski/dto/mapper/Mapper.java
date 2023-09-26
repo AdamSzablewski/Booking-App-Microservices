@@ -74,7 +74,7 @@ public class Mapper {
         List<FacilityDto> facilityDtos = new ArrayList<>();
 
         facilities.forEach(facility -> {
-            FacilityDto.builder()
+            facilityDtos.add(FacilityDto.builder()
                     .owner(convertObjectToId(facility.getOwner()))
                     .id(facility.getId())
                     .name(facility.getName())
@@ -85,7 +85,7 @@ public class Mapper {
                     .tasks(mapTaskToDto(facility.getTasks()))
                     .street(facility.getStreet())
                     .houseNumber(facility.getHouseNumber())
-                    .build();
+                    .build());
         });
         return facilityDtos;
     }

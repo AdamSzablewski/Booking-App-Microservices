@@ -4,10 +4,7 @@ import com.adamszablewski.appointments.Appointment;
 import com.adamszablewski.util.Identifiable;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.util.List;
@@ -24,6 +21,7 @@ public class Client implements Identifiable {
     private long id;
     private int points;
     @OneToOne
+    @ToString.Exclude
     private UserClass user;
     @OneToMany(fetch = FetchType.LAZY)
     @JsonIgnoreProperties("client")

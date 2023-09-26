@@ -1,5 +1,6 @@
 package com.adamszablewski.users.owners.controllers;
 
+import com.adamszablewski.dto.OwnerDto;
 import com.adamszablewski.dtos.RestResponseDTO;
 import com.adamszablewski.exceptions.CustomExceptionHandler;
 import com.adamszablewski.users.employee.Employee;
@@ -25,8 +26,8 @@ public class OwnerControllerGET {
     @GetMapping("/email/{email}")
     @CircuitBreaker(name = "userServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
     @RateLimiter(name = "userServiceRateLimiter")
-    public ResponseEntity<RestResponseDTO<Owner>> getOwnerByEmail(@PathVariable String email){
-        RestResponseDTO<Owner> responseDTO = RestResponseDTO.<Owner>builder()
+    public ResponseEntity<RestResponseDTO<OwnerDto>> getOwnerByEmail(@PathVariable String email){
+        RestResponseDTO<OwnerDto> responseDTO = RestResponseDTO.<OwnerDto>builder()
                 .value(ownerService.getOwnerByEmail(email))
                 .build();
         return ResponseEntity.ok(responseDTO);
@@ -35,8 +36,8 @@ public class OwnerControllerGET {
     @GetMapping("/id/{id}")
     @CircuitBreaker(name = "userServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
     @RateLimiter(name = "userServiceRateLimiter")
-    public ResponseEntity<RestResponseDTO<Owner>> getOwnerById(@PathVariable long id){
-        RestResponseDTO<Owner> responseDTO = RestResponseDTO.<Owner>builder()
+    public ResponseEntity<RestResponseDTO<OwnerDto>> getOwnerById(@PathVariable long id){
+        RestResponseDTO<OwnerDto> responseDTO = RestResponseDTO.<OwnerDto>builder()
                 .value(ownerService.getOwnerById(id))
                 .build();
         return ResponseEntity.ok(responseDTO);

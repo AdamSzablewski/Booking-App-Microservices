@@ -57,10 +57,20 @@ public class TaskService {
     public void createTaskForFacility(long id, Task task) {
         Facility facility = facilityRepository.findById(id)
                 .orElseThrow(NoSuchFacilityException::new);
-        task.setFacility(facility);
-        facility.getTasks().add(task);
+        Task newTask = Task.builder()
+                .region(facility.getRegion())
+                .city(facility.getCity())
+                .category(task.getCategory())
+                .name(task.getName())
+                .price(task.getPrice())
+                .durationInMinutes(task.getDurationInMinutes())
+                .currency(task.getCurrency())
+                .facility(facility)
+                .build();
+
+        facility.getTasks().add(newTask);
         facilityRepository.save(facility);
-        messageSender.sendTaskCreatedMessage(facility, task);
+        messageSender.sendTaskCreatedMessage(facility, newTask);
 
     }
     @Transactional

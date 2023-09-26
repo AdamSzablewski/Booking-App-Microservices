@@ -23,6 +23,13 @@ public class AppointmentControllerPUT {
         appointmentService.changeEmployeeForAppointmentById(id);
         return ResponseEntity.ok(new RestResponseDTO<>());
     }
+    @PutMapping("/close/id/{id}")
+    @CircuitBreaker(name = "bookingServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
+    @RateLimiter(name = "bookingServiceRateLimiter")
+    public ResponseEntity<RestResponseDTO<String>> markAppointmentAsDone(@PathVariable Long id){
+        appointmentService.markAppointmentAsDone(id);
+        return ResponseEntity.ok(new RestResponseDTO<>());
+    }
     public  ResponseEntity<RestResponseDTO<?>> fallBackMethod(Throwable throwable){
         return CustomExceptionHandler.handleException(throwable);
     }

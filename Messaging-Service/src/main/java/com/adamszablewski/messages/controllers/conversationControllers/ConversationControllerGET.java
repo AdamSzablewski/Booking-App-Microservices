@@ -3,6 +3,7 @@ package com.adamszablewski.messages.controllers.conversationControllers;
 
 
 import com.adamszablewski.RestResponseDTO;
+import com.adamszablewski.dto.ConversationDTO;
 import com.adamszablewski.exceptions.CustomExceptionHandler;
 import com.adamszablewski.messages.Conversation;
 import com.adamszablewski.messages.repositories.ConversationRepository;
@@ -28,13 +29,13 @@ public class ConversationControllerGET {
     private final ConversationService conversationService;
     private final ConversationRepository conversationRepository;
 
-    @GetMapping("/user/{user}")
+    @GetMapping("/user/{id}")
     @CircuitBreaker(name = "messagingServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
     @RateLimiter(name = "messagingServiceRateLimiter")
     //@PreAuthorize("hasAuthority('ADMIN') or principal.username == #user")
-    public ResponseEntity<RestResponseDTO<Conversation>> getCoversation(@PathVariable long user){
-        RestResponseDTO<Conversation> responseDTO = RestResponseDTO.<Conversation>builder()
-                .value(conversationService.getCoversation(user))
+    public ResponseEntity<RestResponseDTO<ConversationDTO>> getCoversation(@PathVariable long id){
+        RestResponseDTO<ConversationDTO> responseDTO = RestResponseDTO.<ConversationDTO>builder()
+                .value(conversationService.getCoversation(id))
                 .build();
         return ResponseEntity.ok(responseDTO);
     }

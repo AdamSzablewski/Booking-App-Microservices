@@ -15,4 +15,7 @@ public interface FacilityRepository extends JpaRepository<Facility, Long> {
     List<Facility> findByCity(String city);
 
     Optional<Facility> findByName(String name);
+    boolean existsByName(String name);
+
+    Optional<Facility> findByOwnerId(long id);
 }

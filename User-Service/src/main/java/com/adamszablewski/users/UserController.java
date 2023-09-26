@@ -1,5 +1,6 @@
 package com.adamszablewski.users;
 
+import com.adamszablewski.dto.UserClassDTO;
 import com.adamszablewski.dtos.RestResponseDTO;
 
 import com.adamszablewski.users.service.UserService;
@@ -15,15 +16,22 @@ import java.util.List;
 @RequestMapping("/users")
 public class UserController {
 
-    UserService userService;
+    private final UserService userService;
 
-//    @PostMapping("/authenticate")
-//    public ResponseEntity<RestResponseDTO<String>> authenticate(@RequestBody AuthRequest authRequest){
-//        jwtService.generateToken(authRequest.getEmail())
-//    }
-    @PutMapping
-    void saveAllUsers(@RequestBody List<UserClass> users){
-        userService.saveAllUsers(users);
+    @GetMapping("/id/{id}")
+    public ResponseEntity<RestResponseDTO<UserClassDTO>> getUserById(@PathVariable long id){
+        RestResponseDTO<UserClassDTO> responseDTO = RestResponseDTO.<UserClassDTO>builder()
+                .value(userService.getUserById(id))
+                .build();
+        return ResponseEntity.ok(responseDTO);
+    }
+
+    @DeleteMapping("/id/{id}")
+    public ResponseEntity<RestResponseDTO<String>> deleteUser(@PathVariable long id){
+        RestResponseDTO<String> responseDTO = RestResponseDTO.<String>builder()
+                .value("User deleted")
+                .build();
+        return ResponseEntity.ok(responseDTO);
     }
 
 }

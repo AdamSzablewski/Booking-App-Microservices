@@ -56,16 +56,8 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody LoginDto user){
 
-
         securityService.validateUser(user);
-
-//        Authentication authentication = authenticationManager.authenticate(
-//                new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword())
-//        );
-
-        //SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = tokenGenerator.generateToken(user.getEmail());
-
         return ResponseEntity.ok(token);
     }
 

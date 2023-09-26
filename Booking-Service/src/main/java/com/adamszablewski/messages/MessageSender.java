@@ -1,6 +1,7 @@
 package com.adamszablewski.messages;
 
 import com.adamszablewski.appointments.Appointment;
+import com.adamszablewski.employmentRequests.util.UserTools;
 import com.adamszablewski.facilities.Facility;
 import com.adamszablewski.feignClients.UserServiceClient;
 import com.adamszablewski.feignClients.classes.Employee;
@@ -22,11 +23,12 @@ public class MessageSender {
 
     private final RabbitMqProducer rabbitMqProducer;
     private final UserServiceClient userServiceClient;
+    private final UserTools userTools;
     public void createAppoinmentCanceledMessage(Appointment appointment) {
         Message message = Message.builder()
                 .message("Your appoinment for the date "+appointment.getDate()+" has been canceled")
                 .sender(APP_NAME)
-                .receivers(List.of(appointment.getClient().getUser(), appointment.getEmployee().getUser()))
+                .receivers(List.of(appointment.getClient().getUser().getId(), appointment.getEmployee().getUser().getId()))
                 .dateSent(LocalDateTime.now())
                 .build();
 
@@ -45,7 +47,7 @@ public class MessageSender {
                         ". The address is: "+street+" "+house+" in "+city+". Your appoinment will cost "
                         +appointment.getTask().getPrice()+" "+appointment.getTask().getCurrency())
                 .sender(APP_NAME)
-                .receivers(List.of(appointment.getEmployee().getUser(), appointment.getClient().getUser()))
+                .receivers(List.of(appointment.getEmployee().getUser().getId(), appointment.getClient().getUser().getId()))
                 .dateSent(LocalDateTime.now())
                 .build();
 
@@ -54,14 +56,15 @@ public class MessageSender {
     }
 
     public void createFacilityCreatedMessage(String ownerEmail, Facility facility) {
-        UserClass user = userServiceClient.findUserByEmail(ownerEmail).getValue();
+        UserClass user = userTools.getUserByEmail(ownerEmail);
         Message message = Message.builder()
                 .message("Congratulations your new facility "+facility.getName()+" has been created. " +
                         "To start taking appointments create one or more services that you offer.")
-                .receivers(List.of(user))
+                .receivers(List.of(user.getId()))
                 .sender(APP_NAME)
                 .dateSent(LocalDateTime.now())
                 .build();
+        //System.out.println(message);
         rabbitMqProducer.sendMessageObject(message);
     }
 
@@ -71,7 +74,7 @@ public class MessageSender {
         System.out.println(user);
         Message message = Message.builder()
                 .sender(APP_NAME)
-                .receivers(List.of(user))
+                .receivers(List.of(user.getId()))
                 .message("You have reieved a request to start working for: "+facility.getName()+" " +
                         "to accept request go to requests")
                 .dateSent(LocalDateTime.now())
@@ -84,8 +87,9 @@ public class MessageSender {
         UserClass owner = facility.getOwner().getUser();
         Message message = Message.builder()
                 .sender(APP_NAME)
-                .receivers(List.of(owner))
+                .receivers(List.of(owner.getId()))
                 .message("The user "+user.getEmail()+" hase denied your employment request")
+                .dateSent(LocalDateTime.now())
                 .build();
         rabbitMqProducer.sendMessageObject(message);
     }
@@ -95,8 +99,9 @@ public class MessageSender {
         UserClass owner = facility.getOwner().getUser();
         Message message = Message.builder()
                 .sender(APP_NAME)
-                .receivers(List.of(owner))
+                .receivers(List.of(owner.getId()))
                 .message("The user "+user.getEmail()+" hase accepted your employment request")
+                .dateSent(LocalDateTime.now())
                 .build();
         rabbitMqProducer.sendMessageObject(message);
     }
@@ -105,8 +110,20 @@ public class MessageSender {
         UserClass owner = facility.getOwner().getUser();
         Message message = Message.builder()
                 .sender(APP_NAME)
-                .receivers(List.of(owner))
+                .receivers(List.of(owner.getId()))
                 .message("You have successfully added the service "+task.getName()+" to your facility.")
+                .dateSent(LocalDateTime.now())
+                .build();
+        rabbitMqProducer.sendMessageObject(message);
+    }
+
+    public void sendAppointmentDoneMessage(Appointment appointment) {
+        UserClass user = appointment.getClient().getUser();
+        Message message = Message.builder()
+                .sender(APP_NAME)
+                .receivers(List.of(user.getId()))
+                .message("Your appointment has been completed")
+                .dateSent(LocalDateTime.now())
                 .build();
         rabbitMqProducer.sendMessageObject(message);
     }

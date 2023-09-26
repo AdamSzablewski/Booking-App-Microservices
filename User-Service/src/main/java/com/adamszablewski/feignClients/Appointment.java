@@ -24,27 +24,29 @@ public class Appointment implements Identifiable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
+
     @ManyToOne
-    //@JsonIgnoreProperties({"appointment","appointments"})
     private Facility facility;
+
     @ManyToOne
-    //@JsonIgnoreProperties({"appointment","appointments"})
-    @JsonBackReference
     @ToString.Exclude
     private Task task;
+
     private LocalDate date;
+
     private LocalTime startTime;
+
     private LocalTime endTime;
+
     private String number;
+
     private String email;
-    @OneToOne
-    @JsonBackReference
-    //@JsonIgnoreProperties({"appointment","appointments"})
+
+    @ManyToOne
     @ToString.Exclude
     private Client client;
-    @OneToOne
-    @JsonBackReference
-    //@JsonIgnoreProperties({"appointment","appointments"})
+
+    @ManyToOne
     @ToString.Exclude
     private Employee employee;
 

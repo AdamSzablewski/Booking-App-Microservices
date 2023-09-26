@@ -11,7 +11,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
+import org.springframework.web.server.ServerWebExchange;
+import reactor.core.publisher.Mono;
 
 @AllArgsConstructor
 @Configuration
@@ -66,5 +69,7 @@ public class AuthenticationFilter {
         String path = request.getPath().toString();
         return path.contains("/register");
     }
+
+
 
 }

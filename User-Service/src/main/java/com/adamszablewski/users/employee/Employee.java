@@ -30,11 +30,7 @@ public class Employee implements Identifiable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
     @ManyToOne
-    //@JsonIgnoreProperties({"employees", "employee"})
-    @JsonBackReference
     private Facility workplace;
-    @OneToOne
-    private UserClass user;
     private LocalTime startTime;
     private LocalTime endTime;
     @ManyToMany
@@ -43,13 +39,12 @@ public class Employee implements Identifiable {
             joinColumns = @JoinColumn(name = "employee_id"),
             inverseJoinColumns = @JoinColumn(name = "task_id")
     )
-    @JsonIgnoreProperties({"employees", "employee"})
     @ToString.Exclude
-    @JsonBackReference
     private List<Task> tasks;
     @OneToMany
-    @JsonIgnoreProperties({"employees", "employee"})
     private List<Appointment> appointments;
+    @OneToOne
+    private UserClass user;
 
     @Override
     public Long getId() {

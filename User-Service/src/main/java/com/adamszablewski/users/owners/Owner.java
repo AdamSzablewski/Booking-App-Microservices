@@ -28,11 +28,7 @@ public class Owner implements Identifiable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
     @OneToMany(cascade = CascadeType.ALL)
-    @JsonIgnoreProperties("owner")
     private List<Facility> facilities;
-    @OneToOne
-    @JsonIgnoreProperties("owner")
-    private Employee employee;
     @OneToOne
     private UserClass user;
     @Override

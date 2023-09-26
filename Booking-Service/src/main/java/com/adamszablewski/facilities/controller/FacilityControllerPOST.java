@@ -23,7 +23,6 @@ public class FacilityControllerPOST {
     @RateLimiter(name = "bookingServiceRateLimiter")
     ResponseEntity<RestResponseDTO<String>> createFacility(@RequestBody Facility facility,
                                                            @RequestHeader("userEmail") String ownerEmail){
-        System.out.println("user in post facility "+ownerEmail);
         facilityService.createFacility(facility, ownerEmail);
         return ResponseEntity.ok(new RestResponseDTO<>());
   }

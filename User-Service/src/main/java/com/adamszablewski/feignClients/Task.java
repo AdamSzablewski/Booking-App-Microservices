@@ -27,19 +27,12 @@ public class Task implements Identifiable {
     private String category;
     private String name;
     @OneToMany
-    //@JsonIgnoreProperties({"task", "tasks"})
-    @JsonManagedReference
     @ToString.Exclude
     private List<Appointment> appointments;
     @ManyToOne
-    //@JsonIgnoreProperties({"task", "tasks"})
-    @JsonBackReference
     @ToString.Exclude
     private Facility facility;
     @ManyToMany
-    //@JsonIgnoreProperties({"task", "tasks"})
-    //@JsonIgnore
-    @JsonManagedReference
     @ToString.Exclude
     private List<Employee> employees;
     private double price;

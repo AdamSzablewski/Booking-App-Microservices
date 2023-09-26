@@ -17,10 +17,11 @@ public class AppointmentHelper {
         appointment.setEmployee(employee);
     }
     public void deleteAppointment(Appointment appointment) {
+
         appointment.getEmployee().getAppointments().remove(appointment);
         appointment.getClient().getAppointments().remove(appointment);
         appointmentRepository.delete(appointment);
-        messageSender.createAppoinmentCanceledMessage(appointment);
+
     }
 
 }

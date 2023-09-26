@@ -40,6 +40,15 @@ public class FacilityControllerGET {
                 .build();
         return ResponseEntity.ok(responseDTO);
     }
+    @GetMapping("/user/{id}")
+    @CircuitBreaker(name = "bookingServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
+    @RateLimiter(name = "bookingServiceRateLimiter")
+    public ResponseEntity<RestResponseDTO<FacilityDto>> getFacilityForUser(@PathVariable long id){
+        RestResponseDTO<FacilityDto> responseDTO = RestResponseDTO.<FacilityDto>builder()
+                .value(facilityService.getFacilityForUser(id))
+                .build();
+        return ResponseEntity.ok(responseDTO);
+    }
     @GetMapping("/id/{id}")
     @CircuitBreaker(name = "bookingServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
     @RateLimiter(name = "bookingServiceRateLimiter")

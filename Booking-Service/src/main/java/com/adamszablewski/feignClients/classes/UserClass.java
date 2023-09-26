@@ -27,8 +27,15 @@ public class UserClass implements Identifiable {
     private String city;
     private String email;
     private String phoneNumber;
+    @OneToOne(cascade = CascadeType.ALL)
+    private Employee employee;
+    @OneToOne(cascade = CascadeType.ALL)
+    private Owner owner;
+    @OneToOne(cascade = CascadeType.ALL)
+    private Client client;
     @JsonIgnore
     private String password;
+
     @Override
     public Long getId() {
         return id;

@@ -1,5 +1,6 @@
 package com.adamszablewski.messages;
 
+import com.adamszablewski.classes.Identifiable;
 import com.adamszablewski.classes.UserClass;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -28,14 +29,9 @@ public class Message {
     private List<Conversation> conversations;
     private String message;
     private String sender;
-    @ManyToMany
-    @JoinTable(
-            name = "message_receiver",
-            joinColumns = @JoinColumn(name = "message_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
-    private List<UserClass> receivers;
+    private List<Long> receivers;
     private LocalDateTime dateSent;
+
     @Override
     public String toString() {
         return "Message{" +

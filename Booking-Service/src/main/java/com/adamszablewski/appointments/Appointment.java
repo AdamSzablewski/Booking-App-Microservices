@@ -4,10 +4,7 @@ import com.adamszablewski.facilities.Facility;
 import com.adamszablewski.feignClients.classes.Client;
 import com.adamszablewski.feignClients.classes.Employee;
 import com.adamszablewski.tasks.Task;
-
 import com.adamszablewski.util.Identifiable;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -44,11 +41,11 @@ public class Appointment implements Identifiable {
 
     private String email;
 
-    @OneToOne
+    @ManyToOne
     @ToString.Exclude
     private Client client;
 
-    @OneToOne
+    @ManyToOne
     @ToString.Exclude
     private Employee employee;
 

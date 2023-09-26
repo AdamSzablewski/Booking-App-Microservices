@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -18,4 +20,7 @@ public class FacilityDto {
     private String city;
     private String street;
     private String houseNumber;
+    private long owner;
+    private List<Long> employees;
+    private List<TaskDto> tasks;
 }

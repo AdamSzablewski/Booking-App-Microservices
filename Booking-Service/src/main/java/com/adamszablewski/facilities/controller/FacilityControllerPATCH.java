@@ -22,7 +22,7 @@ public class FacilityControllerPATCH {
     @CircuitBreaker(name = "bookingServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
     @RateLimiter(name = "bookingServiceRateLimiter")
     public ResponseEntity<RestResponseDTO<String>> addServiceToFacility(@PathVariable Long id, @RequestBody Task service){
-        facilityService.addServiceToFacility(id, service);
+        facilityService.addTaskToFacility(id, service);
         return ResponseEntity.ok(new RestResponseDTO<>());
     }
     @PatchMapping("/add/employee/{email}/facility/id/{facilityId}")

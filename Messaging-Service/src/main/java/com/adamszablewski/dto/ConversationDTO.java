@@ -1,8 +1,9 @@
-package com.adamszablewski.messages;
+package com.adamszablewski.dto;
 
 
 import com.adamszablewski.classes.Identifiable;
 import com.adamszablewski.classes.UserClass;
+import com.adamszablewski.messages.Message;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -16,31 +17,16 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 @Builder
-@Entity
-public class Conversation implements Identifiable {
+public class ConversationDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
-    @OneToOne
     private UserClass user;
-    @ManyToMany()
-    @JoinTable(
-            name = "conversation_messages",
-            joinColumns = @JoinColumn(name = "conversation_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "message_id", referencedColumnName = "id")
-    )
-    @JsonIgnoreProperties("conversation")
-    private List<Message> messages;
+    private List<MessageDTO> messages;
     @Override
     public String toString() {
         return "Conversation{" +
                 "id=" + id +
                 ", userId=" + user +
                 '}';
-    }
-    @Override
-    public Long getId() {
-        return id;
     }
 }

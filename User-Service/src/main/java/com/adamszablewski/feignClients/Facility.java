@@ -32,18 +32,12 @@ public class Facility implements Identifiable {
     private String houseNumber;
 
     @OneToMany(cascade = CascadeType.ALL)
-    @JsonIgnoreProperties({"facility","facilities","workplace"})
-    @JsonManagedReference
     private List<Task> tasks;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JsonIgnoreProperties({"facility","facilities","workplace"})
-    @JsonBackReference
     private Owner owner;
     @OneToMany(cascade = CascadeType.ALL)
-    @JsonIgnoreProperties({"facility","facilities","workplace"})
     @ToString.Exclude
-    @JsonManagedReference
     private List<Employee> employees;
     @Override
     public Long getId() {

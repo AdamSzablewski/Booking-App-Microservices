@@ -1,5 +1,6 @@
 package com.adamszablewski.messages.service;
 
+import com.adamszablewski.dto.ConversationDTO;
 import com.adamszablewski.exceptions.NoSuchUserFoundException;
 import com.adamszablewski.messages.Conversation;
 import com.adamszablewski.messages.helpers.ConversationCreator;
@@ -13,15 +14,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.adamszablewski.classes.Mapper.mapConversationToDTO;
+
 @AllArgsConstructor
 @Service
 public class ConversationService {
     private final ConversationRepository conversationRepository;
     private final ConversationCreator conversationCreator;
 
-    public Conversation getCoversation(long user) {
-        return conversationRepository.findByUserId(user)
-                .orElseThrow(NoSuchUserFoundException::new);
+    public ConversationDTO getCoversation(long user) {
+        return mapConversationToDTO(conversationRepository.findByUserId(user)
+                .orElseThrow(NoSuchUserFoundException::new));
 
     }
 
