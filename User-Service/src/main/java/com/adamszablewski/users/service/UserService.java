@@ -1,7 +1,9 @@
 package com.adamszablewski.users.service;
 
+import com.adamszablewski.dto.RestResponseDTO;
 import com.adamszablewski.dto.UserClassDTO;
 import com.adamszablewski.exceptions.NoSuchUserException;
+import com.adamszablewski.feignClients.MessagingServiceClient;
 import com.adamszablewski.users.UserClass;
 import com.adamszablewski.users.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -15,7 +17,8 @@ import static com.adamszablewski.dto.mapper.Mapper.mapUserToDto;
 @Service
 @AllArgsConstructor
 public class UserService {
-    UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final MessagingServiceClient messagingServiceClient;
 
     @Transactional
     public void saveAllUsers(List<UserClass> users) {
@@ -25,6 +28,14 @@ public class UserService {
     public UserClassDTO getUserById(long id) {
         return mapUserToDto(userRepository.findById(id)
                 .orElseThrow(NoSuchUserException::new));
+    }
+
+    public void deleteUser(long id) {
+        RestResponseDTO<String> responseDTO = messagingServiceClient.deleteConversation(id);
+        if (responseDTO.getError() != null ){
+            throw new RuntimeException("Conversation not deleted");
+        }
+        userRepository.deleteById(id);
     }
 
 //    public List<UserClass> getEmployeesByTaskAndFacility(String taskName, String facilityName) {

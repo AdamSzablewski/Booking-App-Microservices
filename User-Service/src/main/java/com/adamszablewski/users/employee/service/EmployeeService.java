@@ -1,5 +1,6 @@
 package com.adamszablewski.users.employee.service;
 
+import com.adamszablewski.exceptions.EmployeeAlreadyCreatedException;
 import com.adamszablewski.exceptions.NoSuchUserException;
 import com.adamszablewski.users.UserClass;
 import com.adamszablewski.users.employee.Employee;
@@ -39,10 +40,14 @@ public class EmployeeService {
     public void makeEmployeeFromUser(long id) {
         UserClass user = userRepository.findById(id)
                 .orElseThrow(NoSuchUserException::new);
+        if (user.getEmployee() != null){
+            throw new EmployeeAlreadyCreatedException();
+        }
 
         Employee newEmployee = Employee.builder()
                 .user(user)
                 .build();
+        user.setEmployee(newEmployee);
         employeeRepository.save(newEmployee);
     }
 

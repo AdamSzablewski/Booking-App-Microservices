@@ -56,7 +56,7 @@ public class FacilityService {
         if (facilityRepository.existsByName(facility.getName())){
             throw new FacilityNameTakenException();
         }
-        Owner owner = userTools.getUserByEmail(email).getOwner();
+        Owner owner = userTools.getOwnerByEmail(email);
         Facility newFacility = Facility.builder()
                 .name(facility.getName())
                 .country(facility.getCountry())
@@ -66,8 +66,14 @@ public class FacilityService {
                 .street(facility.getStreet())
                 .owner(owner)
                 .build();
+        System.out.println(owner);
+        if(owner.getFacilities() != null){
+            owner.getFacilities().add(newFacility);
+        }
+        else {
+            owner.setFacilities(List.of(newFacility));
+        }
 
-        owner.getFacilities().add(newFacility);
         facilityRepository.save(newFacility);
         messageSender.createFacilityCreatedMessage(email, facility);
 

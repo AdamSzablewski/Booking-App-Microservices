@@ -32,8 +32,8 @@ public class Mapper {
     public static AppoinmentDTO mapAppointmentToDto(Appointment appointment){
         return AppoinmentDTO.builder()
                 .id(appointment.getId())
-                .facility(mapFacilityToDto(appointment.getFacility()))
-                .client(mapClientToDto(appointment.getClient()))
+                .facility(appointment.getFacility().getId())
+                .client(convertObjectToId(appointment.getClient()))
                 .employee(mapEmployeeToDto(appointment.getEmployee()))
                 .task(mapTaskToDto(appointment.getTask()))
                 .startTime(appointment.getStartTime())
@@ -47,8 +47,8 @@ public class Mapper {
 
             convertedList.add(AppoinmentDTO.builder()
                     .id(appointment.getId())
-                    .facility(mapFacilityToDto(appointment.getFacility()))
-                    .client(mapClientToDto(appointment.getClient()))
+                    .facility(appointment.getFacility().getId())
+                    .client(convertObjectToId(appointment.getClient()))
                     .employee(mapEmployeeToDto(appointment.getEmployee()))
                     .task(mapTaskToDto(appointment.getTask()))
                     .startTime(appointment.getStartTime())

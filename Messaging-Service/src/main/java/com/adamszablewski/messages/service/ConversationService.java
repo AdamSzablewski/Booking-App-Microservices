@@ -1,6 +1,7 @@
 package com.adamszablewski.messages.service;
 
 import com.adamszablewski.dto.ConversationDTO;
+import com.adamszablewski.exceptions.NoSuchConversationFound;
 import com.adamszablewski.exceptions.NoSuchUserFoundException;
 import com.adamszablewski.messages.Conversation;
 import com.adamszablewski.messages.helpers.ConversationCreator;
@@ -25,6 +26,14 @@ public class ConversationService {
     public ConversationDTO getCoversation(long user) {
         return mapConversationToDTO(conversationRepository.findByUserId(user)
                 .orElseThrow(NoSuchUserFoundException::new));
+
+    }
+
+    public void deleteConversation(long id) {
+        Conversation conversation = conversationRepository.findByUserId(id).get();
+        if (conversation != null){
+            conversationRepository.delete(conversation);
+        }
 
     }
 

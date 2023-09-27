@@ -35,7 +35,7 @@ public class Facility implements Identifiable {
     @OneToMany(cascade = CascadeType.ALL)
     private List<Task> tasks;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     @ToString.Exclude
     private Owner owner;
     @OneToMany(cascade = CascadeType.ALL)

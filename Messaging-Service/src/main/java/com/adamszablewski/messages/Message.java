@@ -24,9 +24,9 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
 
-    @ManyToMany
-    @JsonIgnoreProperties("messages")
-    private List<Conversation> conversations;
+//    @ManyToMany
+//    @JsonIgnoreProperties("messages")
+//    private List<Conversation> conversations;
     private String message;
     private String sender;
     private List<Long> receivers;

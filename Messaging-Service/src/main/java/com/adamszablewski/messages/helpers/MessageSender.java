@@ -43,13 +43,8 @@ public class MessageSender {
             }else {
                 conversation = optionalConversation.get();
             }
-            System.out.println(conversation);
 
             conversation.getMessages().add(message);
-            if (message.getConversations() == null){
-                message.setConversations(new ArrayList<>());
-            }
-             message.getConversations().add(conversation);
             conversationRepository.save(conversation);
         });
 

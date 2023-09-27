@@ -3,6 +3,7 @@ package com.adamszablewski.timeSlots.service;
 import com.adamszablewski.appointments.Appointment;
 import com.adamszablewski.appointments.repository.AppointmentRepository;
 import com.adamszablewski.dto.ClientDto;
+import com.adamszablewski.employmentRequests.util.UserTools;
 import com.adamszablewski.exceptions.NoSuchTaskException;
 import com.adamszablewski.exceptions.NoSuchUserException;
 import com.adamszablewski.exceptions.TimeSlotAlreadyTakenException;
@@ -35,6 +36,7 @@ public class TimeSlotService {
     private final AppointmentRepository appointmentRepository;
     private final UserServiceClient userServiceClient;
     private final MessageSender messageSender;
+    private final UserTools userTools;
     private final ClientRepository clientRepository;
 
 
@@ -77,10 +79,9 @@ public class TimeSlotService {
 
 
     public void makeAppointmentFromTimeSlot(long id, TimeSlot timeSlot) {
-        System.out.println("timeSlot");
 
-        Client client = clientRepository.findById(id)
-                .orElseThrow(NoSuchUserException::new);
+        Client client = userTools.getClientById(id);
+
         Task task = taskRepository.findById(timeSlot.getTask().getId())
                 .orElseThrow(NoSuchTaskException::new);
         Employee employee = task.getEmployees()
@@ -110,9 +111,6 @@ public class TimeSlotService {
 
         messageSender.sendAppointmentCreatedMessage(appointment);
 
-//        rabbitMqProducer.sendMessage(appointment);
-//        userRepository.save(client);
-//        userRepository.save(employee);
 
     }
 }

@@ -1,6 +1,8 @@
 package com.adamszablewski.users.clients.service;
 
 import com.adamszablewski.dto.ClientDto;
+import com.adamszablewski.exceptions.ClientAlreadyCreatedException;
+import com.adamszablewski.exceptions.EmployeeAlreadyCreatedException;
 import com.adamszablewski.exceptions.NoSuchUserException;
 import com.adamszablewski.users.UserClass;
 import com.adamszablewski.users.clients.Client;
@@ -30,13 +32,30 @@ public class ClientService {
     }
 
     public void makeClientFromUser(long id) {
+
         UserClass user = userRepository.findById(id)
                 .orElseThrow(NoSuchUserException::new);
+        if (user.getClient() != null){
+            throw new ClientAlreadyCreatedException();
+        }
 
         Client newClient = Client.builder()
                     .user(user)
                     .build();
-            clientRepository.save(newClient);
+        user.setClient(newClient);
+        clientRepository.save(newClient);
 
     }
+
+//    UserClass user = userRepository.findById(id)
+//            .orElseThrow(NoSuchUserException::new);
+//        if (user.getEmployee() != null){
+//        throw new EmployeeAlreadyCreatedException();
+//    }
+//
+//    Employee newEmployee = Employee.builder()
+//            .user(user)
+//            .build();
+//        user.setEmployee(newEmployee);
+//        employeeRepository.save(newEmployee);
 }

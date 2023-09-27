@@ -18,14 +18,14 @@ import java.time.LocalTime;
 public class AppoinmentDTO {
 
     private long id;
-    private FacilityDto facility;
+    private long facility;
     private TaskDto task;
     private LocalDate date;
     private LocalTime startTime;
     private LocalTime endTime;
     private String number;
     private String email;
-    private ClientDto client;
+    private long client;
     private EmployeeDto employee;
 
 }

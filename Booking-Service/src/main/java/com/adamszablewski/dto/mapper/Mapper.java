@@ -93,6 +93,8 @@ public class Mapper {
         return TaskDto.builder()
                 .id(task.getId())
                 .category(task.getCategory())
+                .city(task.getCity())
+                .region(task.getRegion())
                 .name(task.getName())
                 .durationInMinutes(task.getDurationInMinutes())
                 .employees(convertObjectListToIdList(task.getEmployees()))

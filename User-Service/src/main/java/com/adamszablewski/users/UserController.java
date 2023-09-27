@@ -28,6 +28,7 @@ public class UserController {
 
     @DeleteMapping("/id/{id}")
     public ResponseEntity<RestResponseDTO<String>> deleteUser(@PathVariable long id){
+        userService.deleteUser(id);
         RestResponseDTO<String> responseDTO = RestResponseDTO.<String>builder()
                 .value("User deleted")
                 .build();

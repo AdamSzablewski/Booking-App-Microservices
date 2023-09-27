@@ -1,11 +1,9 @@
 package com.adamszablewski.employmentRequests.util;
 
+import com.adamszablewski.exceptions.NoSuchClientException;
 import com.adamszablewski.exceptions.NoSuchUserException;
 import com.adamszablewski.feignClients.UserRepository;
-import com.adamszablewski.feignClients.classes.Employee;
-import com.adamszablewski.feignClients.classes.EmployeeRepository;
-import com.adamszablewski.feignClients.classes.Owner;
-import com.adamszablewski.feignClients.classes.UserClass;
+import com.adamszablewski.feignClients.classes.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -39,5 +37,18 @@ public class UserTools {
     public Owner getOwnerByUserId(long id) {
         return ownerRepository.findByUserId(id)
                 .orElseThrow(NoSuchUserException::new);
+    }
+    public Owner getOwnerByEmail(String email) {
+        UserClass user = getUserByEmail(email);
+        return user.getOwner();
+    }
+
+    public Client getClientById(long id) {
+        UserClass userClass = userRepository.findById(id)
+                .orElseThrow(NoSuchUserException::new);
+        if (userClass.getClient() == null){
+            throw new NoSuchClientException();
+        }
+        return userClass.getClient();
     }
 }
