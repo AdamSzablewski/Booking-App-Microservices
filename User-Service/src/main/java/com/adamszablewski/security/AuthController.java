@@ -7,6 +7,7 @@ import com.adamszablewski.security.dto.RegisterDto;
 import com.adamszablewski.model.UserClass;
 import com.adamszablewski.repository.UserRepository;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +32,7 @@ public class AuthController {
 
 
     @PostMapping("/register")
-    public ResponseEntity<String> registerUser(@RequestBody RegisterDto registerDto){
+    public ResponseEntity<String> registerUser(@Valid @RequestBody RegisterDto registerDto){
         //System.out.println(registerDto);
         if (userRepository.existsByEmail(registerDto.getEmail())){
             return new ResponseEntity<>("username is taken", HttpStatus.BAD_REQUEST);

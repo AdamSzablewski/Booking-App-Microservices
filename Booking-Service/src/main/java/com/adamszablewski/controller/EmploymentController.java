@@ -21,16 +21,18 @@ public class EmploymentController {
     @CircuitBreaker(name = "bookingServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
     @RateLimiter(name = "bookingServiceRateLimiter")
     public ResponseEntity<RestResponseDTO<String>> answereEmploymentRequest(@PathVariable long id,
-                                                                             @RequestParam("status") boolean status){
-        employmentRequestService.answereEmploymentRequest(id, status);
+                                                                             @RequestParam("status") boolean status,
+                                                                            @RequestHeader("userEmail") String userEmail){
+        employmentRequestService.answereEmploymentRequest(id, status, userEmail);
         return ResponseEntity.ok(new RestResponseDTO<>());
     }
     @GetMapping("/request/user/{id}")
     @CircuitBreaker(name = "bookingServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
     @RateLimiter(name = "bookingServiceRateLimiter")
-    public ResponseEntity<RestResponseDTO<EmploymentRequestDTO>> getEmploymentRequestsForUser(@PathVariable long id){
+    public ResponseEntity<RestResponseDTO<EmploymentRequestDTO>> getEmploymentRequestsForUser(@PathVariable long id,
+                                                                                              @RequestHeader("userEmail") String userEmail){
         RestResponseDTO<EmploymentRequestDTO> responseDTO = RestResponseDTO.<EmploymentRequestDTO>builder()
-                .values(employmentRequestService.getEmploymentRequestsForUser(id))
+                .values(employmentRequestService.getEmploymentRequestsForUser(id, userEmail))
                 .build();
         return ResponseEntity.ok(responseDTO);
     }

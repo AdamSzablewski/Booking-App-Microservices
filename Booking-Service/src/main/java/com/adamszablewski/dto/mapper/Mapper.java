@@ -91,6 +91,24 @@ public class Mapper {
         });
         return facilityDtos;
     }
+    public static Set<FacilityDto> mapFacilityToDto(Set<Facility> facilities, boolean isLimited){
+        Set<FacilityDto> facilityDtos = new HashSet<>();
+
+        facilities.forEach(facility -> {
+            facilityDtos.add(FacilityDto.builder()
+                    .id(facility.getId())
+                    .name(facility.getName())
+                    .employees(convertObjectListToIdList(facility.getEmployees()))
+                    .city(facility.getCity())
+                    .country(facility.getCountry())
+                    .region(facility.getRegion())
+                    .tasks(mapTaskToDto(facility.getTasks()))
+                    .street(facility.getStreet())
+                    .houseNumber(facility.getHouseNumber())
+                    .build());
+        });
+        return facilityDtos;
+    }
     public static TaskDto mapTaskToDto(Task task){
         return TaskDto.builder()
                 .id(task.getId())
@@ -105,7 +123,6 @@ public class Mapper {
                 .price(task.getPrice())
                 .currency(task.getCurrency())
                 .build();
-
     }
     public static Set<TaskDto> mapTaskToDto(Set<Task> tasks){
         Set<TaskDto> taskDtos = new HashSet<>();
@@ -120,6 +137,24 @@ public class Mapper {
                     .facility(convertObjectToId(task.getFacility()))
                     .price(task.getPrice())
                     .appointments(convertObjectListToIdList(task.getAppointments()))
+                    .currency(task.getCurrency())
+                    .build());
+        });
+        return taskDtos;
+
+    }
+    public static Set<TaskDto> mapTaskToDto(Set<Task> tasks, boolean isLimited){
+        Set<TaskDto> taskDtos = new HashSet<>();
+
+        tasks.forEach(task -> {
+            taskDtos.add( TaskDto.builder()
+                    .id(task.getId())
+                    .category(task.getCategory())
+                    .name(task.getName())
+                    .durationInMinutes(task.getDurationInMinutes())
+                    .employees(convertObjectListToIdList(task.getEmployees()))
+                    .facility(convertObjectToId(task.getFacility()))
+                    .price(task.getPrice())
                     .currency(task.getCurrency())
                     .build());
         });

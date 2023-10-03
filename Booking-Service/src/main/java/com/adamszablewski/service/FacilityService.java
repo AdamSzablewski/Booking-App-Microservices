@@ -1,22 +1,22 @@
 package com.adamszablewski.service;
 
+import com.adamszablewski.dao.Dao;
 import com.adamszablewski.dto.FacilityDto;
+import com.adamszablewski.exceptions.NotAuthorizedException;
 import com.adamszablewski.helpers.UserTools;
 import com.adamszablewski.exceptions.FacilityNameTakenException;
 import com.adamszablewski.exceptions.NoSuchFacilityException;
+import com.adamszablewski.helpers.UserValidator;
 import com.adamszablewski.model.Facility;
 import com.adamszablewski.repository.FacilityRepository;
 import com.adamszablewski.model.Owner;
 import com.adamszablewski.messages.MessageSender;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import lombok.AllArgsConstructor;
 import com.adamszablewski.model.Task;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
-import java.util.List;
 import java.util.Set;
 
 import static com.adamszablewski.dto.mapper.Mapper.mapFacilityToDto;
@@ -29,14 +29,15 @@ public class FacilityService {
     private final EmploymentRequestService employmentRequestService;
     private final MessageSender messageSender;
     private final UserTools userTools;
-    @PersistenceContext
-    private EntityManager entityManager;
+    private final UserValidator userValidator;
+    private final Dao dao;
+
     public Set<FacilityDto> getAllFacilities() {
         return mapFacilityToDto((Set<Facility>) facilityRepository.findAll());
     }
 
     public Set<FacilityDto> getAllFacilitiesForRegion(String region) {
-        return mapFacilityToDto(facilityRepository.findByRegion(region));
+        return mapFacilityToDto(facilityRepository.findByRegion(region), true);
     }
 
     public Set<FacilityDto> getAllFacilitiesForCity(String city) {
@@ -76,24 +77,32 @@ public class FacilityService {
 
     }
 
-    public void addTaskToFacility(Long id, Task task) {
+    public void addTaskToFacility(Long id, Task task, String userEmail) {
         Facility facility = facilityRepository.findById(id)
                 .orElseThrow(NoSuchFacilityException::new);
+        if (!userValidator.isOwner(facility, userEmail)){
+            throw new NotAuthorizedException("Not authorized for this action");
+        }
         task.setFacility(facility);
         facility.getTasks().add(task);
         facilityRepository.save(facility);
     }
 
-    public void removeFacilityById(Long id) {
+    public void removeFacilityById(Long id, String userEmail) {
         Facility facility = facilityRepository.findById(id)
                         .orElseThrow(NoSuchFacilityException::new);
-        facility.getEmployees().forEach(employee -> {
-            employee.setWorkplace(null);
-        });
-        facilityRepository.deleteById(id);
+        if(!userValidator.isOwner(facility, userEmail)){
+            throw new NotAuthorizedException("Not authorized for this action");
+        }
+        dao.deleteFacility(facility);
     }
 
-    public void addEmployeeToFacility(String email, long facilityId) {
+    public void addEmployeeToFacility(String email, long facilityId, String userEmail) {
+        Facility facility = facilityRepository.findById(facilityId)
+                        .orElseThrow(NoSuchFacilityException::new);
+        if (!userValidator.isOwner(facility, userEmail)){
+            throw new NotAuthorizedException("Not authorized for this action");
+        }
         employmentRequestService.sendEmploymentRequest(email, facilityId);
     }
 

@@ -1,10 +1,12 @@
 package com.adamszablewski.service;
 
 import com.adamszablewski.dto.EmploymentRequestDTO;
+import com.adamszablewski.exceptions.NotAuthorizedException;
 import com.adamszablewski.helpers.UserTools;
 import com.adamszablewski.exceptions.NoSuchEmploymentRequestException;
 import com.adamszablewski.exceptions.NoSuchFacilityException;
 import com.adamszablewski.exceptions.NoSuchUserException;
+import com.adamszablewski.helpers.UserValidator;
 import com.adamszablewski.model.Facility;
 import com.adamszablewski.repository.FacilityRepository;
 import com.adamszablewski.repository.UserRepository;
@@ -17,7 +19,6 @@ import com.adamszablewski.repository.EmploymentRequestRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Set;
 
 import static com.adamszablewski.dto.mapper.Mapper.mapEmploymentRequestToDTO;
@@ -27,20 +28,15 @@ import static com.adamszablewski.dto.mapper.Mapper.mapEmploymentRequestToDTO;
 public class EmploymentRequestService {
 
     private final MessageSender messageSender;
-    private final UserServiceClient userServiceClient;
     private final FacilityRepository facilityRepository;
     private final EmploymentRequestRepository employmentRequestRepository;
     private final EmployeeRepository employeeRepository;
-    private final UserRepository userRepository;
     private final UserTools userTools;
+
 
     public void sendEmploymentRequest(String email, long facilityId) {
 
-//        RestResponseDTO<Employee> employeer = userServiceClient.findEmployeeByEmail(email);
-        //Employee employee = employeer.getValue();
-
         Employee employee = userTools.getEmployeeByMail(email);
-        System.out.println("service "+employee);
         Facility facility = facilityRepository.findById(facilityId)
                         .orElseThrow(NoSuchFacilityException::new);
 
@@ -55,12 +51,16 @@ public class EmploymentRequestService {
 
     }
 
-    public void answereEmploymentRequest(long id, boolean status) {
+    public void answereEmploymentRequest(long id, boolean status, String userEmail) {
         EmploymentRequest employmentRequest = employmentRequestRepository.findById(id)
                 .orElseThrow(NoSuchEmploymentRequestException::new);
 
         Employee employee = employmentRequest.getEmployee();
         Facility facility = employmentRequest.getFacility();
+
+        if (!employmentRequest.getEmployee().getUser().getEmail().equals(userEmail)){
+            throw new NotAuthorizedException();
+        }
 
         facilityRepository.save(facility);
         if (!status){
@@ -75,7 +75,7 @@ public class EmploymentRequestService {
         employmentRequestRepository.delete(employmentRequest);
     }
 
-    public Set<EmploymentRequestDTO> getEmploymentRequestsForUser(long id) {
+    public Set<EmploymentRequestDTO> getEmploymentRequestsForUser(long id, String userEmail) {
         Employee employee = employeeRepository.findByUserId(id)
                 .orElseThrow(NoSuchUserException::new);
 

@@ -24,7 +24,7 @@ public class TaskController {
     @GetMapping("/facility/name/{name}")
     @CircuitBreaker(name = "bookingServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
     @RateLimiter(name = "bookingServiceRateLimiter")
-    public ResponseEntity<RestResponseDTO<TaskDto>> getAllServicesFOrFacilityByName(@PathVariable String name){
+    public ResponseEntity<RestResponseDTO<TaskDto>> getAllServicesForFacilityByName(@PathVariable String name){
         RestResponseDTO<TaskDto> responseDTO = RestResponseDTO.<TaskDto>builder()
                 .values(serviceService.getAllTasksForFacilityByName(name))
                 .build();
@@ -72,16 +72,18 @@ public class TaskController {
     @CircuitBreaker(name = "bookingServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
     @RateLimiter(name = "bookingServiceRateLimiter")
     public ResponseEntity<RestResponseDTO<Task>> createTaskForFacility(@PathVariable long id,
-                                                                       @RequestBody Task task){
-        taskService.createTaskForFacility(id, task);
+                                                                       @RequestBody Task task,
+                                                                       @RequestHeader("userEmail") String userEmail){
+        taskService.createTaskForFacility(id, task, userEmail);
         return ResponseEntity.ok(new RestResponseDTO<>());
     }
     @PutMapping("/id/{id}")
     @CircuitBreaker(name = "bookingServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
     @RateLimiter(name = "bookingServiceRateLimiter")
     public ResponseEntity<RestResponseDTO<Task>> changeTaskById(@PathVariable long id,
-                                                                @RequestBody Task task){
-        taskService.changeTask(id, task);
+                                                                @RequestBody Task task,
+                                                                @RequestHeader("userEmail") String userEmail){
+        taskService.changeTask(id, task, userEmail);
         return ResponseEntity.ok(new RestResponseDTO<>());
     }
 
@@ -90,25 +92,27 @@ public class TaskController {
     @CircuitBreaker(name = "bookingServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
     @RateLimiter(name = "bookingServiceRateLimiter")
     public ResponseEntity<RestResponseDTO<Task>> removeEmployeeFromTask (@PathVariable long id,
-                                                                         @PathVariable long taskId){
-        taskService.removeEmployeeFromTask(id, taskId);
+                                                                         @PathVariable long taskId,
+                                                                         @RequestHeader("userEmail") String userEmail){
+        taskService.removeEmployeeFromTask(id, taskId, userEmail);
         return ResponseEntity.ok(new RestResponseDTO<>());
     }
     @PatchMapping("/add/employee/id/{id}/task/id/{taskId}")
     @CircuitBreaker(name = "bookingServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
     @RateLimiter(name = "bookingServiceRateLimiter")
     public ResponseEntity<RestResponseDTO<Task>> addEmployeeTOTask (@PathVariable long id,
-                                                                    @PathVariable long taskId){
-        taskService.addEmployeeTOTask(id, taskId);
+                                                                    @PathVariable long taskId,
+                                                                    @RequestHeader("userEmail") String userEmail){
+        taskService.addEmployeeTOTask(id, taskId, userEmail);
         return ResponseEntity.ok(new RestResponseDTO<>());
     }
 
     @DeleteMapping("/id/{id}")
     @CircuitBreaker(name = "bookingServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
     @RateLimiter(name = "bookingServiceRateLimiter")
-    public ResponseEntity<RestResponseDTO<Task>> deleteTaskById(@PathVariable long id){
-
-        serviceService.deleteTaskById(id);
+    public ResponseEntity<RestResponseDTO<Task>> deleteTaskById(@PathVariable long id,
+                                                                @RequestHeader("userEmail") String userEmail){
+        serviceService.deleteTaskById(id, userEmail);
         return ResponseEntity.ok(new RestResponseDTO<>());
     }
 

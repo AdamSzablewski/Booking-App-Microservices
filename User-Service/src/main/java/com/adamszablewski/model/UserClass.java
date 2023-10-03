@@ -7,6 +7,7 @@ import com.adamszablewski.model.Employee;
 import com.adamszablewski.model.Owner;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

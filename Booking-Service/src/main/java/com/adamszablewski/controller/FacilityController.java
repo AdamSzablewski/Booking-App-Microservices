@@ -80,24 +80,26 @@ public class FacilityController {
     @PatchMapping("id/{id}/add/services/")
     @CircuitBreaker(name = "bookingServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
     @RateLimiter(name = "bookingServiceRateLimiter")
-    public ResponseEntity<RestResponseDTO<String>> addServiceToFacility(@PathVariable Long id, @RequestBody Task service){
-        facilityService.addTaskToFacility(id, service);
+    public ResponseEntity<RestResponseDTO<String>> addServiceToFacility(@PathVariable Long id, @RequestBody Task service,
+                                                                         @RequestHeader("userEmail") String userEmail){
+        facilityService.addTaskToFacility(id, service, userEmail);
         return ResponseEntity.ok(new RestResponseDTO<>());
     }
     @PatchMapping("/add/employee/{email}/facility/id/{facilityId}")
     @CircuitBreaker(name = "bookingServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
     @RateLimiter(name = "bookingServiceRateLimiter")
     public ResponseEntity<RestResponseDTO<String>> addEmployeeToFacility(@PathVariable String email,
-                                                                         @PathVariable long facilityId){
-        facilityService.addEmployeeToFacility(email, facilityId);
+                                                                         @PathVariable long facilityId,
+                                                                         @RequestHeader("userEmail") String userEmail){
+        facilityService.addEmployeeToFacility(email, facilityId, userEmail);
         return ResponseEntity.ok(new RestResponseDTO<>());
     }
 
     @DeleteMapping("/id/{id}")
     @CircuitBreaker(name = "bookingServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
     @RateLimiter(name = "bookingServiceRateLimiter")
-    ResponseEntity<RestResponseDTO<String>> removeFacilityById(@PathVariable Long id){
-        facilityService.removeFacilityById(id);
+    ResponseEntity<RestResponseDTO<String>> removeFacilityById(@PathVariable Long id, @RequestHeader("userEmail") String userEmail ){
+        facilityService.removeFacilityById(id, userEmail);
         return ResponseEntity.ok(new RestResponseDTO<>());
     }
 

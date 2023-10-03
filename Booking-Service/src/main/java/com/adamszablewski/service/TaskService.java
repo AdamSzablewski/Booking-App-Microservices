@@ -1,10 +1,13 @@
 package com.adamszablewski.service;
 
+import com.adamszablewski.dao.Dao;
 import com.adamszablewski.dto.TaskDto;
+import com.adamszablewski.exceptions.NotAuthorizedException;
 import com.adamszablewski.helpers.UserTools;
 import com.adamszablewski.exceptions.NoSuchEmployeeException;
 import com.adamszablewski.exceptions.NoSuchFacilityException;
 import com.adamszablewski.exceptions.NoSuchTaskException;
+import com.adamszablewski.helpers.UserValidator;
 import com.adamszablewski.model.Facility;
 import com.adamszablewski.repository.FacilityRepository;
 import com.adamszablewski.feignClients.UserServiceClient;
@@ -16,7 +19,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import static com.adamszablewski.dto.mapper.Mapper.mapTaskToDto;
@@ -30,10 +33,12 @@ public class TaskService {
     private final UserServiceClient userServiceClient;
     private final MessageSender messageSender;
     private final UserTools userTools;
+    private final UserValidator userValidator;
+    private final Dao dao;
     public Set<TaskDto> getAllTasksForFacilityByName(String name) {
         Facility facility = facilityRepository.findByName(name)
                 .orElseThrow(NoSuchFacilityException::new);
-        return mapTaskToDto(facility.getTasks());
+        return mapTaskToDto(facility.getTasks(), true);
     }
 
     public Set<TaskDto> getAllTasksforFacilityById(Long id) {
@@ -48,16 +53,21 @@ public class TaskService {
     }
 
     public Set<TaskDto> getTasksForCity( String city) {
-        return mapTaskToDto(taskRepository.findByCity( city));
+        return mapTaskToDto(taskRepository.findByCity( city), true);
     }
 
     public Set<TaskDto> getTasksForCityByCategory(String city, String category) {
-        return mapTaskToDto(taskRepository.findByCityAndCategory(city, category));
+        return mapTaskToDto(taskRepository.findByCityAndCategory(city, category), true);
     }
 
-    public void createTaskForFacility(long id, Task task) {
+    public void createTaskForFacility(long id, Task task, String userEmail) {
         Facility facility = facilityRepository.findById(id)
                 .orElseThrow(NoSuchFacilityException::new);
+
+        if (!userValidator.isOwner(facility, userEmail)){
+            throw new NotAuthorizedException();
+        }
+
         Task newTask = Task.builder()
                 .region(facility.getRegion())
                 .city(facility.getCity())
@@ -76,10 +86,12 @@ public class TaskService {
 
     }
     @Transactional
-    public void changeTask(long id, Task newTask) {
+    public void changeTask(long id, Task newTask, String userEmail) {
         Task task = taskRepository.findById(id)
                 .orElseThrow(NoSuchTaskException::new);
-
+        if (userValidator.isOwner(task.getFacility(), userEmail)){
+            throw new NotAuthorizedException();
+        }
         task.setCurrency(newTask.getCurrency());
         task.setCategory(newTask.getCategory());
         task.setName(newTask.getName());
@@ -89,24 +101,27 @@ public class TaskService {
 
     }
     @Transactional
-    public void removeEmployeeFromTask(long id, long taskId) {
+    public void removeEmployeeFromTask(long id, long taskId, String userEmail) {
         Task task = taskRepository.findById(taskId)
                 .orElseThrow(NoSuchTaskException::new);
+        if (!userValidator.isOwner(task.getFacility(), userEmail)){
+            throw new NotAuthorizedException();
+        }
         Employee employee = userServiceClient.findEmployeeById(id).getValue();
         employee.getTasks().remove(task);
         task.getEmployees().remove(employee);
         taskRepository.save(task);
     }
     @Transactional
-    public void addEmployeeTOTask(long id, long taskId) {
+    public void addEmployeeTOTask(long id, long taskId, String userEmail) {
         Task task = taskRepository.findById(taskId)
                 .orElseThrow(NoSuchTaskException::new);
 
+        if (!userValidator.isOwner(task.getFacility(), userEmail)){
+            throw new NotAuthorizedException();
+        }
         Employee employee = userTools.getEmployeeByUserId(id);
-        System.out.println(employee);
-        System.out.println("employees for facility "+employee.getWorkplace());
-        System.out.println(task);
-        if (employee.getWorkplace() == null || employee.getWorkplace().getId() != task.getFacility().getId()){
+        if (employee.getWorkplace() == null || !Objects.equals(employee.getWorkplace().getId(), task.getFacility().getId())){
             throw new NoSuchEmployeeException();
         }
         task.getEmployees().add(employee);
@@ -115,15 +130,12 @@ public class TaskService {
         taskRepository.save(task);
     }
 
-    public void deleteTaskById(long id) {
+    public void deleteTaskById(long id, String userEmail) {
         Task task = taskRepository.findById(id)
                         .orElseThrow(NoSuchTaskException::new);
-        task.getEmployees().forEach(employee -> {
-            employee.getTasks().remove(task);
-        });
-        task.getAppointments().clear();
-        task.getFacility().getTasks().remove(task);
-
-        taskRepository.delete(task);
+        if (!userValidator.isOwner(task.getFacility(), userEmail)){
+            throw new NotAuthorizedException();
+        }
+        dao.deleteTask(task);
     }
 }

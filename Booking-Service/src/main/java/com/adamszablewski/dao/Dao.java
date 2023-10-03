@@ -1,9 +1,13 @@
-package com.adamszablewski.service;
+package com.adamszablewski.dao;
 
 import com.adamszablewski.model.Appointment;
+import com.adamszablewski.model.Facility;
 import com.adamszablewski.model.Task;
+import com.adamszablewski.model.UserClass;
 import com.adamszablewski.repository.AppointmentRepository;
+import com.adamszablewski.repository.FacilityRepository;
 import com.adamszablewski.repository.TaskRepository;
+import com.adamszablewski.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,17 +18,10 @@ import java.util.Set;
 public class Dao {
     private final TaskRepository taskRepository;
     private final AppointmentRepository appointmentRepository;
+    private final FacilityRepository facilityRepository;
+    private final UserRepository userRepository;
 
     public void deleteTasks(Task task) {
-//        task.getAppointments().forEach(
-//                appointment -> {
-//                    appointment.setFacility(null);
-//                    appointment.getClient().getAppointments().remove(appointment);
-//                    appointment.getEmployee().setTasks(null);
-//                    appointment.getEmployee().setAppointments(null);
-//                });
-//        appointmentRepository.deleteAll(task.getAppointments());
-//        taskRepository.delete(task);
         task.getEmployees().forEach(employee -> {
             employee.getTasks().remove(task);
         });
@@ -38,22 +35,39 @@ public class Dao {
     }
     public void deleteTask(Task task) {
 
-        task.getAppointments().forEach(this::deleteAppoinment);
-        task.getAppointments().clear();
-
+        if (task.getAppointments() != null){
+            task.getAppointments().forEach(this::deleteAppoinment);
+            task.getAppointments().clear();
+        }
         task.getEmployees().forEach(employee -> employee.getTasks().remove(task));
         task.getFacility().getTasks().remove(task);
 
         taskRepository.save(task);
 
-
         taskRepository.delete(task);
+    }
+    public void deleteFacility(Facility facility){
+        deleteTasks(facility.getTasks());
+        if (facility.getEmployees() != null){
+            facility.getEmployees().forEach(employee -> {
+                employee.setWorkplace(null);
+            });
+        }
+        facilityRepository.delete(facility);
+    }
+    public void deleteUser(UserClass userClass){
+        if (userClass.getOwner() != null && userClass.getOwner().getFacilities() != null){
+            userClass.getOwner().getFacilities().forEach(this::deleteFacility);
+        }
+        userRepository.delete(userClass);
     }
 
     public void deleteAppoinment(Appointment appointment){
+
         appointment.getClient().getAppointments().remove(appointment);
         appointment.getEmployee().getAppointments().remove(appointment);
         appointmentRepository.delete(appointment);
+
     }
 
 
