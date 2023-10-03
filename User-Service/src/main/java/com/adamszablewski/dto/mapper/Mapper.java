@@ -4,26 +4,28 @@ import com.adamszablewski.Identifiable;
 
 import com.adamszablewski.dto.*;
 
-import com.adamszablewski.feignClients.Appointment;
-import com.adamszablewski.feignClients.Facility;
-import com.adamszablewski.feignClients.Task;
-import com.adamszablewski.users.UserClass;
-import com.adamszablewski.users.clients.Client;
-import com.adamszablewski.users.employee.Employee;
-import com.adamszablewski.users.owners.Owner;
+import com.adamszablewski.model.Appointment;
+import com.adamszablewski.model.Facility;
+import com.adamszablewski.model.Task;
+import com.adamszablewski.model.UserClass;
+import com.adamszablewski.model.Client;
+import com.adamszablewski.model.Employee;
+import com.adamszablewski.model.Owner;
 import lombok.AllArgsConstructor;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
 public class Mapper {
 
-    public static  <T extends Identifiable> List<Long> convertObjectListToIdList(List<T> list){
+    public static  <T extends Identifiable> Set<Long> convertObjectListToIdList(Set<T> list){
         return list.stream()
                 .map(Identifiable::getId)
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
     }
     public static <T extends Identifiable> Long convertObjectToId(T entity){
         return entity.getId();
@@ -41,8 +43,8 @@ public class Mapper {
                 .date(appointment.getDate())
                 .build();
     }
-    public static List<AppoinmentDTO> mapAppointmentToDto(List<Appointment> appointments){
-        List<AppoinmentDTO> convertedList = new ArrayList<>();
+    public static Set<AppoinmentDTO> mapAppointmentToDto(Set<Appointment> appointments){
+        Set<AppoinmentDTO> convertedList = new HashSet<>();
         appointments.forEach(appointment -> {
 
             convertedList.add(AppoinmentDTO.builder()
@@ -59,8 +61,8 @@ public class Mapper {
         });
         return convertedList;
     }
-    public static List<TaskDto> mapTaskToDto(List<Task> tasks){
-        List<TaskDto> taskDtos = new ArrayList<>();
+    public static Set<TaskDto> mapTaskToDto(Set<Task> tasks){
+        Set<TaskDto> taskDtos = new HashSet<>();
 
         tasks.forEach(task -> {
             taskDtos.add( TaskDto.builder()
@@ -88,8 +90,8 @@ public class Mapper {
                 .houseNumber(facility.getHouseNumber())
                 .build();
     }
-    public static List<FacilityDto> mapFacilityToDto(List<Facility> facilities){
-        List<FacilityDto> facilityDtos = new ArrayList<>();
+    public static Set<FacilityDto> mapFacilityToDto(Set<Facility> facilities){
+        Set<FacilityDto> facilityDtos = new HashSet<>();
 
         facilities.forEach(facility -> {
             facilityDtos.add(FacilityDto.builder()
@@ -115,6 +117,7 @@ public class Mapper {
                 .durationInMinutes(task.getDurationInMinutes())
                 .employees(convertObjectListToIdList(task.getEmployees()))
                 .facility(convertObjectToId(task.getFacility()))
+                .appointments(convertObjectListToIdList(task.getAppointments()))
                 .price(task.getPrice())
                 .currency(task.getCurrency())
                 .build();
@@ -127,10 +130,11 @@ public class Mapper {
                 .userId(convertObjectToId(employee.getUser()))
                 .startTime(employee.getStartTime())
                 .endTime(employee.getEndTime())
+                .workplace(mapFacilityToDto(employee.getWorkplace()))
                 .build();
     }
-    public static List<EmployeeDto> mapEmployeeToDto(List<Employee> employees){
-        List<EmployeeDto> employeeDtos = new ArrayList<>();
+    public static Set<EmployeeDto> mapEmployeeToDto(Set<Employee> employees){
+        Set<EmployeeDto> employeeDtos = new HashSet<>();
 
         employees.forEach(employee -> {
             employeeDtos.add(EmployeeDto.builder()
@@ -161,6 +165,7 @@ public class Mapper {
         return UserClassDTO.builder()
                 .id(user.getId())
                 .owner(user.getOwner() == null ? null : mapOwnerToDto(user.getOwner()))
+                .employee(user.getEmployee() == null ? null : mapEmployeeToDto(user.getEmployee()))
                 .email(user.getEmail())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())

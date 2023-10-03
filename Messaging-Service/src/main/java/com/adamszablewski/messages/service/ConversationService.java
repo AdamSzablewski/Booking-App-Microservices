@@ -30,11 +30,13 @@ public class ConversationService {
     }
 
     public void deleteConversation(long id) {
-        Conversation conversation = conversationRepository.findByUserId(id).get();
-        if (conversation != null){
+        Optional<Conversation> optionalConversation = conversationRepository.findByUserId(id);
+        if (optionalConversation.isPresent()){
+            Conversation conversation = optionalConversation.get();
             conversationRepository.delete(conversation);
+            System.out.println("deleted");
+            System.out.println("conversation "+conversation);
         }
-
     }
 
 //    public ResponseEntity<String> createConversation(String user) {

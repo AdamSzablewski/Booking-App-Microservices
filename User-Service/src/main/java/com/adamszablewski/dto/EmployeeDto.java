@@ -1,5 +1,6 @@
 package com.adamszablewski.dto;
 
+import com.adamszablewski.model.Facility;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,5 +18,6 @@ public class EmployeeDto {
     private long userId;
     private LocalTime startTime;
     private LocalTime endTime;
+    private FacilityDto workplace;
 
 }

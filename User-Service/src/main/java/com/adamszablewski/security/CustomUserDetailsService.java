@@ -3,8 +3,8 @@
 //
 //
 //import com.adamszablewski.exceptions.NoSuchUserException;
-//import com.adamszablewski.users.UserClass;
-//import com.adamszablewski.users.repository.UserRepository;
+//import com.adamszablewski.model.UserClass;
+//import com.adamszablewski.repository.UserRepository;
 //import com.adamszablewski.users.role.Role;
 //import lombok.AllArgsConstructor;
 //

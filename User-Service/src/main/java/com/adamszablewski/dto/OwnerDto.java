@@ -1,16 +1,13 @@
 package com.adamszablewski.dto;
 
 
-import com.adamszablewski.Identifiable;
-import com.adamszablewski.feignClients.Facility;
-import com.adamszablewski.users.UserClass;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,7 +16,7 @@ import java.util.List;
 public class OwnerDto {
 
     private long id;
-    private List<FacilityDto> facilities;
+    private Set<FacilityDto> facilities;
     private Long user;
 
 }

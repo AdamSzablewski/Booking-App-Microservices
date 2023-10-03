@@ -1,8 +1,6 @@
 package com.adamszablewski.dto;
 
 
-import com.adamszablewski.users.clients.Client;
-import com.adamszablewski.users.employee.Employee;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

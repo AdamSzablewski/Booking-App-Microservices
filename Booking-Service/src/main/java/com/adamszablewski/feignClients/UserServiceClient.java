@@ -2,10 +2,9 @@ package com.adamszablewski.feignClients;
 
 import com.adamszablewski.dto.ClientDto;
 import com.adamszablewski.dto.RestResponseDTO;
-import com.adamszablewski.feignClients.classes.Client;
-import com.adamszablewski.feignClients.classes.Employee;
-import com.adamszablewski.feignClients.classes.Owner;
-import com.adamszablewski.feignClients.classes.UserClass;
+import com.adamszablewski.model.Employee;
+import com.adamszablewski.model.Owner;
+import com.adamszablewski.model.UserClass;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

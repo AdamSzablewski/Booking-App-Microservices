@@ -1,7 +1,5 @@
 package com.adamszablewski.rabbitMq.classes;
 
-import com.adamszablewski.feignClients.classes.UserClass;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

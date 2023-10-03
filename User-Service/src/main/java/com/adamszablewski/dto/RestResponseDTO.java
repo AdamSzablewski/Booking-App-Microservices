@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -13,7 +14,7 @@ import java.util.List;
 @Data
 public class RestResponseDTO <T>{
     private T value;
-    private List<T> values;
+    private Set<T> values;
     private String error;
 }
 

@@ -1,14 +1,7 @@
 package com.adamszablewski.dto;
 
-import com.adamszablewski.facilities.Facility;
-import com.adamszablewski.feignClients.classes.Client;
-import com.adamszablewski.feignClients.classes.Employee;
-import com.adamszablewski.tasks.Task;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.*;
 import lombok.*;
 
-import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.LocalTime;
 

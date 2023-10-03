@@ -52,6 +52,7 @@ public class ConversationControllerGET {
     @CircuitBreaker(name = "messagingServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
     @RateLimiter(name = "messagingServiceRateLimiter")
     public ResponseEntity<RestResponseDTO<Conversation>> deleteConversation(@PathVariable long id){
+        System.out.println("delete called ");
         conversationService.deleteConversation(id);
         return ResponseEntity.ok(new RestResponseDTO<>());
     }

@@ -1,38 +1,20 @@
 package com.adamszablewski.TimeSlots;
 
-import com.adamszablewski.appointments.Appointment;
-import com.adamszablewski.appointments.repository.AppointmentRepository;
-import com.adamszablewski.facilities.Facility;
+import com.adamszablewski.repository.AppointmentRepository;
 import com.adamszablewski.feignClients.UserServiceClient;
-import com.adamszablewski.feignClients.classes.Client;
-import com.adamszablewski.feignClients.classes.Employee;
 import com.adamszablewski.messages.MessageSender;
-import com.adamszablewski.tasks.Task;
-import com.adamszablewski.tasks.repository.TaskRepository;
-import com.adamszablewski.timeSlots.TimeSlot;
-import com.adamszablewski.timeSlots.helper.TimeSlotHelper;
-import com.adamszablewski.timeSlots.service.TimeSlotService;
+import com.adamszablewski.repository.TaskRepository;
+import com.adamszablewski.helpers.TimeSlotHelper;
+import com.adamszablewski.service.TimeSlotService;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.atomic.AtomicReference;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)

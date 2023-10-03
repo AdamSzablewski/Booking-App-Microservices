@@ -1,14 +1,14 @@
 package com.adamszablewski.messages;
 
-import com.adamszablewski.appointments.Appointment;
-import com.adamszablewski.employmentRequests.util.UserTools;
-import com.adamszablewski.facilities.Facility;
+import com.adamszablewski.model.Appointment;
+import com.adamszablewski.helpers.UserTools;
+import com.adamszablewski.model.Facility;
 import com.adamszablewski.feignClients.UserServiceClient;
-import com.adamszablewski.feignClients.classes.Employee;
-import com.adamszablewski.feignClients.classes.UserClass;
+import com.adamszablewski.model.Employee;
+import com.adamszablewski.model.UserClass;
 import com.adamszablewski.rabbitMq.RabbitMqProducer;
 import com.adamszablewski.rabbitMq.classes.Message;
-import com.adamszablewski.tasks.Task;
+import com.adamszablewski.model.Task;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 

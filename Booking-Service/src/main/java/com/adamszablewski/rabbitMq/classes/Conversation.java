@@ -1,7 +1,7 @@
 package com.adamszablewski.rabbitMq.classes;
 
 
-import com.adamszablewski.feignClients.classes.UserClass;
+import com.adamszablewski.model.UserClass;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

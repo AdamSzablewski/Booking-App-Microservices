@@ -3,6 +3,8 @@ package com.adamszablewski.dto;
 import lombok.*;
 
 import java.util.List;
+import java.util.Set;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -20,5 +22,6 @@ public class TaskDto {
     private int durationInMinutes;
     private String currency;
     private long facility;
-    private List<Long> employees;
-}
+    private Set<Long> employees;
+    private Set<Long> appointments;
+ }

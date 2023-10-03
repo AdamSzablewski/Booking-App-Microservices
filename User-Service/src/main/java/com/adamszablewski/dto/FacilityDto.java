@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,6 +22,6 @@ public class FacilityDto {
     private String street;
     private String houseNumber;
     private long owner;
-    private List<Long> employees;
-    private List<TaskDto> tasks;
+    private Set<Long> employees;
+    private Set<TaskDto> tasks;
 }

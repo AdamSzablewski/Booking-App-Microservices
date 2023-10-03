@@ -1,10 +1,10 @@
 package com.adamszablewski.TimeSlots;
 
-import com.adamszablewski.appointments.Appointment;
-import com.adamszablewski.appointments.repository.AppointmentRepository;
+import com.adamszablewski.model.Appointment;
+import com.adamszablewski.repository.AppointmentRepository;
 import com.adamszablewski.feignClients.UserServiceClient;
-import com.adamszablewski.feignClients.classes.Employee;
-import com.adamszablewski.timeSlots.helper.TimeSlotHelper;
+import com.adamszablewski.model.Employee;
+import com.adamszablewski.helpers.TimeSlotHelper;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,7 +13,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

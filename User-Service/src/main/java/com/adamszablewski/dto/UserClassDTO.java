@@ -1,10 +1,6 @@
 package com.adamszablewski.dto;
 
 
-import com.adamszablewski.Identifiable;
-import com.adamszablewski.users.clients.Client;
-import com.adamszablewski.users.employee.Employee;
-import com.adamszablewski.users.owners.Owner;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

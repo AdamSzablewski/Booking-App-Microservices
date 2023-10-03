@@ -4,9 +4,9 @@ package com.adamszablewski.security;
 
 import com.adamszablewski.security.dto.LoginDto;
 import com.adamszablewski.security.dto.RegisterDto;
-import com.adamszablewski.users.UserClass;
-import com.adamszablewski.users.repository.UserRepository;
-import com.adamszablewski.users.role.RoleRepository;
+import com.adamszablewski.model.UserClass;
+import com.adamszablewski.repository.UserRepository;
+
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +24,7 @@ public class AuthController {
    // private AuthenticationManager authenticationManager;
     private final UserRepository userRepository;
     private PasswordEncoder passwordEncoder;
-    private RoleRepository roleRepository;
+
     private TokenGenerator tokenGenerator;
     private SecurityService securityService;
 

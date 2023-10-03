@@ -1,0 +1,84 @@
+package com.adamszablewski.service;
+
+import com.adamszablewski.dto.EmploymentRequestDTO;
+import com.adamszablewski.helpers.UserTools;
+import com.adamszablewski.exceptions.NoSuchEmploymentRequestException;
+import com.adamszablewski.exceptions.NoSuchFacilityException;
+import com.adamszablewski.exceptions.NoSuchUserException;
+import com.adamszablewski.model.Facility;
+import com.adamszablewski.repository.FacilityRepository;
+import com.adamszablewski.repository.UserRepository;
+import com.adamszablewski.feignClients.UserServiceClient;
+import com.adamszablewski.model.Employee;
+import com.adamszablewski.repository.EmployeeRepository;
+import com.adamszablewski.messages.MessageSender;
+import com.adamszablewski.model.EmploymentRequest;
+import com.adamszablewski.repository.EmploymentRequestRepository;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Set;
+
+import static com.adamszablewski.dto.mapper.Mapper.mapEmploymentRequestToDTO;
+
+@AllArgsConstructor
+@Service
+public class EmploymentRequestService {
+
+    private final MessageSender messageSender;
+    private final UserServiceClient userServiceClient;
+    private final FacilityRepository facilityRepository;
+    private final EmploymentRequestRepository employmentRequestRepository;
+    private final EmployeeRepository employeeRepository;
+    private final UserRepository userRepository;
+    private final UserTools userTools;
+
+    public void sendEmploymentRequest(String email, long facilityId) {
+
+//        RestResponseDTO<Employee> employeer = userServiceClient.findEmployeeByEmail(email);
+        //Employee employee = employeer.getValue();
+
+        Employee employee = userTools.getEmployeeByMail(email);
+        System.out.println("service "+employee);
+        Facility facility = facilityRepository.findById(facilityId)
+                        .orElseThrow(NoSuchFacilityException::new);
+
+        EmploymentRequest employmentRequest = EmploymentRequest.builder()
+                .employee(employee)
+                .facility(facility)
+                .status(false)
+                .build();
+
+        messageSender.sendEmploymentRequestMessage(employee, facility);
+        employmentRequestRepository.save(employmentRequest);
+
+    }
+
+    public void answereEmploymentRequest(long id, boolean status) {
+        EmploymentRequest employmentRequest = employmentRequestRepository.findById(id)
+                .orElseThrow(NoSuchEmploymentRequestException::new);
+
+        Employee employee = employmentRequest.getEmployee();
+        Facility facility = employmentRequest.getFacility();
+
+        facilityRepository.save(facility);
+        if (!status){
+            messageSender.sendEmploymentRequestDenied(employee, facility);
+        }
+        else {
+            messageSender.sendEmploymentRequestAccepted(employee, facility);
+            facility.getEmployees().add(employee);
+            employee.setWorkplace(facility);
+            facilityRepository.save(facility);
+        }
+        employmentRequestRepository.delete(employmentRequest);
+    }
+
+    public Set<EmploymentRequestDTO> getEmploymentRequestsForUser(long id) {
+        Employee employee = employeeRepository.findByUserId(id)
+                .orElseThrow(NoSuchUserException::new);
+
+        return mapEmploymentRequestToDTO(employmentRequestRepository.findAllByEmployeeId(employee.getId()));
+    }
+}
