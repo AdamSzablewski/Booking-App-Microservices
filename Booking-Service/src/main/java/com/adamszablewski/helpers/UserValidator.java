@@ -2,7 +2,9 @@ package com.adamszablewski.helpers;
 
 import com.adamszablewski.model.Appointment;
 import com.adamszablewski.model.Facility;
+import org.springframework.stereotype.Component;
 
+@Component
 public class UserValidator {
     public boolean isOwner(Facility facility, String userEmail){
         return facility.getOwner().getUser().getEmail().equals(userEmail);

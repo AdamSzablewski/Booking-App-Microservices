@@ -1,5 +1,6 @@
 package com.adamszablewski.service;
 
+import com.adamszablewski.dto.mapper.Mapper;
 import com.adamszablewski.model.*;
 import com.adamszablewski.repository.AppointmentRepository;
 import com.adamszablewski.helpers.UserTools;
@@ -23,7 +24,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static com.adamszablewski.dto.mapper.Mapper.*;
+
 
 @Service
 @AllArgsConstructor
@@ -32,11 +33,10 @@ public class TimeSlotService {
     private final TaskRepository taskRepository;
     private final TimeSlotHelper timeSlotHelper;
     private final AppointmentRepository appointmentRepository;
-    private final UserServiceClient userServiceClient;
     private final MessageSender messageSender;
     private final UserTools userTools;
-    private final ClientRepository clientRepository;
     private final FacilityRepository facilityRepository;
+    private final Mapper mapper;
 
 
 
@@ -62,10 +62,10 @@ public class TimeSlotService {
                         TimeSlot.builder()
                                 .startTime(employeeStartTime)
                                 .date(date)
-                                .task(mapTaskToDto(task))
+                                .task(mapper.mapTaskToDto(task))
                                 .endTime(employeeStartTime.plusMinutes(task.getDurationInMinutes()))
-                                .emloyee(mapEmployeeToDto(employee))
-                                .facility(mapFacilityToDto(task.getFacility()))
+                                .emloyee(mapper.mapEmployeeToDto(employee))
+                                .facility(mapper.mapFacilityToDto(task.getFacility()))
                                 .build()
                     );
                 }

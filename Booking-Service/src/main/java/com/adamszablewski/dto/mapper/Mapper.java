@@ -10,16 +10,16 @@ import com.adamszablewski.model.Task;
 import com.adamszablewski.util.Identifiable;
 import lombok.AllArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
 public class Mapper {
 
     public static  <T extends Identifiable> Set<Long> convertObjectListToIdList(Set<T> set){
+        if (set == null){
+            return Collections.emptySet();
+        }
         return set.stream()
                 .map(Identifiable::getId)
                 .collect(Collectors.toSet());
