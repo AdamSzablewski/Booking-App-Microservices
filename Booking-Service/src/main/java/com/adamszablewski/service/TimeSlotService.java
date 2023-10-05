@@ -24,6 +24,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static com.adamszablewski.dto.mapper.Mapper.*;
 
 
 @Service
@@ -36,7 +37,7 @@ public class TimeSlotService {
     private final MessageSender messageSender;
     private final UserTools userTools;
     private final FacilityRepository facilityRepository;
-    private final Mapper mapper;
+
 
 
 
@@ -62,10 +63,10 @@ public class TimeSlotService {
                         TimeSlot.builder()
                                 .startTime(employeeStartTime)
                                 .date(date)
-                                .task(mapper.mapTaskToDto(task))
+                                .task(mapTaskToDto(task))
                                 .endTime(employeeStartTime.plusMinutes(task.getDurationInMinutes()))
-                                .emloyee(mapper.mapEmployeeToDto(employee))
-                                .facility(mapper.mapFacilityToDto(task.getFacility()))
+                                .emloyee(mapEmployeeToDto(employee))
+                                .facility(mapFacilityToDto(task.getFacility()))
                                 .build()
                     );
                 }

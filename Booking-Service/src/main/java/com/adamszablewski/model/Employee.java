@@ -16,12 +16,12 @@ import java.util.Set;
 @NoArgsConstructor
 @Builder
 @Table
-@ToString
 public class Employee implements Identifiable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @ManyToOne
+    @ToString.Exclude
     private Facility workplace;
     private LocalTime startTime;
     private LocalTime endTime;
@@ -33,6 +33,7 @@ public class Employee implements Identifiable {
     )
     @ToString.Exclude
     private Set<Task> tasks;
+    @ToString.Exclude
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Appointment> appointments;
     @OneToOne
