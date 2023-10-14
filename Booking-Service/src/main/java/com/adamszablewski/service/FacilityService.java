@@ -3,10 +3,10 @@ package com.adamszablewski.service;
 import com.adamszablewski.dao.Dao;
 import com.adamszablewski.dto.FacilityDto;
 import com.adamszablewski.exceptions.NotAuthorizedException;
-import com.adamszablewski.helpers.UserTools;
+import com.adamszablewski.util.helpers.UserTools;
 import com.adamszablewski.exceptions.FacilityNameTakenException;
 import com.adamszablewski.exceptions.NoSuchFacilityException;
-import com.adamszablewski.helpers.UserValidator;
+import com.adamszablewski.util.helpers.UserValidator;
 import com.adamszablewski.model.Facility;
 import com.adamszablewski.repository.FacilityRepository;
 import com.adamszablewski.model.Owner;
@@ -38,6 +38,7 @@ public class FacilityService {
 
     public Set<FacilityDto> getAllFacilitiesForRegion(String region) {
         return mapFacilityToDto(facilityRepository.findByRegion(region), true);
+
     }
 
     public Set<FacilityDto> getAllFacilitiesForCity(String city) {
@@ -48,6 +49,7 @@ public class FacilityService {
         return mapFacilityToDto(facilityRepository.findById(id)
                 .orElseThrow(NoSuchFacilityException::new));
     }
+
     @Transactional
     public void createFacility(Facility facility, String email) {
 

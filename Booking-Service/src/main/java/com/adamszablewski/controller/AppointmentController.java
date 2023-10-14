@@ -32,8 +32,9 @@ public class AppointmentController {
     @CircuitBreaker(name = "bookingServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
     @RateLimiter(name = "bookingServiceRateLimiter")
     public ResponseEntity<RestResponseDTO<String>> changeEmployeeForAppointmentById(@PathVariable Long id,
+                                                                                    @PathVariable String employeeEmail,
                                                                                     @RequestHeader("userEmail") String userEmail){
-        appointmentService.changeEmployeeForAppointmentById(id, userEmail);
+        appointmentService.changeEmployeeForAppointmentById(id, employeeEmail, userEmail);
         return ResponseEntity.ok(new RestResponseDTO<>());
     }
     @PutMapping("/close/id/{id}")

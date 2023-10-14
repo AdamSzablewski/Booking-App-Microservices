@@ -23,7 +23,7 @@ public class EmploymentController {
     public ResponseEntity<RestResponseDTO<String>> answereEmploymentRequest(@PathVariable long id,
                                                                              @RequestParam("status") boolean status,
                                                                             @RequestHeader("userEmail") String userEmail){
-        employmentRequestService.answereEmploymentRequest(id, status, userEmail);
+        employmentRequestService.answerEmploymentRequest(id, status, userEmail);
         return ResponseEntity.ok(new RestResponseDTO<>());
     }
     @GetMapping("/request/user/{id}")

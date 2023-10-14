@@ -2,15 +2,12 @@ package com.adamszablewski.service;
 
 import com.adamszablewski.dto.EmploymentRequestDTO;
 import com.adamszablewski.exceptions.NotAuthorizedException;
-import com.adamszablewski.helpers.UserTools;
+import com.adamszablewski.util.helpers.UserTools;
 import com.adamszablewski.exceptions.NoSuchEmploymentRequestException;
 import com.adamszablewski.exceptions.NoSuchFacilityException;
 import com.adamszablewski.exceptions.NoSuchUserException;
-import com.adamszablewski.helpers.UserValidator;
 import com.adamszablewski.model.Facility;
 import com.adamszablewski.repository.FacilityRepository;
-import com.adamszablewski.repository.UserRepository;
-import com.adamszablewski.feignClients.UserServiceClient;
 import com.adamszablewski.model.Employee;
 import com.adamszablewski.repository.EmployeeRepository;
 import com.adamszablewski.messages.MessageSender;
@@ -46,12 +43,13 @@ public class EmploymentRequestService {
                 .status(false)
                 .build();
 
-        messageSender.sendEmploymentRequestMessage(employee, facility);
         employmentRequestRepository.save(employmentRequest);
+        messageSender.sendEmploymentRequestMessage(employee, facility);
+
 
     }
 
-    public void answereEmploymentRequest(long id, boolean status, String userEmail) {
+    public void answerEmploymentRequest(long id, boolean status, String userEmail) {
         EmploymentRequest employmentRequest = employmentRequestRepository.findById(id)
                 .orElseThrow(NoSuchEmploymentRequestException::new);
 

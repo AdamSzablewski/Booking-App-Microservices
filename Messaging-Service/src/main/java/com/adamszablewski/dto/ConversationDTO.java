@@ -1,11 +1,7 @@
 package com.adamszablewski.dto;
 
 
-import com.adamszablewski.classes.Identifiable;
-import com.adamszablewski.classes.UserClass;
-import com.adamszablewski.messages.Message;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.*;
+import com.adamszablewski.model.UserClass;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

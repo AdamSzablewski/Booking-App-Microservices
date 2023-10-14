@@ -4,7 +4,7 @@ import com.adamszablewski.model.Appointment;
 import com.adamszablewski.repository.AppointmentRepository;
 import com.adamszablewski.feignClients.UserServiceClient;
 import com.adamszablewski.model.Employee;
-import com.adamszablewski.helpers.TimeSlotHelper;
+import com.adamszablewski.util.helpers.TimeSlotHelper;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

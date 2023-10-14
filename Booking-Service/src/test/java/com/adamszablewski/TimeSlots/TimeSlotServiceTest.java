@@ -3,8 +3,7 @@ package com.adamszablewski.TimeSlots;
 import com.adamszablewski.dto.EmployeeDto;
 import com.adamszablewski.dto.FacilityDto;
 import com.adamszablewski.dto.TaskDto;
-import com.adamszablewski.dto.mapper.Mapper;
-import com.adamszablewski.helpers.UserTools;
+import com.adamszablewski.util.helpers.UserTools;
 import com.adamszablewski.model.*;
 import com.adamszablewski.repository.AppointmentRepository;
 import com.adamszablewski.feignClients.UserServiceClient;
@@ -12,7 +11,7 @@ import com.adamszablewski.messages.MessageSender;
 import com.adamszablewski.repository.ClientRepository;
 import com.adamszablewski.repository.FacilityRepository;
 import com.adamszablewski.repository.TaskRepository;
-import com.adamszablewski.helpers.TimeSlotHelper;
+import com.adamszablewski.util.helpers.TimeSlotHelper;
 import com.adamszablewski.service.TimeSlotService;
 
 import org.junit.jupiter.api.BeforeEach;

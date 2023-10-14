@@ -1,7 +1,7 @@
 package com.adamszablewski.messages;
 
 import com.adamszablewski.model.Appointment;
-import com.adamszablewski.helpers.UserTools;
+import com.adamszablewski.util.helpers.UserTools;
 import com.adamszablewski.model.Facility;
 import com.adamszablewski.feignClients.UserServiceClient;
 import com.adamszablewski.model.Employee;
@@ -48,6 +48,25 @@ public class MessageSender {
                         +appointment.getTask().getPrice()+" "+appointment.getTask().getCurrency())
                 .sender(APP_NAME)
                 .receivers(List.of(appointment.getEmployee().getUser().getId(), appointment.getClient().getUser().getId()))
+                .dateSent(LocalDateTime.now())
+                .build();
+
+        rabbitMqProducer.sendMessageObject(message);
+
+    }
+    public void sendAppointmentCreatedMessage(Appointment appointment, long userId) {
+        String city = appointment.getFacility().getCity();
+        String street = appointment.getFacility().getStreet();
+        String house = appointment.getFacility().getHouseNumber();
+
+        Message message = Message.builder()
+                .message("You have a new appoinment for: "+appointment.getTask().getName()+" with "
+                        +appointment.getFacility().getName()+" on " +
+                        appointment.getDate()+" at "+appointment.getStartTime()+
+                        ". The address is: "+street+" "+house+" in "+city+". Your appoinment will cost "
+                        +appointment.getTask().getPrice()+" "+appointment.getTask().getCurrency())
+                .sender(APP_NAME)
+                .receivers(List.of(userId))
                 .dateSent(LocalDateTime.now())
                 .build();
 

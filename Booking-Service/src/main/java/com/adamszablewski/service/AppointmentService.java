@@ -1,19 +1,17 @@
 package com.adamszablewski.service;
 
 import com.adamszablewski.dao.Dao;
+import com.adamszablewski.dto.mapper.Mapper;
 import com.adamszablewski.exceptions.NotAuthorizedException;
-import com.adamszablewski.helpers.UserValidator;
+import com.adamszablewski.util.helpers.UserValidator;
 import com.adamszablewski.model.Appointment;
-import com.adamszablewski.helpers.AppointmentHelper;
+import com.adamszablewski.util.helpers.AppointmentHelper;
 import com.adamszablewski.repository.AppointmentRepository;
 import com.adamszablewski.dto.AppoinmentDTO;
 import com.adamszablewski.exceptions.NoSuchAppointmentException;
 import com.adamszablewski.messages.MessageSender;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-
-
-import static com.adamszablewski.dto.mapper.Mapper.mapAppointmentToDto;
 
 
 @Service
@@ -24,16 +22,17 @@ public class AppointmentService {
     private final MessageSender messageSender;
     private final Dao dao;
     private final UserValidator userValidator;
+    private final Mapper mapper;
 
 
     public AppoinmentDTO getAppointmentById(Long id, String userEmail) {
         Appointment appointment = appointmentRepository.findById(id)
                 .orElseThrow(NoSuchAppointmentException::new);
 
-        if (!userValidator.isOwnerEmployeeOrTheClient(appointment, userEmail)){
+        if (!userValidator.isOwnerOrEmployeeOrTheClient(appointment, userEmail)){
             throw new NotAuthorizedException();
         }
-        return mapAppointmentToDto(appointment);
+        return mapper.mapAppointmentToDto(appointment);
     }
     public void deleteAppointmentById(Long id, String userEmail) {
         Appointment appointment = appointmentRepository.findById(id)
@@ -44,24 +43,23 @@ public class AppointmentService {
         dao.deleteAppoinment(appointment);
         messageSender.createAppoinmentCanceledMessage(appointment);
     }
-    public void changeEmployeeForAppointmentById(Long id, String userEmail) {
+    public void changeEmployeeForAppointmentById(Long id, String employeeEmail, String userEmail) {
         Appointment appointment= appointmentRepository.findById(id)
                 .orElseThrow(NoSuchAppointmentException::new);
-        if (!userValidator.isOwnerEmployeeOrTheClient(appointment, userEmail)){
+        if (!userValidator.isOwnerOrEmployeeOrTheClient(appointment, userEmail)){
             throw new NotAuthorizedException();
         }
-        appointmentHelper.changeEmployeeForAppointment(appointment, appointment.getEmployee());
+        appointmentHelper.changeEmployeeForAppointment(appointment, appointment.getEmployee(), employeeEmail);
     }
 
     public void markAppointmentAsDone(Long id, String userEmail) {
         Appointment appointment= appointmentRepository.findById(id)
                 .orElseThrow(NoSuchAppointmentException::new);
 
-        if (!userValidator.isEmployee(appointment.getFacility(), userEmail)
-                && !userValidator.isOwner(appointment.getFacility(), userEmail)){
+        if (!userValidator.isOwnerOrEmployee(appointment, userEmail)){
             throw new NotAuthorizedException();
         }
-        appointmentHelper.deleteAppointment(appointment);
+        dao.deleteAppoinment(appointment);
         messageSender.sendAppointmentDoneMessage(appointment);
     }
 }
