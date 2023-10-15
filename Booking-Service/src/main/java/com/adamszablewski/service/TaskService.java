@@ -110,6 +110,7 @@ public class TaskService {
         Employee employee = userServiceClient.findEmployeeById(id).getValue();
         employee.getTasks().remove(task);
         task.getEmployees().remove(employee);
+
         taskRepository.save(task);
     }
     @Transactional
@@ -121,7 +122,7 @@ public class TaskService {
             throw new NotAuthorizedException();
         }
         Employee employee = userTools.getEmployeeByUserId(id);
-        if (employee.getWorkplace() == null || !Objects.equals(employee.getWorkplace().getId(), task.getFacility().getId())){
+        if (employee.getWorkplace() == null || employee.getWorkplace().getId() != task.getFacility().getId()){
             throw new NoSuchEmployeeException();
         }
         task.getEmployees().add(employee);

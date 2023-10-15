@@ -60,7 +60,7 @@ public class EmploymentRequestService {
             throw new NotAuthorizedException();
         }
 
-        facilityRepository.save(facility);
+       // facilityRepository.save(facility);
         if (!status){
             messageSender.sendEmploymentRequestDenied(employee, facility);
         }

@@ -1,6 +1,6 @@
 package com.adamszablewski.controller;
 
-import com.adamszablewski.dtos.RestResponseDTO;
+import com.adamszablewski.dto.RestResponseDTO;
 import com.adamszablewski.exceptions.CustomExceptionHandler;
 import com.adamszablewski.model.Employee;
 import com.adamszablewski.service.EmployeeService;
@@ -22,16 +22,6 @@ import java.util.List;
 public class EmployeeController {
 
     private final EmployeeService employeeService;
-
-//    @GetMapping("/email/{email}")
-//    @CircuitBreaker(name = "userServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
-//    @RateLimiter(name = "userServiceRateLimiter")
-//    public ResponseEntity<RestResponseDTO<Employee>> getEmployeeByMail(@PathVariable String email){
-//            RestResponseDTO<Employee> responseDTO = RestResponseDTO.<Employee>builder()
-//                    .value(employeeService.getEmployeeByEmail(email))
-//                    .build();
-//        return ResponseEntity.ok(responseDTO);
-//    }
 
     @GetMapping("/id/{id}")
     @CircuitBreaker(name = "userServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
@@ -88,8 +78,7 @@ public class EmployeeController {
     public ResponseEntity<RestResponseDTO<Employee>>  setWorkingHoursForEmployee(@PathVariable long id,
                                                                                  @RequestParam("startTime")
                                                                                  @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)LocalTime startTIme,
-                                                                                 @RequestParam("endTime")
-                                                                                     @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)LocalTime endTIme){
+                                                                                 @RequestParam("endTime") @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)LocalTime endTIme){
         employeeService.setWorkingHours(id, startTIme, endTIme);
         return ResponseEntity.ok(new RestResponseDTO<>());
     }

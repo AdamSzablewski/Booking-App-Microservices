@@ -11,7 +11,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.adamszablewski.dto.mapper.Mapper.mapOwnerToDto;
+import static com.adamszablewski.util.Mapper.mapOwnerToDto;
 
 @Service
 @AllArgsConstructor

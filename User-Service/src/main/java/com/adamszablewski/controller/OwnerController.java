@@ -1,7 +1,7 @@
 package com.adamszablewski.controller;
 
 import com.adamszablewski.dto.OwnerDto;
-import com.adamszablewski.dtos.RestResponseDTO;
+import com.adamszablewski.dto.RestResponseDTO;
 import com.adamszablewski.exceptions.CustomExceptionHandler;
 import com.adamszablewski.service.OwnerService;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/users/owner")
 public class OwnerController {
 
-    OwnerService ownerService;
+    private final OwnerService ownerService;
 
     @GetMapping("/email/{email}")
     @CircuitBreaker(name = "userServiceCircuitBreaker", fallbackMethod = "fallBackMethod")

@@ -22,7 +22,16 @@ public class CustomExceptionHandler {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseBody);
         } else if (ex instanceof TimeSlotAlreadyTakenException) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseBody);
-        } else {
+        } else if (ex instanceof FacilityNameTakenException) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseBody);
+        }
+        else if (ex instanceof NotAuthorizedException) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseBody);
+        }
+        else if (ex instanceof NoSuchEmploymentRequestException) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseBody);
+        }
+        else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
         }
     }

@@ -9,11 +9,13 @@ import com.adamszablewski.model.Employee;
 import com.adamszablewski.model.Task;
 import com.adamszablewski.util.Identifiable;
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
+@Component
 public class Mapper {
 
     public static  <T extends Identifiable> Set<Long> convertObjectListToIdList(Set<T> set){

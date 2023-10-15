@@ -12,7 +12,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Builder
 @Data
-public class RestResponseDTO <T>{
+public class RestResponseDTO<T>{
     private T value;
     private Set<T> values;
     private String error;

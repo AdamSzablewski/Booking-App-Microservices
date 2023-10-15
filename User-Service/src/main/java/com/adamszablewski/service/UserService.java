@@ -1,20 +1,15 @@
 package com.adamszablewski.service;
 
-import com.adamszablewski.dto.RestResponseDTO;
 import com.adamszablewski.dto.UserClassDTO;
 import com.adamszablewski.exceptions.NoSuchUserException;
-import com.adamszablewski.feignClients.BookingFeignClient;
 import com.adamszablewski.feignClients.MessagingServiceClient;
 import com.adamszablewski.model.UserClass;
-import com.adamszablewski.repository.FacilityRepository;
 import com.adamszablewski.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Set;
-
-import static com.adamszablewski.dto.mapper.Mapper.mapUserToDto;
+import static com.adamszablewski.util.Mapper.mapUserToDto;
 
 @Service
 @AllArgsConstructor

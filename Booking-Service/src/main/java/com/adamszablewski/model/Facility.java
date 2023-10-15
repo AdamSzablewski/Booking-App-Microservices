@@ -38,4 +38,5 @@ public class Facility implements Identifiable {
     public Long getId() {
         return id;
     }
+
 }

@@ -1,4 +1,4 @@
-package com.adamszablewski.dto.mapper;
+package com.adamszablewski.util;
 
 import com.adamszablewski.Identifiable;
 

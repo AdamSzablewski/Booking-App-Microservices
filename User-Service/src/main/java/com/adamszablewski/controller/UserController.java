@@ -1,7 +1,7 @@
 package com.adamszablewski.controller;
 
+import com.adamszablewski.dto.RestResponseDTO;
 import com.adamszablewski.dto.UserClassDTO;
-import com.adamszablewski.dtos.RestResponseDTO;
 
 import com.adamszablewski.service.UserService;
 import lombok.AllArgsConstructor;

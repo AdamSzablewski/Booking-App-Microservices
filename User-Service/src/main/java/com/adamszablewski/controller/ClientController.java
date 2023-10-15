@@ -1,7 +1,7 @@
 package com.adamszablewski.controller;
 
 import com.adamszablewski.dto.ClientDto;
-import com.adamszablewski.dtos.RestResponseDTO;
+import com.adamszablewski.dto.RestResponseDTO;
 import com.adamszablewski.exceptions.CustomExceptionHandler;
 import com.adamszablewski.service.ClientService;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
@@ -19,15 +19,6 @@ public class ClientController {
 
     private final ClientService clientService;
 
-//    @GetMapping("/email/{email}")
-//    @CircuitBreaker(name = "userServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
-//    @RateLimiter(name = "userServiceRateLimiter")
-//    public ResponseEntity<RestResponseDTO<Client>> getClientByMail(@PathVariable String email){
-//        RestResponseDTO<Client> responseDTO = RestResponseDTO.<Client>builder()
-//                .value(clientService.getClientByMail(email))
-//                .build();
-//        return ResponseEntity.ok(responseDTO);
-//    }
     @GetMapping("/id/{id}")
     @CircuitBreaker(name = "userServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
     @RateLimiter(name = "userServiceRateLimiter")

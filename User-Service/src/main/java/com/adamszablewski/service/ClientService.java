@@ -10,7 +10,7 @@ import com.adamszablewski.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import static com.adamszablewski.dto.mapper.Mapper.mapClientToDto;
+import static com.adamszablewski.util.Mapper.mapClientToDto;
 
 @Service
 @AllArgsConstructor
