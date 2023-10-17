@@ -33,7 +33,7 @@ public class Employee implements Identifiable {
             inverseJoinColumns = @JoinColumn(name = "task_id")
     )
     @ToString.Exclude
-    private List<Task> tasks;
+    private Set<Task> tasks;
     @OneToMany(cascade = CascadeType.REMOVE)
     private Set<Appointment> appointments;
     @OneToOne

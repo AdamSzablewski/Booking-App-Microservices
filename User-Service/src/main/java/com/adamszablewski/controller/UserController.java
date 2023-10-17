@@ -23,6 +23,14 @@ public class UserController {
                 .build();
         return ResponseEntity.ok(responseDTO);
     }
+    @GetMapping("/passwords/getHashed/user/{userEmail}")
+    public ResponseEntity<RestResponseDTO<String>> getHashedPasswordForUser(@PathVariable String userEmail){
+        RestResponseDTO<String> responseDTO = RestResponseDTO.<String>builder()
+                .value(userService.getHashedPassword(userEmail))
+                .build();
+        return ResponseEntity.ok(responseDTO);
+    }
+
     @GetMapping("/email")
     public ResponseEntity<RestResponseDTO<UserClassDTO>> getUserByEmail(@RequestHeader("userEmail") String userEmail){
         RestResponseDTO<UserClassDTO> responseDTO = RestResponseDTO.<UserClassDTO>builder()

@@ -112,4 +112,10 @@ public class FacilityService {
         return mapFacilityToDto(facilityRepository.findByOwnerId(id)
                 .orElseThrow(NoSuchFacilityException::new));
     }
+
+    public String getOwnerMailByFacilityID(long id) {
+        Facility facility = facilityRepository.findById(id)
+                .orElseThrow(NoSuchFacilityException::new);
+        return facility.getOwner().getUser().getEmail();
+    }
 }

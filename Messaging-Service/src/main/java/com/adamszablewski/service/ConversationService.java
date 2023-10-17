@@ -9,17 +9,19 @@ import com.adamszablewski.repository.ConversationRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import static com.adamszablewski.util.Mapper.mapConversationToDTO;
+//import static com.adamszablewski.util.Mapper.mapConversationToDTO;
 
 @AllArgsConstructor
 @Service
 public class ConversationService {
     private final ConversationRepository conversationRepository;
-    private final ConversationCreator conversationCreator;
 
-    public ConversationDTO getCoversation(long user) {
-        return mapConversationToDTO(conversationRepository.findByUserId(user)
-                .orElseThrow(NoSuchUserFoundException::new));
+
+    public Conversation getCoversation(long user) {
+        return conversationRepository.findByUserId(user)
+                .orElseThrow(NoSuchConversationFoundException::new);
+//                mapConversationToDTO(conversationRepository.findByUserId(user)
+//                .orElseThrow(NoSuchUserFoundException::new));
 
     }
 

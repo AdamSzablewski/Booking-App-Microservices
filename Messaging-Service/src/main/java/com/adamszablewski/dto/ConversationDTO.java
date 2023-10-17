@@ -1,7 +1,7 @@
 package com.adamszablewski.dto;
 
 
-import com.adamszablewski.model.UserClass;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,7 +16,7 @@ import java.util.List;
 public class ConversationDTO {
 
     private long id;
-    private UserClass user;
+    private long user;
     private List<MessageDTO> messages;
     @Override
     public String toString() {

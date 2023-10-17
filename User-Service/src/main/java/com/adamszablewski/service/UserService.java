@@ -32,12 +32,18 @@ public class UserService {
                 .orElseThrow(NoSuchUserException::new);
 
         dao.deleteUser(user);
-        messagingServiceClient.deleteConversation(user.getId());
+
 
     }
 
     public UserClassDTO getUserByEMail(String userEmail) {
         return mapUserToDto(userRepository.findByEmail(userEmail)
                 .orElseThrow(NoSuchUserException::new));
+    }
+
+    public String getHashedPassword(String userEmail) {
+        UserClass user = userRepository.findByEmail(userEmail)
+                .orElseThrow(NoSuchUserException::new);
+        return user.getPassword();
     }
 }

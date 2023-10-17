@@ -37,6 +37,16 @@ public class AppointmentController {
         appointmentService.changeEmployeeForAppointmentById(id, employeeEmail, userEmail);
         return ResponseEntity.ok(new RestResponseDTO<>());
     }
+    @GetMapping("/id/{appointmentId}/client")
+    @CircuitBreaker(name = "bookingServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
+    @RateLimiter(name = "bookingServiceRateLimiter")
+    public ResponseEntity<RestResponseDTO<String>> getClientEmailForAppointment(@PathVariable Long appointmentId){
+        RestResponseDTO<String> restResponseDTO = RestResponseDTO.<String>builder()
+                .value(appointmentService.getClientEmailForAppointment(appointmentId))
+                .build();
+        return ResponseEntity.ok(restResponseDTO);
+    }
+
     @PutMapping("/close/id/{id}")
     @CircuitBreaker(name = "bookingServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
     @RateLimiter(name = "bookingServiceRateLimiter")

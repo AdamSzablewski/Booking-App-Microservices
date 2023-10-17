@@ -26,9 +26,9 @@ public class ConversationController {
     @GetMapping("/user/{id}")
     @CircuitBreaker(name = "messagingServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
     @RateLimiter(name = "messagingServiceRateLimiter")
-    public ResponseEntity<RestResponseDTO<ConversationDTO>> getCoversation(@PathVariable long id,
+    public ResponseEntity<RestResponseDTO<Conversation>> getCoversation(@PathVariable long id,
                                                                            @RequestHeader("userEmail") String userEmail){
-        RestResponseDTO<ConversationDTO> responseDTO = RestResponseDTO.<ConversationDTO>builder()
+        RestResponseDTO<Conversation> responseDTO = RestResponseDTO.<Conversation>builder()
                 .value(conversationService.getCoversation(id))
                 .build();
         return ResponseEntity.ok(responseDTO);

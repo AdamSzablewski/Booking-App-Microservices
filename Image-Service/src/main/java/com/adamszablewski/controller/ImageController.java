@@ -1,7 +1,6 @@
 package com.adamszablewski.controller;
 
 import com.adamszablewski.dto.RestResponseDTO;
-import com.adamszablewski.model.ImageData;
 import com.adamszablewski.service.ImageService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -46,11 +45,12 @@ public class ImageController {
                 .contentType(MediaType.IMAGE_JPEG)
                 .body(data);
     }
-    @PostMapping("/facilityID/{id}")
+    @PostMapping("/facilityID/{id}/user/{userId}")
     public ResponseEntity<RestResponseDTO<String>> addFacilityImage(@RequestParam("image")MultipartFile file,
                                                                     @PathVariable long id,
-                                                                    @RequestHeader("userEmail") String userEmail) throws IOException {
-        imageService.addFacilityImage(id, file, userEmail);
+                                                                    @RequestHeader("userEmail") String userEmail,
+                                                                    @PathVariable long userId) throws IOException {
+        imageService.addFacilityImage(id, file, userEmail, userId);
         return ResponseEntity.ok(new RestResponseDTO<>());
     }
     @PostMapping("/userID/{id}")

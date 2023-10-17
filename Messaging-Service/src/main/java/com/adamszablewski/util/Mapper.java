@@ -43,26 +43,26 @@ public class Mapper {
         return messageDTOS;
     }
 
-    public static ConversationDTO mapConversationToDTO(Conversation conversation){
-        return ConversationDTO.builder()
-                .id(conversation.getId())
-                .user(conversation.getUser())
-                .messages(mapMessageToDTO(conversation.getMessages()))
-                .build();
-    }
-
-    public static List<ConversationDTO> mapConversationToDTO(List<Conversation> conversations){
-        List<ConversationDTO> conversationDTOS = new ArrayList<>();
-        conversations.forEach(conversation -> {
-
-            conversationDTOS.add(ConversationDTO.builder()
-                    .id(conversation.getId())
-                    .user(conversation.getUser())
-                    .messages(mapMessageToDTO(conversation.getMessages()))
-                    .build());
-        });
-
-        return conversationDTOS;
-    }
+//    public static ConversationDTO mapConversationToDTO(Conversation conversation){
+//        return ConversationDTO.builder()
+//                .id(conversation.getId())
+//                .user(conversation.getUser())
+//                .messages(mapMessageToDTO(conversation.getMessages()))
+//                .build();
+//    }
+//
+//    public static List<ConversationDTO> mapConversationToDTO(List<Conversation> conversations){
+//        List<ConversationDTO> conversationDTOS = new ArrayList<>();
+//        conversations.forEach(conversation -> {
+//
+//            conversationDTOS.add(ConversationDTO.builder()
+//                    .id(conversation.getId())
+//                    .user(conversation.getUser())
+//                    .messages(mapMessageToDTO(conversation.getMessages()))
+//                    .build());
+//        });
+//
+//        return conversationDTOS;
+//    }
 
 }

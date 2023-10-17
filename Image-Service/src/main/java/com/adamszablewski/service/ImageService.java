@@ -1,17 +1,16 @@
 package com.adamszablewski.service;
 
+
 import com.adamszablewski.exceptions.FIleNotFoundException;
-import com.adamszablewski.exceptions.NoSuchFacilityException;
-import com.adamszablewski.exceptions.NoSuchUserException;
 import com.adamszablewski.exceptions.NotAuthorizedException;
-import com.adamszablewski.model.Facility;
+import com.adamszablewski.model.FacilityPhoto;
 import com.adamszablewski.model.ImageData;
-import com.adamszablewski.model.UserClass;
-import com.adamszablewski.repository.FacilityRepository;
+import com.adamszablewski.model.ProfilePhoto;
+import com.adamszablewski.repository.FacilityPhotoRepository;
 import com.adamszablewski.repository.ImageRepository;
-import com.adamszablewski.repository.UserRepository;
+import com.adamszablewski.repository.ProfilePhotoRepository;
 import com.adamszablewski.util.ImageUtils;
-import com.adamszablewski.util.helpers.UserValidator;
+import com.adamszablewski.util.UserValidator;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -25,8 +24,9 @@ import java.io.IOException;
 public class ImageService {
 
     private final ImageRepository imageRepository;
-    private final FacilityRepository facilityRepository;
-    private final UserRepository userRepository;
+    private final ProfilePhotoRepository profilePhotoRepository;
+    private final FacilityPhotoRepository facilityPhotoRepository;
+
     private final UserValidator userValidator;
 
     private ImageData uploadImage(MultipartFile file) throws IOException {
@@ -44,46 +44,51 @@ public class ImageService {
         return ImageUtils.decompressImage(imageData.getImageData());
 
     }
-    @Transactional
-    public void addFacilityImage(long id, MultipartFile file, String userEmail) throws IOException {
-        Facility facility = facilityRepository.findById(id)
-                .orElseThrow(NoSuchFacilityException::new);
-        if (!userValidator.isOwner(facility, userEmail)){
+
+    public void addFacilityImage(long id, MultipartFile file, String userEmail, long userId) throws IOException {
+
+        if (!userValidator.isOwner(id, userEmail)){
             throw new NotAuthorizedException();
         }
-        if (facility.getFacilityImage() != null){
-            imageRepository.delete(facility.getFacilityImage());
-        }
         ImageData image = uploadImage(file);
-        facility.setFacilityImage(image);
-        facilityRepository.save(facility);
+        FacilityPhoto facilityPhoto = FacilityPhoto.builder()
+                .facilityId(id)
+                .userId(userId)
+                .image(image)
+                .build();
+        facilityPhotoRepository.save(facilityPhoto);
     }
 
     public byte[] getImageForFacility(long id, String userEmail) {
-         Facility facility = facilityRepository.findById(id)
-                 .orElseThrow(NoSuchFacilityException::new);
-         byte[] imageData = facility.getFacilityImage().getImageData();
+         FacilityPhoto facilityPhoto = facilityPhotoRepository.findById(id)
+                 .orElseThrow(FIleNotFoundException::new);
+         byte[] imageData = facilityPhoto.getImage().getImageData();
          return ImageUtils.decompressImage(imageData);
     }
-
+    @Transactional
     public byte[] getImageForUser(long id, String userEmail) {
-        UserClass user = userRepository.findById(id)
-                .orElseThrow(NoSuchUserException::new);
-        byte[] imageData = user.getProfilePhoto().getImageData();
+        ProfilePhoto profilePhoto = profilePhotoRepository.findByUserId(id)
+                .orElseThrow(FIleNotFoundException::new);
+        byte[] imageData = profilePhoto.getImage().getImageData();
         return ImageUtils.decompressImage(imageData);
     }
 
     public void addUserImage(long id, MultipartFile file, String userEmail) throws IOException {
-        UserClass user = userRepository.findById(id)
-                .orElseThrow(NoSuchUserException::new);
-        if (!userValidator.isUser(user, userEmail)){
+
+        if (!userValidator.isUser(id, userEmail)){
             throw new NotAuthorizedException();
         }
-        if (user.getProfilePhoto() != null){
-            imageRepository.delete(user.getProfilePhoto());
-        }
+        profilePhotoRepository.deleteByUserId(id);
         ImageData image = uploadImage(file);
-        user.setProfilePhoto(image);
-        userRepository.save(user);
+        ProfilePhoto profilePhoto = ProfilePhoto.builder()
+                .userId(id)
+                .image(image)
+                .build();
+        profilePhotoRepository.save(profilePhoto);
+    }
+
+    public void deleteImagesForUser(long userId) {
+        facilityPhotoRepository.deleteAllByUserId(userId);
+        profilePhotoRepository.deleteByUserId(userId);
     }
 }

@@ -1,11 +1,12 @@
 package com.adamszablewski.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
 
 @Entity
 @Data
@@ -18,6 +19,7 @@ public class ImageData {
     private long id;
     private String name;
     private String type;
+    private LocalDate date;
     @Lob
     private byte[] imageData;
 }

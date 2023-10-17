@@ -29,6 +29,16 @@ public class FacilityController {
                 .build();
         return ResponseEntity.ok(responseDTO);
     }
+    @GetMapping("/owner/mail/by/id/{id}")
+    @CircuitBreaker(name = "bookingServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
+    @RateLimiter(name = "bookingServiceRateLimiter")
+    public ResponseEntity<RestResponseDTO<String>> getOwnerMailByFacilityID(@PathVariable  long id){
+        RestResponseDTO<String> responseDTO = RestResponseDTO.<String>builder()
+                .value(facilityService.getOwnerMailByFacilityID(id))
+                .build();
+        return ResponseEntity.ok(responseDTO);
+    }
+
     @GetMapping("/region/{region}")
     @CircuitBreaker(name = "bookingServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
     @RateLimiter(name = "bookingServiceRateLimiter")

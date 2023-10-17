@@ -24,12 +24,16 @@ public class GatewayConfig {
                         .or()
                         .path("/timeslots/**")
                         .or()
-                        .path("/images/**")
-                        .or()
                         .uri("lb://BOOKING"))
                 .route("user-service", r -> r
                         .path("/users/**")
                         .uri("lb://USER-SERVICE"))
+                .route("security-service", r -> r
+                        .path("/security/**")
+                        .uri("lb://SECURITY-SERVICE"))
+                .route("image-service", r -> r
+                        .path("/images/**")
+                        .uri("lb://IMAGE-SERVICE"))
                 .route("messaging-service", r -> r
                         .path("/conversations/**")
                         .or()

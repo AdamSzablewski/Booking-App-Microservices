@@ -1,9 +1,7 @@
 package com.adamszablewski.service;
 
-import com.adamszablewski.model.Appointment;
-import com.adamszablewski.model.Facility;
-import com.adamszablewski.model.Task;
-import com.adamszablewski.model.UserClass;
+import com.adamszablewski.model.*;
+import com.adamszablewski.rabbitMq.RabbitMqProducer;
 import com.adamszablewski.repository.AppointmentRepository;
 import com.adamszablewski.repository.FacilityRepository;
 import com.adamszablewski.repository.TaskRepository;
@@ -20,6 +18,7 @@ public class Dao {
     private final AppointmentRepository appointmentRepository;
     private final FacilityRepository facilityRepository;
     private final UserRepository userRepository;
+    private final RabbitMqProducer rabbitMqProducer;
 
     public void deleteTasks(Task task) {
         task.getEmployees().forEach(employee -> {
@@ -56,12 +55,34 @@ public class Dao {
         }
         facilityRepository.delete(facility);
     }
-    public void deleteUser(UserClass userClass){
-        if (userClass.getOwner() != null && userClass.getOwner().getFacilities() != null){
+    public void deleteUser(UserClass user){
+        if (user.getOwner() != null && user.getOwner().getFacilities() != null){
             System.out.println("deleting facilities");
-            userClass.getOwner().getFacilities().forEach(this::deleteFacility);
+            user.getOwner().getFacilities().forEach(this::deleteFacility);
         }
-        userRepository.delete(userClass);
+        if(user.getEmployee() != null){
+            Employee employee = user.getEmployee();
+            if(employee.getWorkplace() != null){
+                Facility facility = employee.getWorkplace();
+                facility.getEmployees().remove(employee);
+                employee.setWorkplace(null);
+                facilityRepository.save(facility);
+            }
+            if(employee.getAppointments() != null){
+                Set<Appointment> appointments = employee.getAppointments();
+                appointments.forEach(this::deleteAppoinment);
+            }
+            if (employee.getTasks() != null){
+                Set<Task> tasks = employee.getTasks();
+                tasks.forEach(task -> {
+                    task.getEmployees().remove(employee);
+                    employee.getTasks().remove(task);
+                });
+                taskRepository.saveAll(tasks);
+            }
+        }
+        userRepository.delete(user);
+        rabbitMqProducer.sendDeleteForUserMessage(user.getId());
     }
 
     public void deleteAppoinment(Appointment appointment){

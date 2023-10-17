@@ -2,16 +2,20 @@ package com.adamszablewski.util.rabbitMqConsumer;
 
 
 import com.adamszablewski.model.Message;
+import com.adamszablewski.service.ConversationService;
 import com.adamszablewski.service.MessageService;
 import lombok.AllArgsConstructor;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;
+
+import static com.adamszablewski.util.rabbitMqConsumer.RabbitMqConfig.USER_DELETED_QUEUE;
 
 @Service
 @AllArgsConstructor
 public class RabbitMqConsumer {
 
     MessageService messageService;
+    ConversationService conversationService;
 
 
 
@@ -24,5 +28,11 @@ public class RabbitMqConsumer {
 
         System.out.println("||| Message Object recieved |||||| "+ message.toString());
         messageService.addMessageToConversation(message);
+    }
+    @RabbitListener(queues = USER_DELETED_QUEUE)
+    public void consume(long userId){
+
+        System.out.println("||| Delete user : |||||| "+ userId);
+        conversationService.deleteConversation(userId);
     }
 }

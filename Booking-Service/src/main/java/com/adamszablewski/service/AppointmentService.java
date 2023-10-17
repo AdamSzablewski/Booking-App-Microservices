@@ -62,4 +62,10 @@ public class AppointmentService {
         dao.deleteAppoinment(appointment);
         messageSender.sendAppointmentDoneMessage(appointment);
     }
+
+    public String getClientEmailForAppointment(Long appointmentId) {
+        Appointment appointment = appointmentRepository.findById(appointmentId)
+                .orElseThrow(NoSuchAppointmentException::new);
+        return appointment.getClient().getUser().getEmail();
+    }
 }
