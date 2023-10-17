@@ -8,6 +8,7 @@ import com.adamszablewski.model.Client;
 import com.adamszablewski.model.Employee;
 import com.adamszablewski.model.Task;
 import com.adamszablewski.util.Identifiable;
+import com.adamszablewski.util.ImageUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 

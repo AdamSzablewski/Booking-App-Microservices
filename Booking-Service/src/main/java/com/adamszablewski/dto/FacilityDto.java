@@ -1,5 +1,6 @@
 package com.adamszablewski.dto;
 
+import com.adamszablewski.model.ImageData;
 import lombok.*;
 
 import java.util.List;

@@ -15,6 +15,7 @@ public class SecurityService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
     public void validateUser(LoginDto loginDto) {
         UserClass user = userRepository.findByEmail(loginDto.getEmail())
                 .orElseThrow(NoSuchUserException::new);
@@ -22,5 +23,9 @@ public class SecurityService {
         if (!passwordEncoder.matches(loginDto.getPassword(), hashedPassword)){
             throw new InvalidCredentialsException();
         }
+    }
+
+    public boolean validateToken(String token) {
+        return jwtUtil.validateToken(token);
     }
 }

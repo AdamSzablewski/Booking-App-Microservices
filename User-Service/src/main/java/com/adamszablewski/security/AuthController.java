@@ -2,6 +2,7 @@ package com.adamszablewski.security;
 
 
 
+import com.adamszablewski.dto.RestResponseDTO;
 import com.adamszablewski.security.dto.LoginDto;
 import com.adamszablewski.security.dto.RegisterDto;
 import com.adamszablewski.model.UserClass;
@@ -28,6 +29,7 @@ public class AuthController {
 
     private TokenGenerator tokenGenerator;
     private SecurityService securityService;
+
 
 
 
@@ -60,6 +62,22 @@ public class AuthController {
         securityService.validateUser(user);
         String token = tokenGenerator.generateToken(user.getEmail());
         return ResponseEntity.ok(token);
+    }
+    @PostMapping("/validate/token")
+    public ResponseEntity<RestResponseDTO<Boolean>> validateToken(@RequestBody String token){
+        String errorMessage = "";
+        boolean validated = false;
+        try {
+            validated = securityService.validateToken(token);
+        }catch (Exception e){
+            errorMessage = e.getMessage();
+        }
+        RestResponseDTO<Boolean> response = RestResponseDTO.<Boolean>builder()
+                .value(validated)
+                .error(errorMessage)
+                .build();
+
+        return ResponseEntity.ok(response);
     }
 
 

@@ -24,6 +24,8 @@ public class GatewayConfig {
                         .or()
                         .path("/timeslots/**")
                         .or()
+                        .path("/images/**")
+                        .or()
                         .uri("lb://BOOKING"))
                 .route("user-service", r -> r
                         .path("/users/**")

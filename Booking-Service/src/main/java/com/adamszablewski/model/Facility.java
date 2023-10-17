@@ -24,6 +24,9 @@ public class Facility implements Identifiable {
     private String city;
     private String street;
     private String houseNumber;
+    @OneToOne(fetch = FetchType.EAGER)
+    @Lob
+    private ImageData facilityImage;
 
     @OneToMany(cascade = CascadeType.REMOVE, orphanRemoval = true)
     private Set<Task> tasks;

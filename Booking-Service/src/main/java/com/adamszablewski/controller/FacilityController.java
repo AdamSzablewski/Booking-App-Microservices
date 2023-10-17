@@ -103,6 +103,7 @@ public class FacilityController {
         return ResponseEntity.ok(new RestResponseDTO<>());
     }
 
+
     public ResponseEntity<RestResponseDTO<?>> fallBackMethod(Throwable throwable){
         return CustomExceptionHandler.handleException(throwable);
     }

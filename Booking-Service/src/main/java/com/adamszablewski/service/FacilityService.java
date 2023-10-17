@@ -44,7 +44,7 @@ public class FacilityService {
     public Set<FacilityDto> getAllFacilitiesForCity(String city) {
         return mapFacilityToDto(facilityRepository.findByCity(city));
     }
-
+    @Transactional
     public FacilityDto getFacilityById(Long id) {
         return mapFacilityToDto(facilityRepository.findById(id)
                 .orElseThrow(NoSuchFacilityException::new));

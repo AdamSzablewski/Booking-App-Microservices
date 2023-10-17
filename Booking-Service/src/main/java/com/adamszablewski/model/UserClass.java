@@ -34,6 +34,9 @@ public class UserClass implements Identifiable {
     private Client client;
     @JsonIgnore
     private String password;
+    @OneToOne
+    @Lob
+    private ImageData profilePhoto;
 
     @Override
     public Long getId() {

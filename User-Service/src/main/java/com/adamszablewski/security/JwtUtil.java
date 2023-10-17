@@ -22,10 +22,11 @@ public class JwtUtil {
 
         return claims.getSubject();
     }
-    public void validateToken(String token) {
+    public boolean validateToken(String token) {
         try {
-
             Jwts.parserBuilder().setSigningKey(getSigningKey()).build().parseClaimsJws(token);
+            return true;
+
         } catch (ExpiredJwtException e) {
             throw new RuntimeException("JWT has expired");
         } catch (MalformedJwtException e) {

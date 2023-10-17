@@ -1,6 +1,7 @@
 package com.adamszablewski;
 
 import com.adamszablewski.dto.LoginDto;
+import com.adamszablewski.dto.RestResponseDTO;
 import com.adamszablewski.feign.UserServiceClient;
 import com.adamszablewski.security.JwtUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -22,6 +23,7 @@ public class AuthenticationFilter {
 
 
     private final JwtUtil jwtUtil;
+    //private final UserServiceClient userServiceClient;
 
 
     @Bean
@@ -44,8 +46,12 @@ public class AuthenticationFilter {
             }
             try {
                 jwtUtil.validateToken(token);
-
-                 request = exchange.getRequest()
+//                    RestResponseDTO<Boolean> validationResponse = userServiceClient.validateToken(token);
+//                    boolean validated = validationResponse.getValue();
+//                    if(!validated){
+//                        return Mono.error(new RuntimeException(validationResponse.getError()));
+//                    }
+                    request = exchange.getRequest()
                         .mutate()
                         .header("userEmail", jwtUtil.getUsernameFromJWT(token))
                         .build();
