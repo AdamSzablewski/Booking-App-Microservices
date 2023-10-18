@@ -38,6 +38,16 @@ public class FacilityController {
                 .build();
         return ResponseEntity.ok(responseDTO);
     }
+    @GetMapping("/appointments/id/{appointmentId}")
+    @CircuitBreaker(name = "bookingServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
+    @RateLimiter(name = "bookingServiceRateLimiter")
+    public ResponseEntity<RestResponseDTO<Long>> getFacilityIdByAppointmentId(@PathVariable  long appointmentId){
+        RestResponseDTO<Long> responseDTO = RestResponseDTO.<Long>builder()
+                .value(facilityService.getFacilityIdByAppointmentId(appointmentId))
+                .build();
+        return ResponseEntity.ok(responseDTO);
+    }
+
 
     @GetMapping("/region/{region}")
     @CircuitBreaker(name = "bookingServiceCircuitBreaker", fallbackMethod = "fallBackMethod")

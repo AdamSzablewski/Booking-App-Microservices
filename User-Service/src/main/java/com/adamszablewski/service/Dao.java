@@ -2,10 +2,7 @@ package com.adamszablewski.service;
 
 import com.adamszablewski.model.*;
 import com.adamszablewski.rabbitMq.RabbitMqProducer;
-import com.adamszablewski.repository.AppointmentRepository;
-import com.adamszablewski.repository.FacilityRepository;
-import com.adamszablewski.repository.TaskRepository;
-import com.adamszablewski.repository.UserRepository;
+import com.adamszablewski.repository.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +16,7 @@ public class Dao {
     private final FacilityRepository facilityRepository;
     private final UserRepository userRepository;
     private final RabbitMqProducer rabbitMqProducer;
+    private final ClientRepository clientRepository;
 
     public void deleteTasks(Task task) {
         task.getEmployees().forEach(employee -> {
@@ -57,40 +55,54 @@ public class Dao {
     }
     public void deleteUser(UserClass user){
         if (user.getOwner() != null && user.getOwner().getFacilities() != null){
-            System.out.println("deleting facilities");
             user.getOwner().getFacilities().forEach(this::deleteFacility);
         }
         if(user.getEmployee() != null){
-            Employee employee = user.getEmployee();
-            if(employee.getWorkplace() != null){
-                Facility facility = employee.getWorkplace();
-                facility.getEmployees().remove(employee);
-                employee.setWorkplace(null);
-                facilityRepository.save(facility);
-            }
-            if(employee.getAppointments() != null){
-                Set<Appointment> appointments = employee.getAppointments();
-                appointments.forEach(this::deleteAppoinment);
-            }
-            if (employee.getTasks() != null){
-                Set<Task> tasks = employee.getTasks();
-                tasks.forEach(task -> {
-                    task.getEmployees().remove(employee);
-                    employee.getTasks().remove(task);
-                });
-                taskRepository.saveAll(tasks);
-            }
+            deleteEmployee(user.getEmployee());
+        }
+        if (user.getClient() != null){
+            deleteClient(user.getClient());
         }
         userRepository.delete(user);
         rabbitMqProducer.sendDeleteForUserMessage(user.getId());
     }
 
+    private void deleteClient(Client client) {
+        client.getAppointments().forEach(this::deleteAppoinment);
+        clientRepository.delete(client);
+    }
+    private void removeEmployeeFromTasks(Employee employee, Set<Task> tasks){
+        tasks.forEach(task -> {
+            task.getEmployees().remove(employee);
+            employee.getTasks().remove(task);
+        });
+        taskRepository.saveAll(tasks);
+
+    }
+
+
+    public void deleteEmployee(Employee employee) {
+        if (employee.getWorkplace() != null) {
+            Facility facility = employee.getWorkplace();
+            facility.getEmployees().remove(employee);
+            employee.setWorkplace(null);
+            facilityRepository.save(facility);
+        }
+        if (employee.getAppointments() != null) {
+            Set<Appointment> appointments = employee.getAppointments();
+            appointments.forEach(this::deleteAppoinment);
+        }
+        if(employee.getTasks() != null){
+            removeEmployeeFromTasks(employee, employee.getTasks());
+        }
+
+    }
+
     public void deleteAppoinment(Appointment appointment){
-        System.out.println( "delete on appoinment called");
         appointment.getClient().getAppointments().remove(appointment);
         appointment.getEmployee().getAppointments().remove(appointment);
         appointmentRepository.delete(appointment);
-        System.out.println("appointment deleted");
+
     }
 
 

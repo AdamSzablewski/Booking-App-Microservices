@@ -21,61 +21,54 @@ import reactor.core.publisher.Mono;
 @Configuration
 public class AuthenticationFilter {
 
-
     private final JwtUtil jwtUtil;
     //private final UserServiceClient userServiceClient;
-
 
     @Bean
     @Order(Ordered.HIGHEST_PRECEDENCE)
     public GlobalFilter customGlobalFilter(AuthenticationFilter authenticationFilter) {
         return (exchange, chain) -> {
+            final ServerHttpRequest originalRequest = exchange.getRequest();
+            final ServerHttpRequest modifiedRequest; // Declare it here
 
-            ServerHttpRequest request;
-
-            if (isRegisterDtoRequest(exchange.getRequest()) || isLoginRequest(exchange.getRequest())) {
+            if (isRegisterDtoRequest(originalRequest) || isLoginRequest(originalRequest)) {
                 return chain.filter(exchange);
             }
-            if (!exchange.getRequest().getHeaders().containsKey(HttpHeaders.AUTHORIZATION)){
-                throw new RuntimeException("no token");
+            if (!originalRequest.getHeaders().containsKey(HttpHeaders.AUTHORIZATION)) {
+                throw new RuntimeException("No token");
             }
 
-            String token = exchange.getRequest().getHeaders().get(HttpHeaders.AUTHORIZATION).get(0);
-            if (token != null && token.startsWith("Bearer ")){
-                token = token.substring(7);
+            String tokenCandidate = originalRequest.getHeaders().get(HttpHeaders.AUTHORIZATION).get(0);
+            if (tokenCandidate != null && tokenCandidate.startsWith("Bearer ")) {
+                tokenCandidate = tokenCandidate.substring(7);
             }
-            try {
-                jwtUtil.validateToken(token);
-//                    RestResponseDTO<Boolean> validationResponse = userServiceClient.validateToken(token);
-//                    boolean validated = validationResponse.getValue();
-//                    if(!validated){
-//                        return Mono.error(new RuntimeException(validationResponse.getError()));
-//                    }
-                    request = exchange.getRequest()
-                        .mutate()
-                        .header("userEmail", jwtUtil.getUsernameFromJWT(token))
-                        .build();
+            final String token = tokenCandidate;
 
-            }catch (Exception e ){
-                e.printStackTrace();
-                throw new RuntimeException("Security service not available");
-            }
+            modifiedRequest = originalRequest.mutate()
+                    .header("userEmail", jwtUtil.getUsernameFromJWT(token))
+                    .build();
 
-            return chain.filter(exchange.mutate().request(request).build());
+            return jwtUtil.validateToken(token)
+                    .flatMap(isValidated -> {
+                        if (!isValidated) {
+                            return Mono.error(new RuntimeException("Not Authorized"));
+                        }
+                        return chain.filter(exchange.mutate().request(modifiedRequest).build());
+                    })
+                    .onErrorResume(error -> {
+                        return chain.filter(exchange);
+                    });
         };
-
     }
+
 
     private boolean isLoginRequest(ServerHttpRequest request) {
         String path = request.getPath().toString();
-        return path.contains("/login");
+        return path.contains("security/login");
     }
 
     private boolean isRegisterDtoRequest(ServerHttpRequest request) {
         String path = request.getPath().toString();
         return path.contains("/register");
     }
-
-
-
 }

@@ -1,11 +1,10 @@
 package com.adamszablewski.service;
 
-import com.adamszablewski.dto.ConversationDTO;
 import com.adamszablewski.exceptions.NoSuchConversationFoundException;
-import com.adamszablewski.exceptions.NoSuchUserFoundException;
+import com.adamszablewski.exceptions.NotAuthorizedException;
 import com.adamszablewski.model.Conversation;
-import com.adamszablewski.util.ConversationCreator;
 import com.adamszablewski.repository.ConversationRepository;
+import com.adamszablewski.util.UserValidator;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,9 +14,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class ConversationService {
     private final ConversationRepository conversationRepository;
+    private final UserValidator userValidator;
 
 
-    public Conversation getCoversation(long user) {
+    public Conversation getCoversation(long user, String userEmail) {
+        if(!userValidator.isUser(user, userEmail)){
+            throw new NotAuthorizedException();
+        }
         return conversationRepository.findByUserId(user)
                 .orElseThrow(NoSuchConversationFoundException::new);
 //                mapConversationToDTO(conversationRepository.findByUserId(user)
@@ -26,9 +29,7 @@ public class ConversationService {
     }
 
     public void deleteConversation(long id) {
-        Conversation conversation = conversationRepository.findByUserId(id)
-                .orElseThrow(NoSuchConversationFoundException::new);
-        conversationRepository.delete(conversation);
+        conversationRepository.deleteById(id);
     }
 
 //    public ResponseEntity<String> createConversation(String user) {

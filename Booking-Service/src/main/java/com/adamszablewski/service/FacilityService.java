@@ -2,7 +2,10 @@ package com.adamszablewski.service;
 
 import com.adamszablewski.dao.Dao;
 import com.adamszablewski.dto.FacilityDto;
+import com.adamszablewski.exceptions.NoSuchAppointmentException;
 import com.adamszablewski.exceptions.NotAuthorizedException;
+import com.adamszablewski.model.Appointment;
+import com.adamszablewski.repository.AppointmentRepository;
 import com.adamszablewski.util.helpers.UserTools;
 import com.adamszablewski.exceptions.FacilityNameTakenException;
 import com.adamszablewski.exceptions.NoSuchFacilityException;
@@ -30,6 +33,7 @@ public class FacilityService {
     private final MessageSender messageSender;
     private final UserTools userTools;
     private final UserValidator userValidator;
+    private final AppointmentRepository appointmentRepository;
     private final Dao dao;
 
     public Set<FacilityDto> getAllFacilities() {
@@ -117,5 +121,11 @@ public class FacilityService {
         Facility facility = facilityRepository.findById(id)
                 .orElseThrow(NoSuchFacilityException::new);
         return facility.getOwner().getUser().getEmail();
+    }
+
+    public Long getFacilityIdByAppointmentId(long appointmentId) {
+        Appointment appointment = appointmentRepository.findById(appointmentId)
+                .orElseThrow(NoSuchAppointmentException::new);
+        return appointment.getFacility().getId();
     }
 }

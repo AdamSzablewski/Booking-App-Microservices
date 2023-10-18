@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,23 +21,9 @@ public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
-
-    @ManyToMany
-    @JsonIgnoreProperties("messages")
-    private List<Conversation> conversations;
+    private Set<Long> recievers;
     private String message;
     private String sender;
-    private List<Long> receivers;
     private LocalDateTime dateSent;
 
-    @Override
-    public String toString() {
-        return "Message{" +
-                "id=" + id +
-                ", message='" + message + '\'' +
-                ", sender='" + sender + '\'' +
-                ", receivers=" + receivers +
-                ", dateSent=" + dateSent +
-                '}';
-    }
 }

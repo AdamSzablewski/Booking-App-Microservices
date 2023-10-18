@@ -29,7 +29,7 @@ public class ConversationController {
     public ResponseEntity<RestResponseDTO<Conversation>> getCoversation(@PathVariable long id,
                                                                            @RequestHeader("userEmail") String userEmail){
         RestResponseDTO<Conversation> responseDTO = RestResponseDTO.<Conversation>builder()
-                .value(conversationService.getCoversation(id))
+                .value(conversationService.getCoversation(id, userEmail))
                 .build();
         return ResponseEntity.ok(responseDTO);
     }

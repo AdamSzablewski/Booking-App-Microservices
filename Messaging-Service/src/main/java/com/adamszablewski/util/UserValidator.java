@@ -20,8 +20,14 @@ public class UserValidator {
         }
         return response.getValue();
     }
-    public boolean isUser(long user, String email){
-        return true;
+    public boolean isUser(long user, String userEmail){
+        System.out.println(user+"  "+userEmail);
+        RestResponseDTO<Boolean> response = securityServiceClient.isUser(user, userEmail);
+        System.out.println("got response "+response);
+        if (response.getValue() == null){
+            throw new MissingFeignValueException();
+        }
+        return response.getValue();
     }
     public boolean isEmployee(long facilityId, String userEmail){
         RestResponseDTO<Boolean> response = securityServiceClient.isEmployee(facilityId, userEmail);

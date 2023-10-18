@@ -9,6 +9,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 import static com.adamszablewski.util.Mapper.mapUserToDto;
 
 @Service
@@ -45,5 +47,14 @@ public class UserService {
         UserClass user = userRepository.findByEmail(userEmail)
                 .orElseThrow(NoSuchUserException::new);
         return user.getPassword();
+    }
+
+    public Boolean validateUser(long userId, String userEmail) {
+        Optional<UserClass> optionalUser = userRepository.findById(userId);
+        if (optionalUser.isEmpty()){
+            return false;
+        }
+        UserClass user = optionalUser.get();
+        return user.getEmail().equals(userEmail);
     }
 }

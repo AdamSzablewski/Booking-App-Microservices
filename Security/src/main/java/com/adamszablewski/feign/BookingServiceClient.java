@@ -19,4 +19,6 @@ public interface BookingServiceClient {
     RestResponseDTO<String> getEmployeesForFacility(@PathVariable long facilityId);
     @GetMapping("/appointments/id/{appointmentId}/client")
     RestResponseDTO<String> getClientForAppointment(@PathVariable long appointmentId);
+    @GetMapping("/appointments/id/{appointmentId}")
+    RestResponseDTO<Long> getFacilityIdForAppointment(@PathVariable long appointmentId);
 }

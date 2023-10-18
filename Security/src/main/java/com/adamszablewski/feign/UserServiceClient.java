@@ -9,7 +9,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 @FeignClient(name = "USER-SERVICE")
 public interface UserServiceClient {
 
-    @GetMapping("/users/passwords/getHashed/user/{email}")
-    RestResponseDTO<String> getHashedPassword(@PathVariable String email);
-
+    @GetMapping("/users/passwords/getHashed/user/{userEmail}")
+    RestResponseDTO<String> getHashedPassword(@PathVariable String userEmail);
+    @GetMapping("/users/{userId}/{userEmail}")
+    RestResponseDTO<Boolean> isUser(@PathVariable long userId,@PathVariable String userEmail);
 }

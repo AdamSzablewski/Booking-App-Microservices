@@ -23,6 +23,14 @@ public class UserController {
                 .build();
         return ResponseEntity.ok(responseDTO);
     }
+    @GetMapping("/{userId}/{userEmail}")
+    public ResponseEntity<RestResponseDTO<Boolean>> validateUser(@PathVariable long userId, @PathVariable String userEmail){
+        RestResponseDTO<Boolean> responseDTO = RestResponseDTO.<Boolean>builder()
+                .value(userService.validateUser(userId, userEmail))
+                .build();
+        return ResponseEntity.ok(responseDTO);
+    }
+
     @GetMapping("/passwords/getHashed/user/{userEmail}")
     public ResponseEntity<RestResponseDTO<String>> getHashedPasswordForUser(@PathVariable String userEmail){
         RestResponseDTO<String> responseDTO = RestResponseDTO.<String>builder()

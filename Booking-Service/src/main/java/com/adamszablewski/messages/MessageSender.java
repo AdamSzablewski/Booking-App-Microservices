@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 import static com.adamszablewski.Variables.APP_NAME;
 
@@ -28,7 +29,7 @@ public class MessageSender {
         Message message = Message.builder()
                 .message("Your appoinment for the date "+appointment.getDate()+" has been canceled")
                 .sender(APP_NAME)
-                .receivers(List.of(appointment.getClient().getUser().getId(), appointment.getEmployee().getUser().getId()))
+                .recievers(Set.of(appointment.getClient().getUser().getId(), appointment.getEmployee().getUser().getId()))
                 .dateSent(LocalDateTime.now())
                 .build();
 
@@ -47,7 +48,7 @@ public class MessageSender {
                         ". The address is: "+street+" "+house+" in "+city+". Your appoinment will cost "
                         +appointment.getTask().getPrice()+" "+appointment.getTask().getCurrency())
                 .sender(APP_NAME)
-                .receivers(List.of(appointment.getEmployee().getUser().getId(), appointment.getClient().getUser().getId()))
+                .recievers(Set.of(appointment.getEmployee().getUser().getId(), appointment.getClient().getUser().getId()))
                 .dateSent(LocalDateTime.now())
                 .build();
 
@@ -66,7 +67,7 @@ public class MessageSender {
                         ". The address is: "+street+" "+house+" in "+city+". Your appoinment will cost "
                         +appointment.getTask().getPrice()+" "+appointment.getTask().getCurrency())
                 .sender(APP_NAME)
-                .receivers(List.of(userId))
+                .recievers(Set.of(userId))
                 .dateSent(LocalDateTime.now())
                 .build();
 
@@ -79,7 +80,7 @@ public class MessageSender {
         Message message = Message.builder()
                 .message("Congratulations your new facility "+facility.getName()+" has been created. " +
                         "To start taking appointments create one or more services that you offer.")
-                .receivers(List.of(user.getId()))
+                .recievers(Set.of(user.getId()))
                 .sender(APP_NAME)
                 .dateSent(LocalDateTime.now())
                 .build();
@@ -93,7 +94,7 @@ public class MessageSender {
         System.out.println(user);
         Message message = Message.builder()
                 .sender(APP_NAME)
-                .receivers(List.of(user.getId()))
+                .recievers(Set.of(user.getId()))
                 .message("You have reieved a request to start working for: "+facility.getName()+" " +
                         "to accept request go to requests")
                 .dateSent(LocalDateTime.now())
@@ -106,7 +107,7 @@ public class MessageSender {
         UserClass owner = facility.getOwner().getUser();
         Message message = Message.builder()
                 .sender(APP_NAME)
-                .receivers(List.of(owner.getId()))
+                .recievers(Set.of(owner.getId()))
                 .message("The user "+user.getEmail()+" hase denied your employment request")
                 .dateSent(LocalDateTime.now())
                 .build();
@@ -118,7 +119,7 @@ public class MessageSender {
         UserClass owner = facility.getOwner().getUser();
         Message message = Message.builder()
                 .sender(APP_NAME)
-                .receivers(List.of(owner.getId()))
+                .recievers(Set.of(owner.getId()))
                 .message("The user "+user.getEmail()+" hase accepted your employment request")
                 .dateSent(LocalDateTime.now())
                 .build();
@@ -129,7 +130,7 @@ public class MessageSender {
         UserClass owner = facility.getOwner().getUser();
         Message message = Message.builder()
                 .sender(APP_NAME)
-                .receivers(List.of(owner.getId()))
+                .recievers(Set.of(owner.getId()))
                 .message("You have successfully added the service "+task.getName()+" to your facility.")
                 .dateSent(LocalDateTime.now())
                 .build();
@@ -140,7 +141,7 @@ public class MessageSender {
         UserClass user = appointment.getClient().getUser();
         Message message = Message.builder()
                 .sender(APP_NAME)
-                .receivers(List.of(user.getId()))
+                .recievers(Set.of(user.getId()))
                 .message("Your appointment has been completed")
                 .dateSent(LocalDateTime.now())
                 .build();

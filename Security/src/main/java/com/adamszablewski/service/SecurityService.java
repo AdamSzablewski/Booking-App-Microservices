@@ -42,4 +42,12 @@ public class SecurityService {
     public boolean validateOwner(long facilityId, String userMail) {
        return userValidator.isOwner(facilityId, userMail);
     }
+
+    public Boolean validateEmployee(long facilityId, String userMail) {
+        return userValidator.isEmployee(facilityId, userMail);
+    }
+
+    public Boolean validateUserEmail(long userId, String userMail) {
+        return userValidator.isUser(userId, userMail);
+    }
 }

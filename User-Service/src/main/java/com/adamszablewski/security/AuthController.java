@@ -56,29 +56,29 @@ public class AuthController {
         return new ResponseEntity<>("User registered", HttpStatus.OK);
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginDto user){
-
-        securityService.validateUser(user);
-        String token = tokenGenerator.generateToken(user.getEmail());
-        return ResponseEntity.ok(token);
-    }
-    @PostMapping("/validate/token")
-    public ResponseEntity<RestResponseDTO<Boolean>> validateToken(@RequestBody String token){
-        String errorMessage = "";
-        boolean validated = false;
-        try {
-            validated = securityService.validateToken(token);
-        }catch (Exception e){
-            errorMessage = e.getMessage();
-        }
-        RestResponseDTO<Boolean> response = RestResponseDTO.<Boolean>builder()
-                .value(validated)
-                .error(errorMessage)
-                .build();
-
-        return ResponseEntity.ok(response);
-    }
+//    @PostMapping("/login")
+//    public ResponseEntity<String> login(@RequestBody LoginDto user){
+//
+//        securityService.validateUser(user);
+//        String token = tokenGenerator.generateToken(user.getEmail());
+//        return ResponseEntity.ok(token);
+//    }
+//    @PostMapping("/validate/token")
+//    public ResponseEntity<RestResponseDTO<Boolean>> validateToken(@RequestBody String token){
+//        String errorMessage = "";
+//        boolean validated = false;
+//        try {
+//            validated = securityService.validateToken(token);
+//        }catch (Exception e){
+//            errorMessage = e.getMessage();
+//        }
+//        RestResponseDTO<Boolean> response = RestResponseDTO.<Boolean>builder()
+//                .value(validated)
+//                .error(errorMessage)
+//                .build();
+//
+//        return ResponseEntity.ok(response);
+//    }
 
 
 }

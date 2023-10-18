@@ -35,8 +35,8 @@ public class AuthController {
         return ResponseEntity.ok(token);
     }
 
-    @GetMapping("/validate/owner/facilityID/{facilityId}")
-    public ResponseEntity<RestResponseDTO<Boolean>> validateOwner(long facilityId, String userMail){
+    @GetMapping("/validate/owner/facilityID/{facilityId}/user/{userMail}")
+    public ResponseEntity<RestResponseDTO<Boolean>> validateOwner(@PathVariable Long facilityId,@PathVariable String userMail){
         RestResponseDTO<Boolean> response = RestResponseDTO.<Boolean>builder()
                 .value(securityService.validateOwner(facilityId, userMail))
                 .build();
@@ -44,8 +44,28 @@ public class AuthController {
         return ResponseEntity.ok(response);
 
     }
-    @PostMapping("/validate/token")
-    public ResponseEntity<RestResponseDTO<Boolean>> validateToken(@RequestBody String token){
+    @GetMapping("/validate/employee/facilityID/{facilityId}/user/{userMail}")
+    public ResponseEntity<RestResponseDTO<Boolean>> validateEmployee(@PathVariable Long facilityId,@PathVariable String userMail){
+        RestResponseDTO<Boolean> response = RestResponseDTO.<Boolean>builder()
+                .value(securityService.validateEmployee(facilityId, userMail))
+                .build();
+
+        return ResponseEntity.ok(response);
+
+    }
+    @GetMapping("/validate/user/{userId}/{userMail}")
+    public ResponseEntity<RestResponseDTO<Boolean>> validateUser(@PathVariable Long userId,@PathVariable String userMail){
+        RestResponseDTO<Boolean> response = RestResponseDTO.<Boolean>builder()
+                .value(securityService.validateUserEmail(userId, userMail))
+                .build();
+
+        return ResponseEntity.ok(response);
+
+    }
+    
+    @GetMapping("/validate/token")
+    public ResponseEntity<RestResponseDTO<Boolean>> validateToken(@RequestParam("token") String token){
+
         String errorMessage = "";
         boolean validated = false;
         try {
