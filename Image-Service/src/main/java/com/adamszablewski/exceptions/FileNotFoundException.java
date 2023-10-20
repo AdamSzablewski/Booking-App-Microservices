@@ -1,13 +1,13 @@
 package com.adamszablewski.exceptions;
 
-public class FIleNotFoundException extends RuntimeException{
+public class FileNotFoundException extends RuntimeException{
 
     private static final String DEFAULT_MESSAGE = "Failed to establish a connection with the remote service";
 
-    public FIleNotFoundException(String message) {
+    public FileNotFoundException(String message) {
         super(message);
     }
-    public FIleNotFoundException() {
+    public FileNotFoundException() {
         super(DEFAULT_MESSAGE);
     }
 }

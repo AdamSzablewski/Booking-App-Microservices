@@ -1,11 +1,13 @@
 package com.adamszablewski.dto;
 
+import com.adamszablewski.model.Message;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -13,8 +15,7 @@ import java.time.LocalDateTime;
 @Builder
 public class MessageDTO {
 
-    private long id;
-    private String message;
-    private String sender;
-    private LocalDateTime dateSent;
+    private Set<Long> recievers;
+
+    private Message message;
 }

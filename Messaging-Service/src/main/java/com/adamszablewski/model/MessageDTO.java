@@ -11,5 +11,6 @@ import java.util.Set;
 @NoArgsConstructor
 public class MessageDTO {
     private Set<Long> recievers;
+
     private Message message;
 }

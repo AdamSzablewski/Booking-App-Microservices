@@ -1,7 +1,10 @@
 package com.adamszablewski.controller;
 
 import com.adamszablewski.dto.RestResponseDTO;
+import com.adamszablewski.exceptions.CustomExceptionHandler;
 import com.adamszablewski.service.ImageService;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -11,41 +14,60 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Set;
 
 @Controller
 @AllArgsConstructor
 @RequestMapping("/images")
 public class ImageController {
 
-    private ImageService imageService;
+    private final ImageService imageService;
 
 //    @PostMapping("/")
 //    public ResponseEntity<?> uploadImage(@RequestParam("image")MultipartFile file) throws IOException {
 //        imageService.uploadImage(file);
 //        return ResponseEntity.ok("File upploaded");
 //    }
-    @GetMapping("/{fileName}")
-    public ResponseEntity<?> downloadImage(@PathVariable String fileName, @RequestHeader("userEmail") String userEmail) throws IOException {
-        byte[] data = imageService.dowloadImage(fileName, userEmail);
+
+    @PostMapping("/images/message/id/{imageId}")
+    @CircuitBreaker(name = "imageServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
+    @RateLimiter(name = "imageServiceRateLimiter")
+    public ResponseEntity<RestResponseDTO<String>> addMessageImage(@RequestParam("image")MultipartFile file,
+                                                                   @PathVariable String imageId,
+                                                                   @RequestParam("recipients")Set<Long> recipients) throws IOException {
+        imageService.addMessageImage(file, imageId, recipients);
+        return ResponseEntity.ok(new RestResponseDTO<>());
+    }
+    @GetMapping("/images/message/id/{imageId}")
+    @CircuitBreaker(name = "imageServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
+    @RateLimiter(name = "imageServiceRateLimiter")
+    public ResponseEntity<?> getMessageImage(@PathVariable String imageId, @RequestParam("recipients")Set<Long> recipients) throws IOException {
+        byte[] data = imageService.getImageForMessage(imageId, recipients);
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.IMAGE_JPEG)
                 .body(data);
     }
     @GetMapping("/facilityID/{id}")
-    public ResponseEntity<?> getImageForFacility(@PathVariable long id, @RequestHeader("userEmail") String userEmail) throws IOException {
-        byte[] data = imageService.getImageForFacility(id, userEmail);
+    @CircuitBreaker(name = "imageServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
+    @RateLimiter(name = "imageServiceRateLimiter")
+    public ResponseEntity<?> getImageForFacility(@PathVariable long id) throws IOException {
+        byte[] data = imageService.getImageForFacility(id);
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.IMAGE_JPEG)
                 .body(data);
     }
     @GetMapping("/userId/{id}")
-    public ResponseEntity<?> getImageForUser(@PathVariable long id, @RequestHeader("userEmail") String userEmail) throws IOException {
-        byte[] data = imageService.getImageForUser(id, userEmail);
+    @CircuitBreaker(name = "imageServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
+    @RateLimiter(name = "imageServiceRateLimiter")
+    public ResponseEntity<?> getImageForUser(@PathVariable long id) throws IOException {
+        byte[] data = imageService.getImageForUser(id);
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.IMAGE_JPEG)
                 .body(data);
     }
     @PostMapping("/facilityID/{id}/user/{userId}")
+    @CircuitBreaker(name = "imageServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
+    @RateLimiter(name = "imageServiceRateLimiter")
     public ResponseEntity<RestResponseDTO<String>> addFacilityImage(@RequestParam("image")MultipartFile file,
                                                                     @PathVariable long id,
                                                                     @RequestHeader("userEmail") String userEmail,
@@ -54,10 +76,34 @@ public class ImageController {
         return ResponseEntity.ok(new RestResponseDTO<>());
     }
     @PostMapping("/userID/{id}")
+    @CircuitBreaker(name = "imageServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
+    @RateLimiter(name = "imageServiceRateLimiter")
     public ResponseEntity<RestResponseDTO<String>> addUserImage(@RequestParam("image")MultipartFile file,
                                                                     @PathVariable long id,
                                                                 @RequestHeader("userEmail") String userEmail) throws IOException {
         imageService.addUserImage(id, file, userEmail);
         return ResponseEntity.ok(new RestResponseDTO<>());
+    }
+    @DeleteMapping("/userID/{id}")
+    @CircuitBreaker(name = "imageServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
+    @RateLimiter(name = "imageServiceRateLimiter")
+    public ResponseEntity<RestResponseDTO<String>> deleteUserImage(@PathVariable long id,
+                                                                @RequestHeader("userEmail") String userEmail) throws IOException {
+        imageService.deleteUserImage(id, userEmail);
+        return ResponseEntity.ok(new RestResponseDTO<>());
+    }
+
+    @DeleteMapping("/facilityID/{facilityID}")
+    @CircuitBreaker(name = "imageServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
+    @RateLimiter(name = "imageServiceRateLimiter")
+    public ResponseEntity<RestResponseDTO<String>> deleteFacilityImage(@PathVariable long facilityID,
+                                                                    @RequestHeader("userEmail") String userEmail){
+        imageService.deleteFacilityImage(facilityID, userEmail);
+        return ResponseEntity.ok(new RestResponseDTO<>());
+    }
+
+    public  ResponseEntity<RestResponseDTO<?>> fallBackMethod(Throwable throwable){
+        System.out.println("cb called");
+        return CustomExceptionHandler.handleException(throwable);
     }
 }

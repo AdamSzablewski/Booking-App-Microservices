@@ -23,5 +23,5 @@ public class TaskDto {
     private String currency;
     private long facility;
     private Set<Long> employees;
-    private Set<Long> appointments;
+
  }

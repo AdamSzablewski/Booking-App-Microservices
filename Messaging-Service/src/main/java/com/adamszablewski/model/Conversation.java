@@ -23,14 +23,13 @@ public class Conversation implements Identifiable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
-    private long userId;
-    @ManyToMany()
-    @JoinTable(
-            name = "conversation_messages",
-            joinColumns = @JoinColumn(name = "conversation_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "message_id", referencedColumnName = "id")
-    )
-    private Set<Message> messages;
+    private long ownerId;
+    private long recipientId;
+    @OneToMany(fetch = FetchType.EAGER)
+    @OrderBy("dateSent DESC")
+    @ManyToOne
+    private List<Message> messages;
+    private boolean isSystemConversation;
 
     @Override
     public Long getId() {

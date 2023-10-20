@@ -6,27 +6,21 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
-import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Set;
 
+@Entity
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
 @Builder
-@Entity
-public class Message {
-
+public class MessagePhoto {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private long recipientId;
-    private String instanceId;
-    private String message;
-    private String sender;
     private String imageId;
-    private LocalDateTime dateSent;
-
+    private Set<Long> users;
+    @OneToOne(cascade = CascadeType.ALL)
+    @Lob
+    private ImageData image;
 
 }

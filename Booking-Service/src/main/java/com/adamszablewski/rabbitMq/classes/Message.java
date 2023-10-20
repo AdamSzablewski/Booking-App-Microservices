@@ -21,9 +21,11 @@ public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
-    private Set<Long> recievers;
+    private long recipientId;
+    private String instanceId;
     private String message;
     private String sender;
+    private String imageId;
     private LocalDateTime dateSent;
 
 }

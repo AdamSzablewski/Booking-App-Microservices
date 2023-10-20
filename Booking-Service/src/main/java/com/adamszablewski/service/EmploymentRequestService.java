@@ -16,6 +16,7 @@ import com.adamszablewski.repository.EmploymentRequestRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalTime;
 import java.util.Set;
 
 import static com.adamszablewski.dto.mapper.Mapper.mapEmploymentRequestToDTO;
@@ -68,6 +69,9 @@ public class EmploymentRequestService {
             messageSender.sendEmploymentRequestAccepted(employee, facility);
             facility.getEmployees().add(employee);
             employee.setWorkplace(facility);
+            employee.setStartTime(LocalTime.of(9, 0));
+            employee.setEndTime(LocalTime.of(17, 0));
+            employeeRepository.save(employee);
             facilityRepository.save(facility);
         }
         employmentRequestRepository.delete(employmentRequest);

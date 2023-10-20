@@ -5,7 +5,9 @@ import com.adamszablewski.rabbitMq.RabbitMqProducer;
 import com.adamszablewski.repository.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -17,7 +19,7 @@ public class Dao {
     private final UserRepository userRepository;
     private final RabbitMqProducer rabbitMqProducer;
     private final ClientRepository clientRepository;
-
+    @Transactional
     public void deleteTasks(Task task) {
         task.getEmployees().forEach(employee -> {
             employee.getTasks().remove(task);
@@ -27,9 +29,15 @@ public class Dao {
 
         taskRepository.delete(task);
     }
+
     public void deleteTasks(Set<Task> tasks) {
-        tasks.forEach(this::deleteTask);
+        Set<Task> tasksCopy = new HashSet<>(tasks); // Create a copy of the set
+
+        for (Task task : tasksCopy) {
+            deleteTask(task);
+        }
     }
+
     public void deleteTask(Task task) {
         System.out.println("deleting tasks");
         System.out.println(task.getAppointments().size());
@@ -44,6 +52,7 @@ public class Dao {
 
         taskRepository.delete(task);
     }
+    @Transactional
     public void deleteFacility(Facility facility){
         deleteTasks(facility.getTasks());
         if (facility.getEmployees() != null){
@@ -53,6 +62,7 @@ public class Dao {
         }
         facilityRepository.delete(facility);
     }
+    @Transactional
     public void deleteUser(UserClass user){
         if (user.getOwner() != null && user.getOwner().getFacilities() != null){
             user.getOwner().getFacilities().forEach(this::deleteFacility);
@@ -66,11 +76,12 @@ public class Dao {
         userRepository.delete(user);
         rabbitMqProducer.sendDeleteForUserMessage(user.getId());
     }
-
+    @Transactional
     private void deleteClient(Client client) {
         client.getAppointments().forEach(this::deleteAppoinment);
         clientRepository.delete(client);
     }
+    @Transactional
     private void removeEmployeeFromTasks(Employee employee, Set<Task> tasks){
         tasks.forEach(task -> {
             task.getEmployees().remove(employee);
@@ -80,7 +91,7 @@ public class Dao {
 
     }
 
-
+    @Transactional
     public void deleteEmployee(Employee employee) {
         if (employee.getWorkplace() != null) {
             Facility facility = employee.getWorkplace();
@@ -97,7 +108,7 @@ public class Dao {
         }
 
     }
-
+    @Transactional
     public void deleteAppoinment(Appointment appointment){
         appointment.getClient().getAppointments().remove(appointment);
         appointment.getEmployee().getAppointments().remove(appointment);

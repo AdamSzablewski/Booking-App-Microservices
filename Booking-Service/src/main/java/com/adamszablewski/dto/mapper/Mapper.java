@@ -118,7 +118,6 @@ public class Mapper {
                 .city(task.getCity())
                 .region(task.getRegion())
                 .name(task.getName())
-                .appointments(convertObjectListToIdList(task.getAppointments()))
                 .durationInMinutes(task.getDurationInMinutes())
                 .employees(convertObjectListToIdList(task.getEmployees()))
                 .facility(convertObjectToId(task.getFacility()))
@@ -138,7 +137,6 @@ public class Mapper {
                     .employees(convertObjectListToIdList(task.getEmployees()))
                     .facility(convertObjectToId(task.getFacility()))
                     .price(task.getPrice())
-                    .appointments(convertObjectListToIdList(task.getAppointments()))
                     .currency(task.getCurrency())
                     .build());
         });

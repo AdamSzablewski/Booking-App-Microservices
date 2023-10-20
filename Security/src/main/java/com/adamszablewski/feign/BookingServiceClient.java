@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
-@FeignClient(name = "BOOKING-SERVICE")
+@FeignClient(name = "BOOKING")
 public interface BookingServiceClient {
 
     @GetMapping("/facilities/owner/mail/by/id/{id}")

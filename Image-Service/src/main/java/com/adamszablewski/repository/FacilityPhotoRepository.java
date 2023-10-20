@@ -11,4 +11,6 @@ public interface FacilityPhotoRepository extends JpaRepository<FacilityPhoto, Lo
     void deleteAllByUserId(long id);
     Optional<FacilityPhoto> findByFacilityId(long id);
     void deleteByFacilityId(long id);
+
+    void deleteAllByFacilityId(long id);
 }

@@ -10,6 +10,7 @@ import com.adamszablewski.repository.TaskRepository;
 import com.adamszablewski.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 
@@ -30,9 +31,11 @@ public class Dao {
 
         taskRepository.delete(task);
     }
+    @Transactional
     public void deleteTasks(Set<Task> tasks) {
         tasks.forEach(this::deleteTask);
     }
+    @Transactional
     public void deleteTask(Task task) {
 
         if (task.getAppointments() != null){
@@ -46,6 +49,7 @@ public class Dao {
 
         taskRepository.delete(task);
     }
+    @Transactional
     public void deleteFacility(Facility facility){
         deleteTasks(facility.getTasks());
         if (facility.getEmployees() != null){
@@ -55,13 +59,14 @@ public class Dao {
         }
         facilityRepository.delete(facility);
     }
+    @Transactional
     public void deleteUser(UserClass userClass){
         if (userClass.getOwner() != null && userClass.getOwner().getFacilities() != null){
             userClass.getOwner().getFacilities().forEach(this::deleteFacility);
         }
         userRepository.delete(userClass);
     }
-
+    @Transactional
     public void deleteAppoinment(Appointment appointment){
 
         appointment.getClient().getAppointments().remove(appointment);
