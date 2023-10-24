@@ -30,6 +30,7 @@ public class ConversationCreator {
                 .ownerId(ownerId)
                 .recipientId(recipientId)
                 .messages(new ArrayList<>())
+                .isSystemConversation(false)
                 .build();
         conversationRepository.save(conversation);
 

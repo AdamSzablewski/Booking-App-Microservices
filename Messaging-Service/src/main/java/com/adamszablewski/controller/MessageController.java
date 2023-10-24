@@ -10,6 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+
 @Controller
 @AllArgsConstructor
 @RequestMapping("/messages")
@@ -28,8 +30,23 @@ public class MessageController {
     public ResponseEntity<RestResponseDTO<MessageDTO>> sendImageToUserById(@PathVariable long recipientId,
                                                                              @PathVariable long senderId,
                                                                              @RequestHeader("userEmail") String userEmail,
-                                                                             @RequestParam MultipartFile image){
+                                                                             @RequestParam MultipartFile image) throws IOException {
         messageService.sendImageToUserById(recipientId, senderId, userEmail, image);
+        return ResponseEntity.ok(new RestResponseDTO<>());
+    }
+    @DeleteMapping("/{conversationId}/message/{messageId}/user/{ownerId}")
+    public ResponseEntity<RestResponseDTO<MessageDTO>> deleteMessageFromConversationForUser(@PathVariable long conversationId,
+                                                                                            @PathVariable long messageId,
+                                                                                            @PathVariable long ownerId,
+                                                                             @RequestHeader("userEmail") String userEmail){
+        messageService.deleteMessageFromConversationForUser(conversationId, messageId, userEmail, ownerId);
+        return ResponseEntity.ok(new RestResponseDTO<>());
+    }
+    @DeleteMapping("/message/instance/{instanceId}/user/{ownerId}")
+    public ResponseEntity<RestResponseDTO<MessageDTO>> deleteMessageFromConversationForAll(@PathVariable String instanceId,
+                                                                                            @PathVariable long ownerId,
+                                                                                            @RequestHeader("userEmail") String userEmail){
+        messageService.deleteMessageFromConversationForAll(instanceId, userEmail, ownerId);
         return ResponseEntity.ok(new RestResponseDTO<>());
     }
 }

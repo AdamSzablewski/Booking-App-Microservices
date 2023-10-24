@@ -17,13 +17,8 @@ import java.util.Set;
 public class ConversationDTO {
 
     private long id;
-    private long user;
+    private long ownerId;
+    private long recipientId;
     private List<MessageDTO> messages;
-    @Override
-    public String toString() {
-        return "Conversation{" +
-                "id=" + id +
-                ", userId=" + user +
-                '}';
-    }
+
 }

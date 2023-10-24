@@ -28,34 +28,35 @@ public class Mapper {
         return entity.getId();
     }
 
-    public static MessageDTO mapMessageToDTO(Message message){
-        return MessageDTO.builder()
-                .id(message.getId())
-                .sender(message.getSender())
-                .message(message.getMessage())
-                .dateSent(message.getDateSent())
-                .build();
-    }
-    public static List<MessageDTO> mapMessageToDTO(List<Message> messages){
-        List<MessageDTO> messageDTOS = new ArrayList<>();
-        messages.forEach(message -> {
-            messageDTOS.add(MessageDTO.builder()
-                    .id(message.getId())
-                    .sender(message.getSender())
-                    .message(message.getMessage())
-                    .dateSent(message.getDateSent())
-                    .build());
-        });
-        return messageDTOS;
-    }
-
-    public static ConversationDTO mapConversationToDTO(Conversation conversation){
-        return ConversationDTO.builder()
-                .id(conversation.getId())
-                .user(conversation.getUserId())
-                .messages(mapMessageToDTO(conversation.getMessages()))
-                .build();
-    }
+//    public static MessageDTO mapMessageToDTO(Message message){
+//        return MessageDTO.builder()
+//                .id(message.getId())
+//                .sender(message.getSender())
+//                .message(message.getMessage())
+//                .dateSent(message.getDateSent())
+//                .build();
+//    }
+//    public static List<MessageDTO> mapMessageToDTO(List<Message> messages){
+//        List<MessageDTO> messageDTOS = new ArrayList<>();
+//        messages.forEach(message -> {
+//            messageDTOS.add(MessageDTO.builder()
+//                    .id(message.getId())
+//                    .sender(message.getSender())
+//                    .message(message.getMessage())
+//                    .dateSent(message.getDateSent())
+//                    .build());
+//        });
+//        return messageDTOS;
+//    }
+//
+//    public static ConversationDTO mapConversationToDTO(Conversation conversation){
+//        return ConversationDTO.builder()
+//                .id(conversation.getId())
+//                .user(conversation.getOwnerId())
+//                .
+//                .messages(mapMessageToDTO(conversation.getMessages()))
+//                .build();
+//    }
 
 //    public static List<ConversationDTO> mapConversationToDTO(List<Conversation> conversations){
 //        List<ConversationDTO> conversationDTOS = new ArrayList<>();

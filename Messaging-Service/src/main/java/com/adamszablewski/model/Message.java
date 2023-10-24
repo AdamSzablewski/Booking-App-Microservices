@@ -1,5 +1,6 @@
 package com.adamszablewski.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,10 +22,15 @@ public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
-    private long recipientId;
+    @ManyToOne
+    @JsonIgnoreProperties("messages")
+    private Conversation conversation;
+    @Column(name = "recipient_id")
+    private Long recipient;
     private String instanceId;
+    private Long owner;
     private String message;
-    private String sender;
+    private Long sender;
     private String imageId;
     private LocalDateTime dateSent;
 

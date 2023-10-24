@@ -40,6 +40,13 @@ public class ImageService {
                 .build());
 
     }
+    private ImageData uploadImage(byte[] imageData) throws IOException {
+        return imageRepository.save(ImageData.builder()
+                .type("image/jpeg")
+                .imageData(ImageUtils.compressImage(imageData))
+                .build());
+
+    }
 
     @Transactional
     public void addFacilityImage(long id, MultipartFile file, String userEmail, long userId) throws IOException {
@@ -105,7 +112,7 @@ public class ImageService {
         facilityPhotoRepository.deleteByFacilityId(facilityID);
     }
     @Transactional
-    public void addMessageImage(MultipartFile file, String imageId, Set<Long> recipients) throws IOException {
+    public void addMessageImage(byte[] file, String imageId, Set<Long> recipients) throws IOException {
 
         ImageData image = uploadImage(file);
         MessagePhoto messagePhoto = MessagePhoto.builder()
@@ -115,11 +122,11 @@ public class ImageService {
                 .build();
         messagePhotoRepository.save(messagePhoto);
     }
-
-    public byte[] getImageForMessage(String imageId, Set<Long> recipients) {
+    @Transactional
+    public byte[] getImageForMessage(String imageId, long userId) {
         MessagePhoto messagePhoto = messagePhotoRepository.findByImageId(imageId)
                 .orElseThrow(FileNotFoundException::new);
-        if (recipients.stream().noneMatch(id -> messagePhoto.getUsers().contains(id))){
+        if (messagePhoto.getUsers().stream().noneMatch(id -> messagePhoto.getUsers().contains(userId))){
             throw new NotAuthorizedException();
         }
         return ImageUtils.decompressImage(messagePhoto.getImage());

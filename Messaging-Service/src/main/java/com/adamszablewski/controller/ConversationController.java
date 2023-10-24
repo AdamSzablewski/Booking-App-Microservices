@@ -2,7 +2,6 @@ package com.adamszablewski.controller;
 
 
 
-import com.adamszablewski.dto.ConversationDTO;
 import com.adamszablewski.dto.RestResponseDTO;
 import com.adamszablewski.exceptions.CustomExceptionHandler;
 import com.adamszablewski.model.Conversation;
@@ -26,25 +25,13 @@ public class ConversationController {
     @GetMapping("/user/{id}")
     @CircuitBreaker(name = "messagingServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
     @RateLimiter(name = "messagingServiceRateLimiter")
-    public ResponseEntity<RestResponseDTO<ConversationDTO>> getCoversation(@PathVariable long id,
+    public ResponseEntity<RestResponseDTO<Conversation>> getCoversationsForUser(@PathVariable long id,
                                                                            @RequestHeader("userEmail") String userEmail){
-        RestResponseDTO<ConversationDTO> responseDTO = RestResponseDTO.<ConversationDTO>builder()
-                .value(conversationService.getCoversation(id, userEmail))
+        RestResponseDTO<Conversation> responseDTO = RestResponseDTO.<Conversation>builder()
+                .values(conversationService.getCoversationsForUser(id, userEmail))
                 .build();
         return ResponseEntity.ok(responseDTO);
     }
-
-
-
-//    @GetMapping("/all")
-//    @CircuitBreaker(name = "messagingServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
-//    @RateLimiter(name = "messagingServiceRateLimiter")
-//    public ResponseEntity<RestResponseDTO<Conversation>> getAll(){
-//        RestResponseDTO<Conversation> responseDTO = RestResponseDTO.<Conversation>builder()
-//                .values(conversationRepository.findAll())
-//                .build();
-//        return ResponseEntity.ok(responseDTO);
-//    }
 
     @DeleteMapping("/delete/user/{id}")
     @CircuitBreaker(name = "messagingServiceCircuitBreaker", fallbackMethod = "fallBackMethod")

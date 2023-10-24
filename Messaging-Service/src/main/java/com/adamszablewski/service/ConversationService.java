@@ -1,7 +1,6 @@
 package com.adamszablewski.service;
 
-import com.adamszablewski.dto.ConversationDTO;
-import com.adamszablewski.exceptions.NoSuchConversationFoundException;
+import com.adamszablewski.exceptions.NoSuchUserFoundException;
 import com.adamszablewski.exceptions.NotAuthorizedException;
 import com.adamszablewski.model.Conversation;
 import com.adamszablewski.repository.ConversationRepository;
@@ -9,6 +8,8 @@ import com.adamszablewski.util.Mapper;
 import com.adamszablewski.util.UserValidator;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.Set;
 
 //import static com.adamszablewski.util.Mapper.mapConversationToDTO;
 
@@ -20,15 +21,11 @@ public class ConversationService {
     private final Mapper mapper;
 
 
-    public ConversationDTO getCoversation(long user, String userEmail) {
+    public Set<Conversation> getCoversationsForUser(long user, String userEmail) {
         if(!userValidator.isUser(user, userEmail)){
             throw new NotAuthorizedException();
         }
-        Conversation conversation =  conversationRepository.findByUserId(user)
-                .orElseThrow(NoSuchConversationFoundException::new);
-        return mapper.mapConversationToDTO(conversation);
-//                mapConversationToDTO(conversationRepository.findByUserId(user)
-//                .orElseThrow(NoSuchUserFoundException::new));
+        return conversationRepository.findAllByOwnerId(user);
 
     }
 

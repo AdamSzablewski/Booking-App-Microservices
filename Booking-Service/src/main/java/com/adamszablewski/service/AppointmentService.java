@@ -41,7 +41,8 @@ public class AppointmentService {
             throw new NotAuthorizedException();
         }
         dao.deleteAppoinment(appointment);
-        messageSender.createAppoinmentCanceledMessage(appointment);
+        messageSender.createAppoinmentCanceledMessage(appointment, appointment.getClient().getUser().getId());
+        messageSender.createAppoinmentCanceledMessage(appointment, appointment.getEmployee().getUser().getId());
     }
     public void changeEmployeeForAppointmentById(Long id, String employeeEmail, String userEmail) {
         Appointment appointment= appointmentRepository.findById(id)

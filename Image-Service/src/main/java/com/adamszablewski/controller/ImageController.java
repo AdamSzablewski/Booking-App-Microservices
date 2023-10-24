@@ -29,20 +29,20 @@ public class ImageController {
 //        return ResponseEntity.ok("File upploaded");
 //    }
 
-    @PostMapping("/images/message/id/{imageId}")
+    @PostMapping("/message/id/{imageId}")
     @CircuitBreaker(name = "imageServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
     @RateLimiter(name = "imageServiceRateLimiter")
-    public ResponseEntity<RestResponseDTO<String>> addMessageImage(@RequestParam("image")MultipartFile file,
+    public ResponseEntity<RestResponseDTO<String>> addMessageImage(@RequestBody byte[] imageData,
                                                                    @PathVariable String imageId,
                                                                    @RequestParam("recipients")Set<Long> recipients) throws IOException {
-        imageService.addMessageImage(file, imageId, recipients);
+        imageService.addMessageImage(imageData, imageId, recipients);
         return ResponseEntity.ok(new RestResponseDTO<>());
     }
-    @GetMapping("/images/message/id/{imageId}")
+    @GetMapping("/message/id/{imageId}/user/{userId}")
     @CircuitBreaker(name = "imageServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
     @RateLimiter(name = "imageServiceRateLimiter")
-    public ResponseEntity<?> getMessageImage(@PathVariable String imageId, @RequestParam("recipients")Set<Long> recipients) throws IOException {
-        byte[] data = imageService.getImageForMessage(imageId, recipients);
+    public ResponseEntity<?> getMessageImage(@PathVariable String imageId, @PathVariable long userId) throws IOException {
+        byte[] data = imageService.getImageForMessage(imageId, userId);
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.IMAGE_JPEG)
                 .body(data);

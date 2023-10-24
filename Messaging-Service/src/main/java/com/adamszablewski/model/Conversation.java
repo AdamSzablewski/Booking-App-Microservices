@@ -25,9 +25,8 @@ public class Conversation implements Identifiable {
     private long id;
     private long ownerId;
     private long recipientId;
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "conversation", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     @OrderBy("dateSent DESC")
-    @ManyToOne
     private List<Message> messages;
     private boolean isSystemConversation;
 

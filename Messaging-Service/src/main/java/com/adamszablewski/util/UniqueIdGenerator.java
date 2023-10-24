@@ -1,7 +1,9 @@
 package com.adamszablewski.util;
 
-import java.util.UUID;
+import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+@Component
 public class UniqueIdGenerator {
     public String generateUniqueId() {
 

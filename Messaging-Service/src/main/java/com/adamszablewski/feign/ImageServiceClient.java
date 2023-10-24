@@ -14,7 +14,9 @@ import java.util.Set;
 public interface ImageServiceClient {
 
     @PostMapping("/images/message/id/{imageId}")
-    void sendImageToImageService(@RequestPart MultipartFile image, @PathVariable String imageId, @RequestParam("recipients") Set<Long> recipients);
+    void sendImageToImageService(@RequestBody byte[] image,
+                                 @PathVariable String imageId,
+                                 @RequestParam("recipients") Set<Long> recipients);
 
 
 }

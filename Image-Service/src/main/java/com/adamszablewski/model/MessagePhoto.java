@@ -17,6 +17,7 @@ public class MessagePhoto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @Column(name = "imageIdentity")
     private String imageId;
     private Set<Long> users;
     @OneToOne(cascade = CascadeType.ALL)
