@@ -105,6 +105,14 @@ public class FacilityController {
         facilityService.addTaskToFacility(id, service, userEmail);
         return ResponseEntity.ok(new RestResponseDTO<>());
     }
+    @GetMapping("/{facilityId}/image/{imageId}")
+    @CircuitBreaker(name = "bookingServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
+    @RateLimiter(name = "bookingServiceRateLimiter")
+    public ResponseEntity<RestResponseDTO<String>> addImageToFacilityPortfolio(@PathVariable Long facilityId,
+                                                                               @PathVariable String imageId){
+        facilityService.addImageToFacilityPortfolio(facilityId, imageId);
+        return ResponseEntity.ok(new RestResponseDTO<>());
+    }
     @PatchMapping("/add/employee/{email}/facility/id/{facilityId}")
     @CircuitBreaker(name = "bookingServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
     @RateLimiter(name = "bookingServiceRateLimiter")

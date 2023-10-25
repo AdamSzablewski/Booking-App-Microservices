@@ -29,6 +29,16 @@ public class ImageController {
 //        return ResponseEntity.ok("File upploaded");
 //    }
 
+    @PostMapping("/portfolio/facility/{facilityId}/user/{userId}")
+    @CircuitBreaker(name = "imageServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
+    @RateLimiter(name = "imageServiceRateLimiter")
+    public ResponseEntity<RestResponseDTO<String>> addPortfolioImage(@RequestParam("image")MultipartFile image,
+                                                                     @PathVariable long facilityId,
+                                                                     @PathVariable long userId,
+                                                                     @RequestHeader("userEmail") String userEmail) throws IOException {
+        imageService.addPortfolioImage(image, facilityId, userEmail, userId);
+        return ResponseEntity.ok(new RestResponseDTO<>());
+    }
     @PostMapping("/message/id/{imageId}")
     @CircuitBreaker(name = "imageServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
     @RateLimiter(name = "imageServiceRateLimiter")

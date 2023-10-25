@@ -3,15 +3,11 @@ package com.adamszablewski.service;
 
 import com.adamszablewski.exceptions.FileNotFoundException;
 import com.adamszablewski.exceptions.NotAuthorizedException;
-import com.adamszablewski.model.FacilityPhoto;
-import com.adamszablewski.model.ImageData;
-import com.adamszablewski.model.MessagePhoto;
-import com.adamszablewski.model.ProfilePhoto;
-import com.adamszablewski.repository.FacilityPhotoRepository;
-import com.adamszablewski.repository.ImageRepository;
-import com.adamszablewski.repository.MessagePhotoRepository;
-import com.adamszablewski.repository.ProfilePhotoRepository;
+import com.adamszablewski.feign.BookingClient;
+import com.adamszablewski.model.*;
+import com.adamszablewski.repository.*;
 import com.adamszablewski.util.ImageUtils;
+import com.adamszablewski.util.UniqueIdGenerator;
 import com.adamszablewski.util.UserValidator;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,8 +25,10 @@ public class ImageService {
     private final ProfilePhotoRepository profilePhotoRepository;
     private final FacilityPhotoRepository facilityPhotoRepository;
     private final MessagePhotoRepository messagePhotoRepository;
-
+    private final UniqueIdGenerator uniqueIdGenerator;
     private final UserValidator userValidator;
+    private final BookingClient bookingClient;
+    private final PortfolioRepository portfolioRepository;
 
     private ImageData uploadImage(MultipartFile file) throws IOException {
         return imageRepository.save(ImageData.builder()
@@ -94,6 +92,7 @@ public class ImageService {
     @Transactional
     public void deleteImagesForUser(long userId) {
         facilityPhotoRepository.deleteAllByUserId(userId);
+        portfolioRepository.deleteAllByUserId(userId);
         profilePhotoRepository.deleteByUserId(userId);
     }
     @Transactional
@@ -130,5 +129,21 @@ public class ImageService {
             throw new NotAuthorizedException();
         }
         return ImageUtils.decompressImage(messagePhoto.getImage());
+    }
+    @Transactional
+    public void addPortfolioImage(MultipartFile file, long facilityId, String userEmail, long userId) throws IOException {
+        if(!userValidator.isOwner(facilityId, userEmail)){
+            throw new NotAuthorizedException();
+        }
+        ImageData image = uploadImage(file);
+        String imageId = uniqueIdGenerator.generateUniqueImageId();
+        PortfolioPhoto portfolioPhoto = PortfolioPhoto.builder()
+                .userId(userId)
+                .facility(facilityId)
+                .imageId(imageId)
+                .imageData(image)
+                .build();
+        portfolioRepository.save(portfolioPhoto);
+        bookingClient.addPortfolioImage(imageId, facilityId);
     }
 }

@@ -1,7 +1,9 @@
 package com.adamszablewski.dto;
 
+import com.adamszablewski.model.Portfolio;
 import lombok.*;
 
+import java.util.List;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -17,6 +19,7 @@ public class FacilityDto {
     private String city;
     private String street;
     private String houseNumber;
+    private Portfolio portfolio;
     private long owner;
     private Set<Long> employees;
     private Set<TaskDto> tasks;

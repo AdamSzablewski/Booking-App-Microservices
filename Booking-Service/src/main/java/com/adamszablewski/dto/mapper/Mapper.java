@@ -66,6 +66,7 @@ public class Mapper {
                 .owner(convertObjectToId(facility.getOwner()))
                 .name(facility.getName())
                 .employees(convertObjectListToIdList(facility.getEmployees()))
+                .portfolio(facility.getPortfolio())
                 .city(facility.getCity())
                 .country(facility.getCountry())
                 .region(facility.getRegion())

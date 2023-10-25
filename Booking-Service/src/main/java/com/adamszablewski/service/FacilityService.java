@@ -4,22 +4,21 @@ import com.adamszablewski.dao.Dao;
 import com.adamszablewski.dto.FacilityDto;
 import com.adamszablewski.exceptions.NoSuchAppointmentException;
 import com.adamszablewski.exceptions.NotAuthorizedException;
-import com.adamszablewski.model.Appointment;
+import com.adamszablewski.model.*;
 import com.adamszablewski.repository.AppointmentRepository;
+import com.adamszablewski.repository.PortfolioRepository;
 import com.adamszablewski.util.helpers.UserTools;
 import com.adamszablewski.exceptions.FacilityNameTakenException;
 import com.adamszablewski.exceptions.NoSuchFacilityException;
 import com.adamszablewski.util.helpers.UserValidator;
-import com.adamszablewski.model.Facility;
 import com.adamszablewski.repository.FacilityRepository;
-import com.adamszablewski.model.Owner;
 import com.adamszablewski.messages.MessageSender;
 import lombok.AllArgsConstructor;
-import com.adamszablewski.model.Task;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import java.util.ArrayList;
 import java.util.Set;
 
 import static com.adamszablewski.dto.mapper.Mapper.mapFacilityToDto;
@@ -35,6 +34,7 @@ public class FacilityService {
     private final UserValidator userValidator;
     private final AppointmentRepository appointmentRepository;
     private final Dao dao;
+    private final PortfolioRepository portfolioRepository;
 
     public Set<FacilityDto> getAllFacilities() {
         return mapFacilityToDto((Set<Facility>) facilityRepository.findAll());
@@ -69,6 +69,9 @@ public class FacilityService {
                 .houseNumber(facility.getHouseNumber())
                 .street(facility.getStreet())
                 .owner(owner)
+                .portfolio(Portfolio.builder()
+                        .imageIds(new ArrayList<>())
+                        .build())
                 .build();
 
         if(owner.getFacilities() != null){
@@ -127,5 +130,14 @@ public class FacilityService {
         Appointment appointment = appointmentRepository.findById(appointmentId)
                 .orElseThrow(NoSuchAppointmentException::new);
         return appointment.getFacility().getId();
+    }
+
+    public void addImageToFacilityPortfolio(Long facilityId, String imageId) {
+        Facility facility = facilityRepository.findById(facilityId)
+                .orElseThrow(NoSuchFacilityException::new);
+        Portfolio portfolio = facility.getPortfolio();
+        portfolio.getImageIds().add(imageId);
+
+        portfolioRepository.save(portfolio);
     }
 }

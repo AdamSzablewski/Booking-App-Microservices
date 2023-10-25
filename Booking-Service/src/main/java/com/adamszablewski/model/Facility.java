@@ -34,6 +34,8 @@ public class Facility implements Identifiable {
     @OneToMany
     @ToString.Exclude
     private Set<Employee> employees;
+    @OneToOne(cascade = CascadeType.ALL)
+    private Portfolio portfolio;
     @Override
     public Long getId() {
         return id;
