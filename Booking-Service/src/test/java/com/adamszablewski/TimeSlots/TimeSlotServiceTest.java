@@ -175,8 +175,12 @@ public class TimeSlotServiceTest {
 
     @Test
     void makeAppointmentFromTimeSlot(){
+        UserClass user = UserClass.builder()
+                .id(1L)
+                .build();
         Employee employee = Employee.builder()
                 .id(1L)
+                .user(user)
                 .appointments(new HashSet<>())
                 .build();
         Facility facility = Facility.builder()
@@ -211,6 +215,7 @@ public class TimeSlotServiceTest {
                 .build();
         Client client = Client.builder()
                 .appointments(new HashSet<>())
+                .user(user)
                 .id(1L)
                 .build();
         Appointment appointment = Appointment.builder()
@@ -229,6 +234,8 @@ public class TimeSlotServiceTest {
 
         when(timeSlotHelper.isTimeSlotAvailable(timeSlot.getStartTime(), timeSlot.getEndTime(),
                 employee, timeSlot.getDate())).thenReturn(true);
+
+
 
         timeSlotService.makeAppointmentFromTimeSlot(1L, timeSlot);
 

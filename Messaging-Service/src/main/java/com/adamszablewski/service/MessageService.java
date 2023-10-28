@@ -34,7 +34,7 @@ public class MessageService {
    private final UniqueIdGenerator uniqueIdGenerator;
    private final ImageServiceClient imageServiceClient;
 
-    public void addMessageToConversation(Message message) {
+    public void addMessageToConversationFromMessageQueue(Message message) {
         messageRepository.save(message);
 
         Conversation conversation = conversationRepository.findByOwnerIdAndIsSystemConversation(message.getRecipient(), true)

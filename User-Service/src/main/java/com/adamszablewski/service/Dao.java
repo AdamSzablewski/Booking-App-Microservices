@@ -39,8 +39,6 @@ public class Dao {
     }
 
     public void deleteTask(Task task) {
-        System.out.println("deleting tasks");
-        System.out.println(task.getAppointments().size());
         if (task.getAppointments() != null){
             task.getAppointments().forEach(this::deleteAppoinment);
             task.getAppointments().clear();

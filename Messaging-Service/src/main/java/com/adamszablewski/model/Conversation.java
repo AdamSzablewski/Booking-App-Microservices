@@ -34,4 +34,14 @@ public class Conversation implements Identifiable {
     public Long getId() {
         return id;
     }
+    @Override
+    public String toString() {
+        return "Conversation{" +
+                "id=" + id +
+                ", ownerId=" + ownerId +
+                ", recipientId=" + recipientId +
+                ", messageCount=" + (messages != null ? messages.size() : 0) +
+                '}';
+    }
+
 }

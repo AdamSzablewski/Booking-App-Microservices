@@ -27,7 +27,7 @@ public class RabbitMqConsumer {
     public void consume(Message message){
 
         System.out.println("||| Message Object recieved |||||| "+ message.toString());
-        messageService.addMessageToConversation(message);
+        messageService.addMessageToConversationFromMessageQueue(message);
     }
     @RabbitListener(queues = USER_DELETED_QUEUE)
     public void consume(long userId){

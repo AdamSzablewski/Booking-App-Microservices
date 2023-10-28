@@ -33,6 +33,7 @@ public class ClientService {
 
         UserClass user = userRepository.findById(id)
                 .orElseThrow(NoSuchUserException::new);
+        //todo add verification
         if (user.getClient() != null){
             throw new ClientAlreadyCreatedException();
         }
@@ -44,16 +45,4 @@ public class ClientService {
         clientRepository.save(newClient);
 
     }
-
-//    UserClass user = userRepository.findById(id)
-//            .orElseThrow(NoSuchUserException::new);
-//        if (user.getEmployee() != null){
-//        throw new EmployeeAlreadyCreatedException();
-//    }
-//
-//    Employee newEmployee = Employee.builder()
-//            .user(user)
-//            .build();
-//        user.setEmployee(newEmployee);
-//        employeeRepository.save(newEmployee);
 }
