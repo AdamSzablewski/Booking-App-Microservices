@@ -19,16 +19,16 @@ public class Dao {
     private final UserRepository userRepository;
     private final RabbitMqProducer rabbitMqProducer;
     private final ClientRepository clientRepository;
-    @Transactional
-    public void deleteTasks(Task task) {
-        task.getEmployees().forEach(employee -> {
-            employee.getTasks().remove(task);
-        });
-        task.getAppointments().clear();
-        task.getFacility().getTasks().remove(task);
-
-        taskRepository.delete(task);
-    }
+//    @Transactional
+//    public void deleteTasks(Task task) {
+//        task.getEmployees().forEach(employee -> {
+//            employee.getTasks().remove(task);
+//        });
+//        task.getAppointments().clear();
+//        task.getFacility().getTasks().remove(task);
+//
+//        taskRepository.delete(task);
+//    }
 
     public void deleteTasks(Set<Task> tasks) {
         Set<Task> tasksCopy = new HashSet<>(tasks); // Create a copy of the set

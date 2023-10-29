@@ -16,12 +16,11 @@ import java.util.Set;
 @Service
 @AllArgsConstructor
 public class EmployeeService {
-    UserRepository userRepository;
-    EmployeeRepository employeeRepository;
+    private final UserRepository userRepository;
+    private final EmployeeRepository employeeRepository;
     public Employee getEmployeeByEmail(String email) {
         UserClass user = userRepository.findByEmail(email)
                 .orElseThrow(NoSuchUserException::new);
-        System.out.println(user);
         return employeeRepository.findByUserId(user.getId())
                 .orElseThrow(NoSuchUserException::new);
     }
@@ -47,6 +46,8 @@ public class EmployeeService {
 
         Employee newEmployee = Employee.builder()
                 .user(user)
+                .startTime(LocalTime.of(9, 0))
+                .endTime(LocalTime.of(17, 0))
                 .build();
         user.setEmployee(newEmployee);
         employeeRepository.save(newEmployee);
