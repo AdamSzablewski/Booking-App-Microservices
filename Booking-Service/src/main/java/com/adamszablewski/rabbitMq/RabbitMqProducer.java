@@ -2,7 +2,7 @@ package com.adamszablewski.rabbitMq;
 
 
 import com.adamszablewski.model.Appointment;
-import com.adamszablewski.rabbitMq.classes.Message;
+import com.adamszablewski.rabbitMq.classes.MessageDto;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +22,7 @@ public class RabbitMqProducer {
     }
 
 
-    public void sendMessageObject(Message message) {
+    public void sendMessageObject(MessageDto message) {
         rabbitTemplate.convertAndSend(EXCHANGE_NAME, "mqkey", message);
     }
 }

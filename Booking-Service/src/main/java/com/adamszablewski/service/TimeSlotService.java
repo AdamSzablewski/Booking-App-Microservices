@@ -102,6 +102,8 @@ public class TimeSlotService {
         client.getAppointments().add(appointment);
         employee.getAppointments().add(appointment);
         task.getAppointments().add(appointment);
+        task.addPoints();
+        taskRepository.save(task);
         appointmentRepository.save(appointment);
 
         messageSender.sendAppointmentCreatedMessage(appointment, appointment.getClient().getUser().getId());

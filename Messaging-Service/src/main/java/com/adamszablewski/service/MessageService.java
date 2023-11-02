@@ -1,5 +1,6 @@
 package com.adamszablewski.service;
 
+import com.adamszablewski.dto.MessageDto;
 import com.adamszablewski.dto.RestResponseDTO;
 import com.adamszablewski.exceptions.NoSuchConversationFoundException;
 import com.adamszablewski.exceptions.NoSuchMessageException;
@@ -9,6 +10,7 @@ import com.adamszablewski.feign.SecurityServiceClient;
 import com.adamszablewski.feign.UserServiceClient;
 import com.adamszablewski.model.Conversation;
 import com.adamszablewski.model.Message;
+import com.adamszablewski.model.MessageDTO;
 import com.adamszablewski.repository.ConversationRepository;
 import com.adamszablewski.repository.MessageRepository;
 import com.adamszablewski.util.ConversationCreator;
@@ -34,13 +36,19 @@ public class MessageService {
    private final UniqueIdGenerator uniqueIdGenerator;
    private final ImageServiceClient imageServiceClient;
 
-    public void addMessageToConversationFromMessageQueue(Message message) {
-        messageRepository.save(message);
+    public void addMessageToConversationFromMessageQueue(MessageDto message) {
+        Message newMessage = Message.builder()
+                .message(message.getMessage())
+                .sender(message.getSender())
+                .owner(message.getRecipient())
+                .dateSent(message.getDateSent())
+                .build();
+        messageRepository.save(newMessage);
 
         Conversation conversation = conversationRepository.findByOwnerIdAndIsSystemConversation(message.getRecipient(), true)
                 .orElseGet(() -> conversationCreator.createConversation(message.getRecipient(), true));
 
-        conversation.getMessages().add(message);
+        conversation.getMessages().add(newMessage);
         conversationRepository.save(conversation);
 
     }

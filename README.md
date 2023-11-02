@@ -2,33 +2,38 @@
 
 ## Overview
 
-The Booking Application is a microservices-based project developed to showcase my skills in Java development, Spring framework, and microservices architecture. It offers a feature-rich experience for scheduling appointments.
+The Booking Application is a microservices-based project showcasing expertise in Java development, Spring framework, and microservices architecture. This comprehensive platform offers a rich experience for scheduling appointments and employs event-driven architecture using RabbitMQ for seamless data management across services.
+
+- [Svenska](README_SE.md)
+
 
 ## Key Features
 
-- **User Registration and Authentication**: Secure user registration and authentication ensure data privacy and access control.
+- **User Registration and Authentication**: Ensuring secure user registration and authentication for data privacy and access control.
 
-- **Service Posting**: Service providers can effortlessly post their services, offering businesses a platform to showcase their offerings.
+- **Service Posting and Portfolio Photos**: Service providers can post services with image portfolios to showcase their offerings.
 
-- **Appointment Booking**: Users can browse available services and schedule appointments conveniently.
+- **Appointment Booking**: Users can conveniently browse available services and schedule appointments, streamlining the booking process.
 
-- **Time Slot Availability**: Users can check the availability of time slots for specific services on any given day, streamlining the booking process.
+- **Time Slot Availability**: Users can easily check service availability and associated images for informed choices.
 
-- **Messaging with RabbitMQ**: The application leverages RabbitMQ for efficient messaging between microservices, ensuring real-time notifications for appointments and bookings.
+- **Messaging with RabbitMQ**: Real-time messaging for appointments, bookings, and direct communication with image support.
+
+- **Event-Driven Architecture**: The application uses RabbitMQ for efficient event-driven data management across services.
 
 ## Technologies Used
 
-This project is built using:
-
 - **Java**: The primary programming language.
 
-- **Spring Framework**: Utilizes the Spring ecosystem, including Spring Boot and Spring Data JPA, for building efficient and scalable microservices.
-- **Microservices Architecture**: Implements microservices architecture to break down complex functionalities into manageable components, ensuring scalability and maintainability.
+- **Spring Framework**: Utilizing Spring Boot and Spring Data JPA for scalable microservices.
 
-- **PostgreSQL**: The application uses PostgreSQL as the database management system to store and manage data securely.
+- **Microservices Architecture**: Breaking down complex functionalities for scalability.
 
-- **RabbitMQ**: Incorporates RabbitMQ for messaging services, facilitating real-time communication between microservices.
+- **PostgreSQL**: Securely managing data, including images.
 
-- **Resilience4J**: Implements Resilience4J as a circuit breaker framework, ensuring robustness and fault tolerance in microservices communication.
+- **RabbitMQ**: Facilitating real-time messaging and event-driven data management.
 
+- **Resilience4J**: Ensuring robustness and fault tolerance in microservices communication.
 
+- [Swedish Version](README_SE.md)
+- 

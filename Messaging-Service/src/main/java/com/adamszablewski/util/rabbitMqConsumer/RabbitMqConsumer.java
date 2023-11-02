@@ -1,7 +1,9 @@
 package com.adamszablewski.util.rabbitMqConsumer;
 
 
+import com.adamszablewski.dto.MessageDto;
 import com.adamszablewski.model.Message;
+import com.adamszablewski.model.MessageDTO;
 import com.adamszablewski.service.ConversationService;
 import com.adamszablewski.service.MessageService;
 import lombok.AllArgsConstructor;
@@ -24,7 +26,7 @@ public class RabbitMqConsumer {
 //        System.out.println("||| Message recieved |||||| "+ salesOrderConfirmation.toString());
 //    }
     @RabbitListener(queues = RabbitMqConfig.MESSAGE_MEASSAGE_QUEUE)
-    public void consume(Message message){
+    public void consume(MessageDto message){
 
         System.out.println("||| Message Object recieved |||||| "+ message.toString());
         messageService.addMessageToConversationFromMessageQueue(message);

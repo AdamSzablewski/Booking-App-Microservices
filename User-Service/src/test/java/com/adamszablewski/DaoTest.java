@@ -51,8 +51,8 @@ public class DaoTest {
     }
     @Test
     void deleteTaskTest(){
-        Task task = Task.builder()
-                .
+        Task task = Task.builder().build();
+
 
     }
 

@@ -2,6 +2,7 @@ package com.adamszablewski.dto;
 
 
 
+import com.adamszablewski.model.MessageDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -28,7 +28,7 @@ public class Conversation {
             joinColumns = @JoinColumn(name = "conversation_id"),
             inverseJoinColumns = @JoinColumn(name = "message_id")
     )
-    private List<Message> messages;
+    private List<MessageDto> messages;
 
     @Override
     public String toString() {

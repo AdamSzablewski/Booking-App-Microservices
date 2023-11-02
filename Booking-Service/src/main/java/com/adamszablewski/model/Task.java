@@ -40,16 +40,15 @@ public class Task implements Identifiable {
     private double price;
     private int durationInMinutes;
     private String currency;
-
-//    @PreRemove
-//    private void preRemove(){
-//        employees.forEach(employee -> {
-//            employee.getTasks().remove(this);
-//        });
-//        facility.getTasks().remove(this);
-//    }
+    private int points;
     @Override
     public Long getId() {
         return id;
+    }
+    public void addPoints(){
+        this.points = this.points + 1;
+    }
+    public void addPoints(int i){
+        this.points = this.points + i;
     }
 }

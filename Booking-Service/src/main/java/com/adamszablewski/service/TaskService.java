@@ -16,10 +16,11 @@ import com.adamszablewski.messages.MessageSender;
 import com.adamszablewski.model.Task;
 import com.adamszablewski.repository.TaskRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Objects;
 import java.util.Set;
 
 import static com.adamszablewski.dto.mapper.Mapper.mapTaskToDto;
@@ -55,10 +56,23 @@ public class TaskService {
     public Set<TaskDto> getTasksForCity( String city) {
         return mapTaskToDto(taskRepository.findByCity( city), true);
     }
-
-    public Set<TaskDto> getTasksForCityByCategory(String city, String category) {
-        return mapTaskToDto(taskRepository.findByCityAndCategory(city, category), true);
+    public Set<TaskDto> getTasksForCityTop30( String city) {
+        Pageable pageable = PageRequest.of(0,30);
+        return mapTaskToDto(taskRepository.findByCityTop(city, pageable), true);
     }
+    public Set<TaskDto> getTasksForCityByText(String city, String text) {
+        Pageable pageable = PageRequest.of(0,50);
+        return mapTaskToDto(taskRepository.findByCityAndNameTop(city, pageable, text), true);
+    }
+    public Set<TaskDto> getTasksForCityByCategory( String city, String category) {
+        Pageable pageable = PageRequest.of(0,30);
+        return mapTaskToDto(taskRepository.findByCityTopAndCategory(city, category, pageable), true);
+    }
+
+
+//    public Set<TaskDto> getTasksForCityByCategory(String city, String category) {
+//        return mapTaskToDto(taskRepository.findByCityAndCategory(city, category), true);
+//    }
 
     public void createTaskForFacility(long id, Task task, String userEmail) {
         Facility facility = facilityRepository.findById(id)

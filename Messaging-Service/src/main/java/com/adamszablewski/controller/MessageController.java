@@ -1,8 +1,9 @@
 package com.adamszablewski.controller;
 
-import com.adamszablewski.dto.MessageDTO;
+
 import com.adamszablewski.dto.RestResponseDTO;
 import com.adamszablewski.model.Message;
+import com.adamszablewski.model.MessageDTO;
 import com.adamszablewski.service.MessageService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +21,9 @@ public class MessageController {
 
     @PostMapping("/user/{recipientId}/from/{senderId}")
     public ResponseEntity<RestResponseDTO<MessageDTO>> sendMessageToUserById(@PathVariable long recipientId,
-                                                                          @PathVariable long senderId,
-                                                                          @RequestHeader("userEmail") String userEmail,
-                                                                          @RequestBody Message message){
+                                                                             @PathVariable long senderId,
+                                                                             @RequestHeader("userEmail") String userEmail,
+                                                                             @RequestBody Message message){
         messageService.sendMessageToUserById(recipientId, senderId, userEmail, message);
         return ResponseEntity.ok(new RestResponseDTO<>());
     }

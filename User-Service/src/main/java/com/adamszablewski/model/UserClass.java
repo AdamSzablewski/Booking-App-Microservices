@@ -8,12 +8,10 @@ import com.adamszablewski.model.Owner;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -34,6 +32,7 @@ public class UserClass implements Identifiable {
     @OneToOne(cascade = {CascadeType.REMOVE}, orphanRemoval = true)
     private Owner owner;
     @OneToOne(cascade = {CascadeType.REMOVE}, orphanRemoval = true)
+    @ToString.Exclude
     private Employee employee;
     @OneToOne(cascade = {CascadeType.REMOVE}, orphanRemoval = true)
     private Client client;

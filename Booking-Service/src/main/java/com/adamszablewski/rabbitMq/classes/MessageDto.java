@@ -8,23 +8,20 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Builder
 @Entity
-public class Message {
-
+public class MessageDto {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private long recipientId;
-    private String instanceId;
+    private Long recipient;
+    private Long owner;
     private String message;
-    private String sender;
+    private Long sender;
     private String imageId;
     private LocalDateTime dateSent;
 
