@@ -10,7 +10,7 @@ import com.adamszablewski.repository.EmployeeRepository;
 import com.adamszablewski.repository.EmploymentRequestRepository;
 import com.adamszablewski.repository.FacilityRepository;
 import com.adamszablewski.service.EmploymentRequestService;
-import com.adamszablewski.util.helpers.UserTools;
+import com.adamszablewski.util.UserTools;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

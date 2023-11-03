@@ -26,7 +26,7 @@ public class TaskController {
     @RateLimiter(name = "bookingServiceRateLimiter")
     public ResponseEntity<RestResponseDTO<TaskDto>> getAllServicesForFacilityByName(@PathVariable String name){
         RestResponseDTO<TaskDto> responseDTO = RestResponseDTO.<TaskDto>builder()
-                .values(serviceService.getAllTasksForFacilityByName(name))
+                .values(serviceService.getAllTasksForFacilityByFacilityName(name))
                 .build();
         return ResponseEntity.ok(responseDTO);
     }
@@ -35,7 +35,7 @@ public class TaskController {
     @RateLimiter(name = "bookingServiceRateLimiter")
     public ResponseEntity<RestResponseDTO<TaskDto>> getAllTasksForFacilityById(@PathVariable Long id){
         RestResponseDTO<TaskDto> responseDTO = RestResponseDTO.<TaskDto>builder()
-                .values(serviceService.getAllTasksforFacilityById(id))
+                .values(serviceService.getAllTasksforFacilityByFacilityId(id))
                 .build();
         return ResponseEntity.ok(responseDTO);
     }
@@ -54,7 +54,16 @@ public class TaskController {
     @RateLimiter(name = "bookingServiceRateLimiter")
     public ResponseEntity<RestResponseDTO<TaskDto>> getTasksForCity( @PathVariable String city){
         RestResponseDTO<TaskDto> responseDTO = RestResponseDTO.<TaskDto>builder()
-                .values(serviceService.getTasksForCity(city))
+                .values(serviceService.getTasksForCityTop30(city))
+                .build();
+        return ResponseEntity.ok(responseDTO);
+    }
+    @GetMapping("/city/{city}/text/{text}")
+    @CircuitBreaker(name = "bookingServiceCircuitBreaker", fallbackMethod = "fallBackMethod")
+    @RateLimiter(name = "bookingServiceRateLimiter")
+    public ResponseEntity<RestResponseDTO<TaskDto>> getTasksForCityByName( @PathVariable String city, @PathVariable String text){
+        RestResponseDTO<TaskDto> responseDTO = RestResponseDTO.<TaskDto>builder()
+                .values(serviceService.getTasksForCityByText(city, text))
                 .build();
         return ResponseEntity.ok(responseDTO);
     }

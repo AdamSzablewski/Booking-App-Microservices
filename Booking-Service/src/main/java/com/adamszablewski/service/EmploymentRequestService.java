@@ -2,7 +2,7 @@ package com.adamszablewski.service;
 
 import com.adamszablewski.dto.EmploymentRequestDTO;
 import com.adamszablewski.exceptions.NotAuthorizedException;
-import com.adamszablewski.util.helpers.UserTools;
+import com.adamszablewski.util.UserTools;
 import com.adamszablewski.exceptions.NoSuchEmploymentRequestException;
 import com.adamszablewski.exceptions.NoSuchFacilityException;
 import com.adamszablewski.exceptions.NoSuchUserException;

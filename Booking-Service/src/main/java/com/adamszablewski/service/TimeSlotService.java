@@ -2,14 +2,14 @@ package com.adamszablewski.service;
 
 import com.adamszablewski.model.*;
 import com.adamszablewski.repository.AppointmentRepository;
-import com.adamszablewski.util.helpers.UserTools;
+import com.adamszablewski.util.UserTools;
 import com.adamszablewski.exceptions.NoSuchTaskException;
 import com.adamszablewski.exceptions.NoSuchUserException;
 import com.adamszablewski.exceptions.TimeSlotAlreadyTakenException;
 import com.adamszablewski.messages.MessageSender;
 import com.adamszablewski.repository.FacilityRepository;
 import com.adamszablewski.repository.TaskRepository;
-import com.adamszablewski.util.helpers.TimeSlotHelper;
+import com.adamszablewski.util.TimeSlotHelper;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;

@@ -1,7 +1,7 @@
 package com.adamszablewski.messages;
 
 import com.adamszablewski.model.Appointment;
-import com.adamszablewski.util.helpers.UserTools;
+import com.adamszablewski.util.UserTools;
 import com.adamszablewski.model.Facility;
 import com.adamszablewski.feignClients.UserServiceClient;
 import com.adamszablewski.model.Employee;
@@ -13,8 +13,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-
-import static com.adamszablewski.Variables.APP_NAME;
 
 @Component
 @AllArgsConstructor

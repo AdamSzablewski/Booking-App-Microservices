@@ -24,7 +24,8 @@ public class Task implements Identifiable {
     private long id;
     private String city;
     private String region;
-    private String category;
+    @ManyToOne
+    private Category category;
     private String name;
 
     @OneToMany(cascade = CascadeType.REMOVE)
@@ -41,6 +42,7 @@ public class Task implements Identifiable {
     private int durationInMinutes;
     private String currency;
     private int points;
+
     @Override
     public Long getId() {
         return id;

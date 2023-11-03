@@ -1,4 +1,4 @@
-package com.adamszablewski.util.helpers;
+package com.adamszablewski.util;
 
 import com.adamszablewski.model.Appointment;
 import com.adamszablewski.model.Facility;

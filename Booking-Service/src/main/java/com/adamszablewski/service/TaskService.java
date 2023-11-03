@@ -2,12 +2,12 @@ package com.adamszablewski.service;
 
 import com.adamszablewski.dao.Dao;
 import com.adamszablewski.dto.TaskDto;
-import com.adamszablewski.exceptions.NotAuthorizedException;
-import com.adamszablewski.util.helpers.UserTools;
-import com.adamszablewski.exceptions.NoSuchEmployeeException;
-import com.adamszablewski.exceptions.NoSuchFacilityException;
-import com.adamszablewski.exceptions.NoSuchTaskException;
-import com.adamszablewski.util.helpers.UserValidator;
+import com.adamszablewski.exceptions.*;
+import com.adamszablewski.model.Category;
+import com.adamszablewski.repository.CategoryRepository;
+import com.adamszablewski.util.CategoryUtil;
+import com.adamszablewski.util.UserTools;
+import com.adamszablewski.util.UserValidator;
 import com.adamszablewski.model.Facility;
 import com.adamszablewski.repository.FacilityRepository;
 import com.adamszablewski.feignClients.UserServiceClient;
@@ -18,6 +18,7 @@ import com.adamszablewski.repository.TaskRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.support.TaskUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,14 +36,16 @@ public class TaskService {
     private final MessageSender messageSender;
     private final UserTools userTools;
     private final UserValidator userValidator;
+    private final CategoryUtil categoryUtil;
+    private final CategoryRepository categoryRepository;
     private final Dao dao;
-    public Set<TaskDto> getAllTasksForFacilityByName(String name) {
+    public Set<TaskDto> getAllTasksForFacilityByFacilityName(String name) {
         Facility facility = facilityRepository.findByName(name)
                 .orElseThrow(NoSuchFacilityException::new);
         return mapTaskToDto(facility.getTasks(), true);
     }
 
-    public Set<TaskDto> getAllTasksforFacilityById(Long id) {
+    public Set<TaskDto> getAllTasksforFacilityByFacilityId(Long id) {
         Facility facility = facilityRepository.findById(id)
                 .orElseThrow(NoSuchFacilityException::new);
         return mapTaskToDto(facility.getTasks());
@@ -53,26 +56,22 @@ public class TaskService {
                 .orElseThrow(NoSuchTaskException::new));
     }
 
-    public Set<TaskDto> getTasksForCity( String city) {
-        return mapTaskToDto(taskRepository.findByCity( city), true);
-    }
+
     public Set<TaskDto> getTasksForCityTop30( String city) {
         Pageable pageable = PageRequest.of(0,30);
-        return mapTaskToDto(taskRepository.findByCityTop(city, pageable), true);
+        Set<Task> tasks = taskRepository.findByCityTop(city, pageable).toSet();
+        return mapTaskToDto(tasks, true);
     }
     public Set<TaskDto> getTasksForCityByText(String city, String text) {
         Pageable pageable = PageRequest.of(0,50);
-        return mapTaskToDto(taskRepository.findByCityAndNameTop(city, pageable, text), true);
+        Set<Task> tasks = taskRepository.findByCityAndNameTop(city, text, pageable).toSet();
+        return mapTaskToDto(tasks, true);
     }
     public Set<TaskDto> getTasksForCityByCategory( String city, String category) {
         Pageable pageable = PageRequest.of(0,30);
-        return mapTaskToDto(taskRepository.findByCityTopAndCategory(city, category, pageable), true);
+        Set<Task> tasks = taskRepository.findByCityTopAndCategoryTop(city, category, pageable).toSet();
+        return mapTaskToDto(tasks, true);
     }
-
-
-//    public Set<TaskDto> getTasksForCityByCategory(String city, String category) {
-//        return mapTaskToDto(taskRepository.findByCityAndCategory(city, category), true);
-//    }
 
     public void createTaskForFacility(long id, Task task, String userEmail) {
         Facility facility = facilityRepository.findById(id)
@@ -80,6 +79,9 @@ public class TaskService {
 
         if (!userValidator.isOwner(facility, userEmail)){
             throw new NotAuthorizedException();
+        }
+        if (!categoryUtil.checkIfExists(task.getCategory().getName())){
+            throw new NoSuchCategoryException();
         }
 
         Task newTask = Task.builder()
@@ -107,12 +109,17 @@ public class TaskService {
             throw new NotAuthorizedException();
         }
         task.setCurrency(newTask.getCurrency());
-        task.setCategory(newTask.getCategory());
+        changeCategory(task);
         task.setName(newTask.getName());
         task.setPrice(newTask.getPrice());
 
         taskRepository.save(task);
 
+    }
+    private void changeCategory(Task task){
+        Category category = categoryRepository.findByName(task.getCategory().getName())
+                .orElseThrow(NoSuchCategoryException::new);
+        task.setCategory(category);
     }
     @Transactional
     public void removeEmployeeFromTask(long id, long taskId, String userEmail) {

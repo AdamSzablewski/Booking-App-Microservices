@@ -115,7 +115,7 @@ public class Mapper {
     public static TaskDto mapTaskToDto(Task task){
         return TaskDto.builder()
                 .id(task.getId())
-                .category(task.getCategory())
+                .category(task.getCategory().getName())
                 .city(task.getCity())
                 .region(task.getRegion())
                 .name(task.getName())
@@ -132,7 +132,7 @@ public class Mapper {
         tasks.forEach(task -> {
             taskDtos.add( TaskDto.builder()
                     .id(task.getId())
-                    .category(task.getCategory())
+                    .category(task.getCategory().getName())
                     .name(task.getName())
                     .durationInMinutes(task.getDurationInMinutes())
                     .employees(convertObjectListToIdList(task.getEmployees()))
@@ -150,7 +150,7 @@ public class Mapper {
         tasks.forEach(task -> {
             taskDtos.add( TaskDto.builder()
                     .id(task.getId())
-                    .category(task.getCategory())
+                    .category(task.getCategory().getName())
                     .name(task.getName())
                     .durationInMinutes(task.getDurationInMinutes())
                     .employees(convertObjectListToIdList(task.getEmployees()))

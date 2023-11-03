@@ -2,8 +2,8 @@ package com.adamszablewski.TimeSlots;
 
 import com.adamszablewski.dao.Dao;
 import com.adamszablewski.dto.mapper.Mapper;
-import com.adamszablewski.util.helpers.AppointmentHelper;
-import com.adamszablewski.util.helpers.UserValidator;
+import com.adamszablewski.util.AppointmentHelper;
+import com.adamszablewski.util.UserValidator;
 import com.adamszablewski.messages.MessageSender;
 import com.adamszablewski.model.Appointment;
 import com.adamszablewski.repository.AppointmentRepository;

@@ -5,20 +5,18 @@ import com.adamszablewski.model.Appointment;
 import com.adamszablewski.model.Employee;
 import com.adamszablewski.repository.AppointmentRepository;
 import com.adamszablewski.repository.EmployeeRepository;
-import com.adamszablewski.util.helpers.AppointmentHelper;
-import com.adamszablewski.util.helpers.UserTools;
+import com.adamszablewski.util.AppointmentHelper;
+import com.adamszablewski.util.UserTools;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.HashSet;
 
-import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
