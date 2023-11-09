@@ -67,9 +67,15 @@ public class TimeSlotServiceTest {
     void getAvailableTimeSlotsForTaskAndDate_should_return_3_for_emptyDay(){
         LocalDate date = LocalDate.now();
 
+        Category category = Category.builder()
+                .id(0)
+                .name("Test")
+                .build();
+
         Task task = Task.builder()
                 .id(0L)
                 .durationInMinutes(180)
+                .category(category)
                 .build();
 
         Facility facility = Facility.builder()
@@ -127,7 +133,6 @@ public class TimeSlotServiceTest {
 
 
         when(taskRepository.findById(task.getId())).thenReturn(Optional.of(task));
-        //when(userServiceClient.findEmployeesForIds(task.getEmployees())).thenReturn(Set.of(employee));
 
         AtomicReference<LocalTime> lastAppointmentEndTime = new AtomicReference<>(employee.getStartTime());
 

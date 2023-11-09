@@ -1,5 +1,6 @@
 package com.adamszablewski;
 
+import com.adamszablewski.dto.MessageDto;
 import com.adamszablewski.dto.RestResponseDTO;
 import com.adamszablewski.feign.ImageServiceClient;
 import com.adamszablewski.feign.SecurityServiceClient;
@@ -58,12 +59,13 @@ public class MessageServiceTest {
     void addMessageToConversationFromMessageQueueTest_should_add_to_Existing_conversation_for_1_User(){
 
 
-        Message message = Message.builder()
+        MessageDto message = MessageDto.builder()
                 .id(1L)
                 .message("Test message")
                 .dateSent(LocalDateTime.now())
-                .sender(0L)
+                .recipient(0L)
                 .recipient(1L)
+                .sender(1L)
                 .build();
         Conversation conversation = Conversation.builder()
                 .id(1L)
@@ -82,7 +84,7 @@ public class MessageServiceTest {
     @Test
     void addMessageToConversationFromMessageQueueTest_should_create_conversation_for_1_User(){
 
-        Message message = Message.builder()
+        MessageDto message = MessageDto.builder()
                 .id(1L)
                 .message("Test message")
                 .dateSent(LocalDateTime.now())

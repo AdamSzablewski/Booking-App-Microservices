@@ -22,7 +22,6 @@ import reactor.core.publisher.Mono;
 public class AuthenticationFilter {
 
     private final JwtUtil jwtUtil;
-    //private final UserServiceClient userServiceClient;
 
     @Bean
     @Order(Ordered.HIGHEST_PRECEDENCE)

@@ -1,70 +1,69 @@
-# Bokningsapp Mikrotjänster
+# Bokningsapplikation baserad på mikrotjänster
 
 ## Översikt
 
-Bokningsapplikationen är ett projekt som visar upp min erfarenhet inom Java-utveckling, Spring-ramverket och mikrotjänstarkitektur. Den ger möjlighet för företagare att erbjuda sina tjänster, och kunder att boka tider för dessa tjänster. Detta projekt erbjuder även möjligheten att lägga upp bilder till tjänsternas portfolion, skicka meddelanden mellan användare och även bilder.
+Bokningsapplikationen är ett exempel på mitt arbete inom Java-utveckling, Spring-ramverket och mikrotjänstarkitektur. Den möjliggör för företag att erbjuda sina tjänster och för kunder att enkelt boka dessa tjänster. Denna applikation innehåller även funktioner för att ladda upp portföljbilder för tjänster och för användare att kommunicera genom meddelanden.
 
 ## Nyckelfunktioner
 
-- **Användarregistrering och autentisering**: Säker användarregistrering och autentisering för att skydda användardata och kontroll över åtkomst. Applikationen använder JWT för autentisering.
+- **Användarregistrering och autentisering**: Säker användarregistrering och autentisering för att skydda användardata och reglera åtkomst. Applikationen använder JWT (JSON Web Tokens) för autentisering.
 
-- **Tjänstpublicering och portföljbilder**: Tjänsteleverantörer kan enkelt publicera sina tjänster och förbättra sin portfolio genom att lägga till bilder för varje tjänst.
+- **Publicering av tjänster och portföljbilder**: Tjänsteleverantörer kan enkelt publicera sina tjänster och förbättra sin portfölj genom att lägga till bilder för varje tjänst.
 
-- **Bokning**: Användare kan enkelt bläddra bland tillgängliga tjänster som rekommenderas i ett givet område, sina favoriter, eller genom att söka.
+- **Bokning**: Användare kan smidigt bläddra bland tillgängliga tjänster, söka efter specifika tjänster och boka sina favoriter.
 
-- **Kolla upp lediga tider**: Användare kan enkelt kolla upp tillgängligheten av lediga tider för specifika tjänster under valfri dag. De tillgängliga tiderna kan även filtreras så att enbart de visas som är tillgängliga för en eller flera valda anställda.
+- **Tidsschemaöversikt**: Användare kan enkelt kontrollera lediga tider för specifika tjänster på valfri dag. De kan även filtrera för att se vilka tider som är tillgängliga för olika anställda.
 
-- **Meddelanden med RabbitMQ**: Applikationen använder RabbitMQ för effektiv meddelandehantering mellan mikrotjänsterna.
+- **Meddelandehantering med RabbitMQ**: Applikationen använder RabbitMQ för effektiv meddelandehantering mellan mikrotjänster.
 
-- **Händelsestyrd arkitektur**: Applikationen använder RabbitMQ för händelsestyrd arkitektur, vilket används i bland annat radering av data bland tjänsterna.
+- **Händelsestyrd arkitektur**: Applikationen använder RabbitMQ för händelsestyrd arkitektur, vilket möjliggör effektiv hantering av data mellan tjänsterna.
 
-- **Meddelanden**: Användare kan skicka både text och bild meddelanden mellan varandra.
+- **Meddelandefunktion**: Användare kan skicka text- och bildmeddelanden till varandra.
 
-## Använda teknologier
+- **Enhetstestning med JUnit och Mockito**: Varje mikrotjänst är noggrant testad med JUnit och Mockito för att säkerställa korrekt funktionalitet och för att upptäcka och åtgärda potentiella fel.
+
+## Teknologier som används
 
 - **Java**: Det primära programmeringsspråket.
 
-- **Spring-ramverket**: Projektet utnyttjar Spring-ekosystemet, inklusive Spring Cloud och Spring Data JPA för att bygga skalbara mikrotjänster.
+- **Spring Framework**: Projektet utnyttjar Spring-ekosystemet, inklusive Spring Cloud och Spring Data JPA för att bygga skalbara mikrotjänster.
 
-- **Mikrotjänstarkitektur**: Applikationen använder effektivt mikrotjänstarkitektur för att bryta ner komplexa funktioner i hanterbara komponenter och säkerställa skalbarhet.
+- **Mikrotjänstarkitektur**: Applikationen använder mikrotjänstarkitektur effektivt för att bryta ner komplexa funktioner i hanterbara komponenter och för att säkerställa skalbarhet.
 
-- **PostgreSQL**: Säker hantering av data, inklusive bilder, uppnås med PostgreSQL som databashanteringssystem.
+- **JUnit och Mockito**: Enhetstestning utförs med hjälp av JUnit och Mockito för att säkerställa att mikrotjänsterna fungerar korrekt och att potentiella fel upptäcks och åtgärdas.
 
-- **RabbitMQ**: Meddelandetjänster möjliggörs av RabbitMQ och stöder realtidskommunikation mellan mikrotjänster samt möjliggör händelsestyrd datahantering.
+- **PostgreSQL**: Datahantering, inklusive hantering av bilder, uppnås med hjälp av PostgreSQL som databashanteringssystem.
+
+- **RabbitMQ**: Meddelandetjänster underlättas av RabbitMQ och stödjer realtidskommunikation mellan mikrotjänster samt möjliggör händelsestyrd datahantering.
 
 - **Resilience4J**: Applikationen använder Resilience4J som en kretsbrytare för att säkerställa robusthet och felhantering i kommunikationen mellan mikrotjänsterna.
 
-## Boknings Applikatiionens Arkitektur
+## Mikrotjänster
 
 ### Api Gateway
-Tar hand om routing och vägledning: API Gateway agerar som en inkommande trafikdirigent och kan skicka inkommande förfrågningar till rätt mikrotjänst baserat på URI, HTTP-metod eller andra kriterier. Det gör det möjligt att hantera flera tjänster med olika API-endpoints under en gemensam URI.
+- Ansvarig för routing och vägledning.
 
 ### Security-Service
-- Autentisering och auktorisering för inkommande förfrågningar.
-- Vid inloggning svarar med en JWT, för senare autentisering och auktorisering.
-- Verifikation av JWT.
-- Hashning av lösenord med SHA-256
+- Hanterar autentisering och auktorisering för inkommande förfrågningar.
+- Svarar med en JWT vid inloggning för senare autentisering och auktorisering.
+- Utför JWT-verifikation.
+- Använder SHA-256 för att kryptera lösenord.
+
+- **Enhetstestning med JUnit och Mockito**: Autentisering och auktorisering är noggrant testade med JUnit och Mockito för att säkerställa säkerhet och tillförlitlighet.
 
 ### User-Service
-- Tar hand om all data som har att göra med användare som t ex kontaktinformation, namn och lösenord.
-- Använder sig av "Event driven architecture" genom RabbitMq, för att meddela de andra tjänsterna om evenemang som radering av en användare, för att ta bort all annan associerad data från andra databaser som används av de andra tjänsterna
-
+- Hanterar all användardata, inklusive kontaktinformation, namn och lösenord.
+- Använder "Event Driven Architecture" med hjälp av RabbitMQ för att meddela andra tjänster om händelser såsom radering av användare och därmed ta bort all associerad data från andra databaser som används av de andra tjänsterna
 ### Booking-Service
-- Vid förfrågningar om tillgängliga tider för en tjänst, returnerar med generade Timeslot objekt för de anställda som är lediga under en given dag och utför tjänsten.
-- Returnerar företag-tjänster baserat på namn, och även ett antal baserat på deras popularitet i sin tjänst kategori.
-- Vid bokning av en tid, skickar meddelanden med informsation till både den utförande samt klienten genom RabbitMq.
+- Returnerar tillgängliga tider för tjänster och genererar Timeslot-objekt för de anställda som är tillgängliga under en viss dag för att utföra tjänsten.
+- Returnerar företag/tjänster baserat på namn och popularitet i deras tjänstkategori.
+- Skickar meddelanden med information om bokningar genom RabbitMQ.
 
 ### Image-Service
-- Komprimerar bilder och sparar de till PostrgreSQL databasen.
-- När den returnerar bilder från databasen så dekomprimeras dem.
-- För bilder avsedda för meddelanden och portföljbilder sparas bilden och mikrotjänsten svarar med ett unikt bild-id till de andra tjänsterna, som används för att hämta bilden vid senare tillfälle.
+- Komprimerar bilder och lagrar dem i PostgreSQL-databasen.
+- Vid hämtning av bilder från databasen dekomprimeras de.
+- Sparar bilder för meddelanden och portföljbilder och svarar med unika bild-ID:n till andra tjänster för senare hämtning.
 
 ### Messaging-Service
-- Ger möjlighet för användare att skicka meddelanden mellan varandra
-- Text och bild meddelanden
-- Tar hand om system-meddelanden om kommande bokningar och annan information från appen
-
-### Eureka
-- Tjänstregistrering
-- Lastbalansering
-- Tjänstupptäckt
+- Möjliggör användare att skicka meddelanden, inklusive text och bilder, till varandra.
+- Hanterar systemmeddelanden om kommande bok
