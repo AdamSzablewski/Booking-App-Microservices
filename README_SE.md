@@ -1,5 +1,6 @@
 # Bokningsapplikation baserad på mikrotjänster
 
+- [English](README.md)
 ## Översikt
 
 Bokningsapplikationen är ett exempel på mitt arbete inom Java-utveckling, Spring-ramverket och mikrotjänstarkitektur. Den möjliggör för företag att erbjuda sina tjänster och för kunder att enkelt boka dessa tjänster. Denna applikation innehåller även funktioner för att ladda upp portföljbilder för tjänster och för användare att kommunicera genom meddelanden.

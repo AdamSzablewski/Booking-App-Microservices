@@ -1,6 +1,7 @@
 
 # Booking Application based on Microservices
 - [Svenska](README_SE.md)
+- [Polski](README_PL.md)
 ## Overview
 The Booking Application showcases my expertise in Java development, the Spring framework, and microservices architecture. It enables businesses to offer their services, allowing customers to effortlessly book these services. The application includes features for service providers to upload portfolio images and for users to communicate through messages.
 
