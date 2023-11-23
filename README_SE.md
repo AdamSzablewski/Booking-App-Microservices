@@ -67,4 +67,5 @@ Bokningsapplikationen är ett exempel på mitt arbete inom Java-utveckling, Spri
 
 ### Messaging-Service
 - Möjliggör användare att skicka meddelanden, inklusive text och bilder, till varandra.
+- Möjliggör användare att radera meddelanden hos sig själv eller för alla i konversationen
 - Hanterar systemmeddelanden om kommande bok

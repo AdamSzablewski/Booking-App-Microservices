@@ -2,7 +2,7 @@ package com.adamszablewski.util;
 
 
 import com.adamszablewski.dto.ConversationDTO;
-import com.adamszablewski.dto.MessageDTO;
+
 import com.adamszablewski.model.Conversation;
 import com.adamszablewski.model.Message;
 import com.adamszablewski.model.Identifiable;
